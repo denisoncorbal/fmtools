@@ -1,0 +1,16 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 15432,
+            "askForPassword": true,
+            "driver": "PostgreSQL",
+            "name": "squad-service",
+            "group": "fmtools",
+            "database": "postgres",
+            "username": "postgres"
+        }
+    ]
+}
