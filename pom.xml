@@ -11,9 +11,8 @@
     <dependencies></dependencies>
     <dependencyManagement></dependencyManagement>
     <modules>
-        <module>
-            squad-manager-service
-        </module>
+        <module>squad-manager-service</module>
+        <module>positions-calculator-service</module>
     </modules>
 
     <properties>

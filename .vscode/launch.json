@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-PositionsCalculatorServiceApplication<positions-calculator-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "br.com.dgc.fmtools.positions_calculator_service.PositionsCalculatorServiceApplication",
+            "projectName": "positions-calculator-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-SquadManagerServiceApplication<squad-manager-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "br.com.dgc.fmtools.squad_manager.SquadManagerServiceApplication",
+            "projectName": "squad-manager-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
