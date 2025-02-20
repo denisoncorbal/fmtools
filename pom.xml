@@ -13,6 +13,7 @@
     <modules>
         <module>squad-manager-service</module>
         <module>positions-calculator-service</module>
+        <module>formation-calculator-service</module>
     </modules>
 
     <properties>

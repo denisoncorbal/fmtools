@@ -19,6 +19,16 @@
             "projectName": "squad-manager-service",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-FormationCalculatorServiceApplication<formation-calculator-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "br.com.dgc.fmtools.formation_calculator_service.FormationCalculatorServiceApplication",
+            "projectName": "formation-calculator-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }
