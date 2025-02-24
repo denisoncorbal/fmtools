@@ -2,7 +2,9 @@ package br.com.dgc.fmtools.squad_manager.domain.service;
 
 import br.com.dgc.fmtools.squad_manager.domain.repository.GoalkeeperPlayerRepository;
 import br.com.dgc.fmtools.squad_manager.domain.repository.dao.GoalkeeperPlayerEntity;
+import br.com.dgc.fmtools.squad_manager.exception.PlayerNotFoundException;
 import br.com.dgc.fmtools.squad_manager.web.dto.request.GoalkeeperPlayerRequest;
+import br.com.dgc.fmtools.squad_manager.web.dto.response.GetGoalkeeperPlayerByIdResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
@@ -20,5 +22,12 @@ public class GoalkeeperPlayerService {
     GoalkeeperPlayerEntity goalkeeperPlayerEntity =
         objectMapper.convertValue(goalkeeperPlayerRequest, GoalkeeperPlayerEntity.class);
     return goalkeeperPlayerRepository.save(goalkeeperPlayerEntity).getId();
+  }
+
+  public GetGoalkeeperPlayerByIdResponse getGoalkeeperPlayerById(UUID id)
+      throws PlayerNotFoundException {
+    return this.goalkeeperPlayerRepository
+        .findGoalkeeperPlayerEntityById(id)
+        .orElseThrow(() -> new PlayerNotFoundException(id));
   }
 }

@@ -2,7 +2,9 @@ package br.com.dgc.fmtools.squad_manager.domain.service;
 
 import br.com.dgc.fmtools.squad_manager.domain.repository.LinePlayerRepository;
 import br.com.dgc.fmtools.squad_manager.domain.repository.dao.LinePlayerEntity;
+import br.com.dgc.fmtools.squad_manager.exception.PlayerNotFoundException;
 import br.com.dgc.fmtools.squad_manager.web.dto.request.LinePlayerRequest;
+import br.com.dgc.fmtools.squad_manager.web.dto.response.GetLinePlayerByIdResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
@@ -20,5 +22,11 @@ public class LinePlayerService {
     LinePlayerEntity linePlayerEntity =
         objectMapper.convertValue(linePlayerRequest, LinePlayerEntity.class);
     return linePlayerRepository.save(linePlayerEntity).getId();
+  }
+
+  public GetLinePlayerByIdResponse getLinePlayerById(UUID id) throws PlayerNotFoundException {
+    return linePlayerRepository
+        .findLinePlayerEntityById(id)
+        .orElseThrow(() -> new PlayerNotFoundException(id));
   }
 }
