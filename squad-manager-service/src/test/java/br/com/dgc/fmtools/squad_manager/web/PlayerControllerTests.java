@@ -1,8 +1,6 @@
 package br.com.dgc.fmtools.squad_manager.web;
 
 import br.com.dgc.fmtools.squad_manager.AbstractIntegrationTest;
-import br.com.dgc.fmtools.squad_manager.web.dto.request.GoalkeeperPlayerRequest;
-import br.com.dgc.fmtools.squad_manager.web.dto.request.LinePlayerRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.util.Map;
@@ -10,94 +8,10 @@ import org.junit.jupiter.api.Test;
 
 public class PlayerControllerTests extends AbstractIntegrationTest {
 
-  private LinePlayerRequest createValidLinePlayerRequest() {
-    return new LinePlayerRequest(
-        "Test",
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1));
-  }
-
-  private GoalkeeperPlayerRequest createValidGoalkeeperPlayerRequest() {
-    return new GoalkeeperPlayerRequest(
-        "Test",
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1),
-        (int) (Math.random() * 20 + 1));
-  }
-
   @Test
   public void givenValidLinePlayer_whenPost_shouldReturnCreated() {
     RestAssured.given()
-        .body(createValidLinePlayerRequest())
+        .body(this.createValidLinePlayerRequest())
         .contentType(ContentType.JSON)
         .when()
         .post("/v1/api/linePlayer")
@@ -113,7 +27,7 @@ public class PlayerControllerTests extends AbstractIntegrationTest {
   @Test
   public void givenValidGoalkeeperPlayer_whenPost_shouldReturnCreated() {
     RestAssured.given()
-        .body(createValidGoalkeeperPlayerRequest())
+        .body(this.createValidGoalkeeperPlayerRequest())
         .contentType(ContentType.JSON)
         .when()
         .post("/v1/api/goalkeeperPlayer")
@@ -128,10 +42,8 @@ public class PlayerControllerTests extends AbstractIntegrationTest {
 
   @Test
   public void givenInvalidLinePlayer_whenPost_shouldReturnBadRequest() {
-    LinePlayerRequest linePlayerRequest = createValidLinePlayerRequest();
-    linePlayerRequest.setAcceleration(0);
     RestAssured.given()
-        .body(linePlayerRequest)
+        .body(this.createInvalidLinePlayerRequest())
         .contentType(ContentType.JSON)
         .when()
         .post("/v1/api/linePlayer")
@@ -141,10 +53,8 @@ public class PlayerControllerTests extends AbstractIntegrationTest {
 
   @Test
   public void givenInvalidGoalkeeperPlayer_whenPost_shouldReturnBadRequest() {
-    GoalkeeperPlayerRequest goalkeeperPlayerRequest = createValidGoalkeeperPlayerRequest();
-    goalkeeperPlayerRequest.setAcceleration(0);
     RestAssured.given()
-        .body(goalkeeperPlayerRequest)
+        .body(this.createInvalidGoalkeeperPlayerRequest())
         .contentType(ContentType.JSON)
         .when()
         .post("/v1/api/goalkeeperPlayer")
