@@ -7,6 +7,7 @@ import br.com.dgc.fmtools.squad_manager.AbstractIntegrationTest;
 import br.com.dgc.fmtools.squad_manager.web.dto.response.GetGoalkeeperPlayerByIdResponse;
 import br.com.dgc.fmtools.squad_manager.web.dto.response.GetLinePlayerByIdResponse;
 import br.com.dgc.fmtools.squad_manager.web.dto.response.PlayerCreatedResponse;
+import br.com.dgc.fmtools.squad_manager.web.dto.response.PlayerUpdatedResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.util.UUID;
@@ -135,6 +136,67 @@ public class PlayerControllerTests extends AbstractIntegrationTest {
     RestAssured.given()
         .when()
         .get(basePath + "goalkeeperPlayer/" + UUID.randomUUID().toString())
+        .then()
+        .statusCode(404);
+  }
+
+  @Test
+  @Order(5)
+  public void givenExistentId_whenPut_shouldReturnOkAndLinePlayerId() {
+    PlayerUpdatedResponse playerUpdatedResponse =
+        RestAssured.given()
+            .body(this.createValidLinePlayerRequest())
+            .contentType(ContentType.JSON)
+            .when()
+            .put(basePath + "linePlayer/" + PlayerControllerTests.validLinePlayerId.toString())
+            .then()
+            .statusCode(200)
+            .and()
+            .extract()
+            .as(PlayerUpdatedResponse.class);
+
+    assertFalse(playerUpdatedResponse.id().toString().isBlank());
+  }
+
+  @Test
+  @Order(6)
+  public void givenExistentId_whenPut_shouldReturnOkAndGoalkeeperId() {
+    PlayerUpdatedResponse playerUpdatedResponse =
+        RestAssured.given()
+            .when()
+            .body(this.createValidGoalkeeperPlayerRequest())
+            .contentType(ContentType.JSON)
+            .put(
+                basePath
+                    + "goalkeeperPlayer/"
+                    + PlayerControllerTests.validGoalkeeperPlayerId.toString())
+            .then()
+            .statusCode(200)
+            .and()
+            .extract()
+            .as(PlayerUpdatedResponse.class);
+
+    assertFalse(playerUpdatedResponse.id().toString().isBlank());
+  }
+
+  @Test
+  public void givenNonExistentId_whenPut_shouldReturnNotFoundForLinePlayer() {
+    RestAssured.given()
+        .when()
+        .body(this.createValidLinePlayerRequest())
+        .contentType(ContentType.JSON)
+        .put(basePath + "linePlayer/" + UUID.randomUUID().toString())
+        .then()
+        .statusCode(404);
+  }
+
+  @Test
+  public void givenNonExistentId_whenPut_shouldReturnNotFoundForGoalkeeperPlayer() {
+    RestAssured.given()
+        .when()
+        .body(this.createValidGoalkeeperPlayerRequest())
+        .contentType(ContentType.JSON)
+        .put(basePath + "goalkeeperPlayer/" + UUID.randomUUID().toString())
         .then()
         .statusCode(404);
   }

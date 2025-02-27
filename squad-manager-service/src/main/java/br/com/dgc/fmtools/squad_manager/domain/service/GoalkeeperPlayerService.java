@@ -30,4 +30,19 @@ public class GoalkeeperPlayerService {
         .findGoalkeeperPlayerEntityById(id)
         .orElseThrow(() -> new PlayerNotFoundException(id));
   }
+
+  public UUID updateGoalkeeperPlayer(UUID id, GoalkeeperPlayerRequest goalkeeperPlayerRequest)
+      throws PlayerNotFoundException {
+    GoalkeeperPlayerEntity goalkeeperPlayerEntity =
+        objectMapper.convertValue(goalkeeperPlayerRequest, GoalkeeperPlayerEntity.class);
+    goalkeeperPlayerEntity.setId(id);
+
+    try {
+      goalkeeperPlayerRepository.save(goalkeeperPlayerEntity);
+    } catch (org.springframework.orm.ObjectOptimisticLockingFailureException e) {
+      throw new PlayerNotFoundException(id);
+    }
+
+    return id;
+  }
 }

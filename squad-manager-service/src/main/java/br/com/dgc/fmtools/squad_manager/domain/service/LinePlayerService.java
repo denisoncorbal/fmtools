@@ -29,4 +29,19 @@ public class LinePlayerService {
         .findLinePlayerEntityById(id)
         .orElseThrow(() -> new PlayerNotFoundException(id));
   }
+
+  public UUID updateLinePlayer(UUID id, LinePlayerRequest linePlayerRequest)
+      throws PlayerNotFoundException {
+    LinePlayerEntity linePlayerEntity =
+        objectMapper.convertValue(linePlayerRequest, LinePlayerEntity.class);
+    linePlayerEntity.setId(id);
+
+    try {
+      linePlayerRepository.save(linePlayerEntity);
+    } catch (org.springframework.orm.ObjectOptimisticLockingFailureException e) {
+      throw new PlayerNotFoundException(id);
+    }
+
+    return id;
+  }
 }
