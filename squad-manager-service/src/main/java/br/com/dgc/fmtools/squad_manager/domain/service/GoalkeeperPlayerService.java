@@ -45,4 +45,8 @@ public class GoalkeeperPlayerService {
 
     return id;
   }
+
+  public void deleteGoalkeeperPlayer(UUID id) {
+    goalkeeperPlayerRepository.deleteById(id);
+  }
 }

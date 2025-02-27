@@ -15,6 +15,7 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.http.HttpStatus;
 
 @TestMethodOrder(OrderAnnotation.class)
 public class PlayerControllerTests extends AbstractIntegrationTest {
@@ -33,7 +34,7 @@ public class PlayerControllerTests extends AbstractIntegrationTest {
             .when()
             .post(basePath + "linePlayer")
             .then()
-            .statusCode(201)
+            .statusCode(HttpStatus.CREATED.value())
             .assertThat()
             .extract()
             .body()
@@ -54,7 +55,7 @@ public class PlayerControllerTests extends AbstractIntegrationTest {
             .when()
             .post(basePath + "goalkeeperPlayer")
             .then()
-            .statusCode(201)
+            .statusCode(HttpStatus.CREATED.value())
             .assertThat()
             .extract()
             .body()
@@ -73,7 +74,7 @@ public class PlayerControllerTests extends AbstractIntegrationTest {
         .when()
         .post(basePath + "linePlayer")
         .then()
-        .statusCode(400);
+        .statusCode(HttpStatus.BAD_REQUEST.value());
   }
 
   @Test
@@ -84,7 +85,7 @@ public class PlayerControllerTests extends AbstractIntegrationTest {
         .when()
         .post(basePath + "goalkeeperPlayer")
         .then()
-        .statusCode(400);
+        .statusCode(HttpStatus.BAD_REQUEST.value());
   }
 
   @Test
@@ -95,7 +96,7 @@ public class PlayerControllerTests extends AbstractIntegrationTest {
             .when()
             .get(basePath + "linePlayer/" + PlayerControllerTests.validLinePlayerId.toString())
             .then()
-            .statusCode(200)
+            .statusCode(HttpStatus.OK.value())
             .and()
             .extract()
             .as(GetLinePlayerByIdResponse.class);
@@ -114,7 +115,7 @@ public class PlayerControllerTests extends AbstractIntegrationTest {
                     + "goalkeeperPlayer/"
                     + PlayerControllerTests.validGoalkeeperPlayerId.toString())
             .then()
-            .statusCode(200)
+            .statusCode(HttpStatus.OK.value())
             .and()
             .extract()
             .as(GetGoalkeeperPlayerByIdResponse.class);
@@ -128,7 +129,7 @@ public class PlayerControllerTests extends AbstractIntegrationTest {
         .when()
         .get(basePath + "linePlayer/" + UUID.randomUUID().toString())
         .then()
-        .statusCode(404);
+        .statusCode(HttpStatus.NOT_FOUND.value());
   }
 
   @Test
@@ -137,7 +138,7 @@ public class PlayerControllerTests extends AbstractIntegrationTest {
         .when()
         .get(basePath + "goalkeeperPlayer/" + UUID.randomUUID().toString())
         .then()
-        .statusCode(404);
+        .statusCode(HttpStatus.NOT_FOUND.value());
   }
 
   @Test
@@ -150,7 +151,7 @@ public class PlayerControllerTests extends AbstractIntegrationTest {
             .when()
             .put(basePath + "linePlayer/" + PlayerControllerTests.validLinePlayerId.toString())
             .then()
-            .statusCode(200)
+            .statusCode(HttpStatus.OK.value())
             .and()
             .extract()
             .as(PlayerUpdatedResponse.class);
@@ -171,7 +172,7 @@ public class PlayerControllerTests extends AbstractIntegrationTest {
                     + "goalkeeperPlayer/"
                     + PlayerControllerTests.validGoalkeeperPlayerId.toString())
             .then()
-            .statusCode(200)
+            .statusCode(HttpStatus.OK.value())
             .and()
             .extract()
             .as(PlayerUpdatedResponse.class);
@@ -187,7 +188,7 @@ public class PlayerControllerTests extends AbstractIntegrationTest {
         .contentType(ContentType.JSON)
         .put(basePath + "linePlayer/" + UUID.randomUUID().toString())
         .then()
-        .statusCode(404);
+        .statusCode(HttpStatus.NOT_FOUND.value());
   }
 
   @Test
@@ -198,6 +199,44 @@ public class PlayerControllerTests extends AbstractIntegrationTest {
         .contentType(ContentType.JSON)
         .put(basePath + "goalkeeperPlayer/" + UUID.randomUUID().toString())
         .then()
-        .statusCode(404);
+        .statusCode(HttpStatus.NOT_FOUND.value());
+  }
+
+  @Test
+  @Order(7)
+  public void givenExistentId_whenDelete_shouldReturnNoContentForLinePlayer() {
+    RestAssured.given()
+        .when()
+        .delete(basePath + "linePlayer/" + PlayerControllerTests.validLinePlayerId)
+        .then()
+        .statusCode(HttpStatus.NO_CONTENT.value());
+  }
+
+  @Test
+  @Order(8)
+  public void givenExistentId_whenDelete_shouldReturnNoContentForGoalkeeperPlayer() {
+    RestAssured.given()
+        .when()
+        .delete(basePath + "goalkeeperPlayer/" + PlayerControllerTests.validGoalkeeperPlayerId)
+        .then()
+        .statusCode(HttpStatus.NO_CONTENT.value());
+  }
+
+  @Test
+  public void givenNonExistentId_whenDelete_shouldReturnNoContentForLinePlayer() {
+    RestAssured.given()
+        .when()
+        .delete(basePath + "linePlayer/" + UUID.randomUUID())
+        .then()
+        .statusCode(HttpStatus.NO_CONTENT.value());
+  }
+
+  @Test
+  public void givenNonExistentId_whenDelete_shouldReturnNoContentForGoalkeeperPlayer() {
+    RestAssured.given()
+        .when()
+        .delete(basePath + "goalkeeperPlayer/" + UUID.randomUUID())
+        .then()
+        .statusCode(HttpStatus.NO_CONTENT.value());
   }
 }

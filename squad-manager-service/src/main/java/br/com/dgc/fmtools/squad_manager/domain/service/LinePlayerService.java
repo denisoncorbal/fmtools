@@ -44,4 +44,8 @@ public class LinePlayerService {
 
     return id;
   }
+
+  public void deleteLinePlayer(UUID id) {
+    linePlayerRepository.deleteById(id);
+  }
 }
