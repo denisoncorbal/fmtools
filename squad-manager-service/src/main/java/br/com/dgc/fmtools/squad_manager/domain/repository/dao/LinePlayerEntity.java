@@ -1,8 +1,7 @@
 package br.com.dgc.fmtools.squad_manager.domain.repository.dao;
 
+import br.com.dgc.fmtools.squad_manager.domain.repository.UuidPostgresqlGeneratorAnnotation;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.UUID;
@@ -10,9 +9,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "TB_LINE_PLAYER")
 public class LinePlayerEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.UUID)
-  private UUID id;
+  @Id @UuidPostgresqlGeneratorAnnotation private UUID id;
 
   private String name;
 
