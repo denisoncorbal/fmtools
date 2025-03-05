@@ -5,12 +5,18 @@ import br.com.dgc.fmtools.squad_manager.domain.service.LinePlayerService;
 import br.com.dgc.fmtools.squad_manager.exception.PlayerNotFoundException;
 import br.com.dgc.fmtools.squad_manager.web.dto.request.GoalkeeperPlayerRequest;
 import br.com.dgc.fmtools.squad_manager.web.dto.request.LinePlayerRequest;
+import br.com.dgc.fmtools.squad_manager.web.dto.response.GetAllGoalkeeperPlayersResponse;
+import br.com.dgc.fmtools.squad_manager.web.dto.response.GetAllLinePlayersResponse;
+import br.com.dgc.fmtools.squad_manager.web.dto.response.GetGoalkeeperPlayerByIdResponse;
+import br.com.dgc.fmtools.squad_manager.web.dto.response.GetLinePlayerByIdResponse;
 import br.com.dgc.fmtools.squad_manager.web.dto.response.PlayerCreatedResponse;
 import br.com.dgc.fmtools.squad_manager.web.dto.response.PlayerUpdatedResponse;
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/v1/api")
 @RestController
+@CrossOrigin("http://localhost:3000")
 public class PlayerController {
 
   private final LinePlayerService linePlayerService;
@@ -49,14 +56,25 @@ public class PlayerController {
   }
 
   @GetMapping("/linePlayer/{id}")
-  public ResponseEntity<?> getLinePlayerById(@PathVariable UUID id) throws PlayerNotFoundException {
+  public ResponseEntity<GetLinePlayerByIdResponse> getLinePlayerById(@PathVariable UUID id)
+      throws PlayerNotFoundException {
     return ResponseEntity.ok(this.linePlayerService.getLinePlayerById(id));
   }
 
-  @GetMapping("goalkeeperPlayer/{id}")
-  public ResponseEntity<?> getGoalkeeperPlayerById(@PathVariable UUID id)
-      throws PlayerNotFoundException {
+  @GetMapping("/goalkeeperPlayer/{id}")
+  public ResponseEntity<GetGoalkeeperPlayerByIdResponse> getGoalkeeperPlayerById(
+      @PathVariable UUID id) throws PlayerNotFoundException {
     return ResponseEntity.ok(this.goalkeeperPlayerService.getGoalkeeperPlayerById(id));
+  }
+
+  @GetMapping("/linePlayer")
+  public ResponseEntity<List<GetAllLinePlayersResponse>> getAllLinePlayerById() {
+    return ResponseEntity.ok(this.linePlayerService.getAllLinePlayers());
+  }
+
+  @GetMapping("/goalkeeperPlayer")
+  public ResponseEntity<List<GetAllGoalkeeperPlayersResponse>> getAllGoalkeeperPlayerById() {
+    return ResponseEntity.ok(this.goalkeeperPlayerService.getAllGoalkeeperPlayers());
   }
 
   @PutMapping("/linePlayer/{id}")

@@ -239,4 +239,22 @@ public class PlayerControllerTests extends AbstractIntegrationTest {
         .then()
         .statusCode(HttpStatus.NO_CONTENT.value());
   }
+
+  @Test
+  public void whenGet_shouldReturnOkOnLinePlayer() {
+    RestAssured.given()
+        .when()
+        .get(basePath + "linePlayer")
+        .then()
+        .statusCode(HttpStatus.OK.value());
+  }
+
+  @Test
+  public void whenGet_shouldReturnOkOnGoalkeeperPlayer() {
+    RestAssured.given()
+        .when()
+        .get(basePath + "goalkeeperPlayer")
+        .then()
+        .statusCode(HttpStatus.OK.value());
+  }
 }

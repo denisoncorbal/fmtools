@@ -4,8 +4,10 @@ import br.com.dgc.fmtools.squad_manager.domain.repository.GoalkeeperPlayerReposi
 import br.com.dgc.fmtools.squad_manager.domain.repository.dao.GoalkeeperPlayerEntity;
 import br.com.dgc.fmtools.squad_manager.exception.PlayerNotFoundException;
 import br.com.dgc.fmtools.squad_manager.web.dto.request.GoalkeeperPlayerRequest;
+import br.com.dgc.fmtools.squad_manager.web.dto.response.GetAllGoalkeeperPlayersResponse;
 import br.com.dgc.fmtools.squad_manager.web.dto.response.GetGoalkeeperPlayerByIdResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 
@@ -48,5 +50,9 @@ public class GoalkeeperPlayerService {
 
   public void deleteGoalkeeperPlayer(UUID id) {
     goalkeeperPlayerRepository.deleteById(id);
+  }
+
+  public List<GetAllGoalkeeperPlayersResponse> getAllGoalkeeperPlayers() {
+    return this.goalkeeperPlayerRepository.findAllProjectedBy();
   }
 }
