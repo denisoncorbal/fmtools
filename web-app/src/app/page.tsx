@@ -1,4 +1,5 @@
-import { Button, Col, Container, Row } from "react-bootstrap";
+import Link from "next/link";
+import { Col, Container, Row } from "react-bootstrap";
 
 export default function Home() {
 
@@ -11,8 +12,13 @@ export default function Home() {
     <Container>
       <Row>
         <Col>
-          Input your code here
-          <Button>Teste</Button>
+          <Link href={"/squad-manager"}>Squad Manager</Link>
+        </Col>
+        <Col>
+          <Link href={"#"}>Position Calculator</Link>
+        </Col>
+        <Col>
+          <Link href={"#"}>Formation Calculator</Link>
         </Col>
       </Row>
     </Container>
