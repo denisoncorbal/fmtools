@@ -11,6 +11,15 @@
             "group": "fmtools",
             "database": "postgres",
             "username": "postgres"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 15433,
+            "driver": "PostgreSQL",
+            "name": "positions-calculator-service",
+            "database": "postgres",
+            "username": "postgres"
         }
     ],
     "java.compile.nullAnalysis.mode": "automatic"
