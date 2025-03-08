@@ -1,30 +1,26 @@
 package br.com.dgc.fmtools.positions_calculator_service.domain.repository.dao;
 
-import java.util.UUID;
-
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.Type;
-import org.hibernate.type.SqlTypes;
-
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.util.UUID;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.Type;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "TB_POSITIONS_CALCULATOR")
 public class Positions {
-  @Id
-  private UUID id;
+  @Id private UUID id;
 
   @Type(JsonBinaryType.class)
   @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "positions", columnDefinition = "jsonb")
   private String positions;
 
-  public Positions() {
-  }
+  public Positions() {}
 
   public UUID getId() {
     return id;
