@@ -9,13 +9,17 @@ export default function Home() {
   // }, []);
 
   return (
-    <Container>
-      <Row>
+    <Container style={{ width: "100vw", height: "100vh" }}>
+      <Row style={{ width: "100%", height: "20%", paddingTop: "8px" }}>
+        <h1>FMTools</h1>
+        <p>Tools to help with Football Manager game</p>
+      </Row>
+      <Row style={{ width: "100%", height: "80%", alignContent: "center" }}>
         <Col>
           <Link href={"/squad-manager"}>Squad Manager</Link>
         </Col>
         <Col>
-          <Link href={"#"}>Position Calculator</Link>
+          <Link href={"/positions-calculator"}>Positions Calculator</Link>
         </Col>
         <Col>
           <Link href={"#"}>Formation Calculator</Link>

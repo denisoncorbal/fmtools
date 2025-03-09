@@ -19,7 +19,8 @@
             "driver": "PostgreSQL",
             "name": "positions-calculator-service",
             "database": "postgres",
-            "username": "postgres"
+            "username": "postgres",
+            "group": "fmtools"
         }
     ],
     "java.compile.nullAnalysis.mode": "automatic"

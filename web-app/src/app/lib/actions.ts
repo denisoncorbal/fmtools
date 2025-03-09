@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { GoalkeeperPlayer, LinePlayer } from "./definitions";
 
 export async function createLinePlayer(formData: FormData) {
@@ -235,4 +236,29 @@ export async function removeGoalkeeperPlayer(formData: FormData) {
     })
 
     revalidatePath('/squad-manager');
+}
+
+export async function calculateLinePositions(formData: FormData) {
+    console.log(formData.get("select-player")?.toString());
+    await fetch("http://localhost:8082/v1/api/calculateLinePositions/" + formData.get("select-player")?.toString(), {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+
+    revalidatePath('/positions-calculator/positions-result/' + formData.get("player-type") + "/" + formData.get("select-player")?.toString());
+    redirect('/positions-calculator/positions-result/' + formData.get("player-type") + "/" + formData.get("select-player")?.toString());
+}
+
+export async function calculateGoalkeeperPositions(formData: FormData) {
+    await fetch("http://localhost:8082/v1/api/calculateGoalkeeperPositions/" + formData.get("select-player")?.toString(), {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+
+    revalidatePath('/positions-calculator/positions-result/' + formData.get("player-type") + "/" + formData.get("select-player")?.toString());
+    redirect('/positions-calculator/positions-result/' + formData.get("player-type") + "/" + formData.get("select-player")?.toString());
 }

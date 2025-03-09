@@ -47,8 +47,6 @@ export function isLinePlayerArray(linePlayers: object[]): linePlayers is LinePla
     return linePlayers.length > 0 && linePlayers.every((linePlayer) => Object.keys(linePlayer).includes("corners"));
 }
 
-
-
 export type GoalkeeperPlayer = {
     id?: string,
     name: string,
@@ -98,4 +96,19 @@ export function isGoalkeeperPlayer(goalkeeperPlayer: object): goalkeeperPlayer i
 
 export function isGoalkeeperPlayerArray(goalkeeperPlayers: object[]): goalkeeperPlayers is GoalkeeperPlayer[] {
     return goalkeeperPlayers.length > 0 && goalkeeperPlayers.every((goalkeeperPlayer) => Object.keys(goalkeeperPlayer).includes("aerialReach"));
+}
+
+export type SuitablePosition = {
+    name: string,
+    percentage: number,
+    quantityKeyAttributes: number,
+    quantityPreferableAttributes: number
+}
+
+export function isSuitablePosition(suitablePosition: object): suitablePosition is SuitablePosition {
+    return Object.keys(suitablePosition).includes("percentage");
+}
+
+export function isSuitablePositionArray(suitablePositions: object[]): suitablePositions is SuitablePosition[] {
+    return suitablePositions.length > 0 && suitablePositions.every((suitablePosition) => Object.keys(suitablePosition).includes("percentage"));
 }
