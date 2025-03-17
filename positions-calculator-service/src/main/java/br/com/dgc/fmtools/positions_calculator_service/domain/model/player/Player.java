@@ -5,6 +5,7 @@ import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.Sui
 import java.util.List;
 
 public abstract class Player {
+
   protected String name;
   protected int aggression;
   protected int anticipation;
@@ -98,23 +99,25 @@ public abstract class Player {
   public abstract List<SuitablePosition> calculateSuitablePositions();
 
   protected SuitablePosition calculateSuitablePosition(Position position) {
+    int sumNormalAttributes =
+        position.getNormalAttributes().stream()
+            .reduce(0, (acumulator, element) -> acumulator += element);
     int sumPreferableAttributes =
         position.getPreferableAttributes().stream()
             .reduce(0, (acumulator, element) -> acumulator += element);
     int sumKeyAttributes =
         position.getKeyAttributes().stream()
             .reduce(0, (acumulator, element) -> acumulator += element * 2);
-    int total = sumPreferableAttributes + sumKeyAttributes;
-    int totalPeso =
-        position.getPreferableAttributes().size() + (position.getKeyAttributes().size() * 2);
 
-    int maxAttributesSum =
-        (position.getPreferableAttributes().size() * 20)
-            + (position.getKeyAttributes().size() * 20 * 2);
-    int maxAttributesValue = (int) (maxAttributesSum / totalPeso);
+    int total = sumNormalAttributes + sumPreferableAttributes + sumKeyAttributes;
+    double totalWeight =
+        position.getWeight()
+            + (position.getPreferableAttributes().size() * 1.5)
+            + (position.getKeyAttributes().size() * 2);
 
-    int suitableValue = (int) (total / totalPeso);
-    int percentageSuitable = (int) (suitableValue * 100 / maxAttributesValue);
+    int suitableValue = (int) (total / totalWeight);
+    int percentageSuitable = (int) (suitableValue * 100 / 20);
+
     return new SuitablePosition(
         position.getName(),
         percentageSuitable,
@@ -232,5 +235,117 @@ public abstract class Player {
 
   public int getPassing() {
     return passing;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setAggression(int aggression) {
+    this.aggression = aggression;
+  }
+
+  public void setAnticipation(int anticipation) {
+    this.anticipation = anticipation;
+  }
+
+  public void setBravery(int bravery) {
+    this.bravery = bravery;
+  }
+
+  public void setComposure(int composure) {
+    this.composure = composure;
+  }
+
+  public void setConcentration(int concentration) {
+    this.concentration = concentration;
+  }
+
+  public void setDecisions(int decisions) {
+    this.decisions = decisions;
+  }
+
+  public void setDetermination(int determination) {
+    this.determination = determination;
+  }
+
+  public void setFlair(int flair) {
+    this.flair = flair;
+  }
+
+  public void setLeadership(int leadership) {
+    this.leadership = leadership;
+  }
+
+  public void setOffTheBall(int offTheBall) {
+    this.offTheBall = offTheBall;
+  }
+
+  public void setPositioning(int positioning) {
+    this.positioning = positioning;
+  }
+
+  public void setTeamwork(int teamwork) {
+    this.teamwork = teamwork;
+  }
+
+  public void setVision(int vision) {
+    this.vision = vision;
+  }
+
+  public void setWorkRate(int workRate) {
+    this.workRate = workRate;
+  }
+
+  public void setAcceleration(int acceleration) {
+    this.acceleration = acceleration;
+  }
+
+  public void setAgility(int agility) {
+    this.agility = agility;
+  }
+
+  public void setBalance(int balance) {
+    this.balance = balance;
+  }
+
+  public void setJumpingReach(int jumpingReach) {
+    this.jumpingReach = jumpingReach;
+  }
+
+  public void setNaturalFitness(int naturalFitness) {
+    this.naturalFitness = naturalFitness;
+  }
+
+  public void setPace(int pace) {
+    this.pace = pace;
+  }
+
+  public void setStamina(int stamina) {
+    this.stamina = stamina;
+  }
+
+  public void setStrength(int strength) {
+    this.strength = strength;
+  }
+
+  public void setFreeKickTaking(int freeKickTaking) {
+    this.freeKickTaking = freeKickTaking;
+  }
+
+  public void setPenaltyTaking(int penaltyTaking) {
+    this.penaltyTaking = penaltyTaking;
+  }
+
+  public void setTechnique(int technique) {
+    this.technique = technique;
+  }
+
+  public void setFirstTouch(int firstTouch) {
+    this.firstTouch = firstTouch;
+  }
+
+  public void setPassing(int passing) {
+    this.passing = passing;
   }
 }

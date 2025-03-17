@@ -1,14 +1,59 @@
 package br.com.dgc.fmtools.positions_calculator_service.domain.model.player;
 
-import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.GoalkeeperDe;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.SuitablePosition;
-import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.SweeperKeeperAt;
-import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.SweeperKeeperDe;
-import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.SweeperKeeperSu;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.goalkeeper.GoalkeeperDeGK;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.goalkeeper.SweeperKeeperAtGK;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.goalkeeper.SweeperKeeperDeGK;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.goalkeeper.SweeperKeeperSuGK;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GoalkeeperPlayer extends Player {
+
+  public void setAerialReach(int aerialReach) {
+    this.aerialReach = aerialReach;
+  }
+
+  public void setCommandOfArea(int commandOfArea) {
+    this.commandOfArea = commandOfArea;
+  }
+
+  public void setCommunication(int communication) {
+    this.communication = communication;
+  }
+
+  public void setEccentricity(int eccentricity) {
+    this.eccentricity = eccentricity;
+  }
+
+  public void setHandling(int handling) {
+    this.handling = handling;
+  }
+
+  public void setKicking(int kicking) {
+    this.kicking = kicking;
+  }
+
+  public void setOneOnOnes(int oneOnOnes) {
+    this.oneOnOnes = oneOnOnes;
+  }
+
+  public void setPunching(int punching) {
+    this.punching = punching;
+  }
+
+  public void setReflexes(int reflexes) {
+    this.reflexes = reflexes;
+  }
+
+  public void setRushingOut(int rushingOut) {
+    this.rushingOut = rushingOut;
+  }
+
+  public void setThrowing(int throwing) {
+    this.throwing = throwing;
+  }
+
   private int aerialReach;
   private int commandOfArea;
   private int communication;
@@ -107,14 +152,57 @@ public class GoalkeeperPlayer extends Player {
     this.throwing = throwing;
   }
 
+  public GoalkeeperPlayer(GoalkeeperPlayer initPlayer) {
+    super(
+        initPlayer.name,
+        initPlayer.aggression,
+        initPlayer.anticipation,
+        initPlayer.bravery,
+        initPlayer.composure,
+        initPlayer.concentration,
+        initPlayer.decisions,
+        initPlayer.determination,
+        initPlayer.flair,
+        initPlayer.leadership,
+        initPlayer.offTheBall,
+        initPlayer.positioning,
+        initPlayer.teamwork,
+        initPlayer.vision,
+        initPlayer.workRate,
+        initPlayer.acceleration,
+        initPlayer.agility,
+        initPlayer.balance,
+        initPlayer.jumpingReach,
+        initPlayer.naturalFitness,
+        initPlayer.pace,
+        initPlayer.stamina,
+        initPlayer.strength,
+        initPlayer.freeKickTaking,
+        initPlayer.penaltyTaking,
+        initPlayer.technique,
+        initPlayer.firstTouch,
+        initPlayer.passing);
+    this.aerialReach = initPlayer.aerialReach;
+    this.commandOfArea = initPlayer.commandOfArea;
+    this.communication = initPlayer.communication;
+    this.eccentricity = initPlayer.eccentricity;
+    this.handling = initPlayer.handling;
+    this.kicking = initPlayer.kicking;
+    this.oneOnOnes = initPlayer.oneOnOnes;
+    this.punching = initPlayer.punching;
+    this.reflexes = initPlayer.reflexes;
+    this.rushingOut = initPlayer.rushingOut;
+    this.throwing = initPlayer.throwing;
+  }
+
   @Override
   public List<SuitablePosition> calculateSuitablePositions() {
     List<SuitablePosition> suitablePositions = new ArrayList<>();
 
-    suitablePositions.add(this.calculateSuitablePosition(new SweeperKeeperDe(this)));
-    suitablePositions.add(this.calculateSuitablePosition(new SweeperKeeperSu(this)));
-    suitablePositions.add(this.calculateSuitablePosition(new SweeperKeeperAt(this)));
-    suitablePositions.add(this.calculateSuitablePosition(new GoalkeeperDe(this)));
+    suitablePositions.add(this.calculateSuitablePosition(new SweeperKeeperDeGK(this)));
+    suitablePositions.add(this.calculateSuitablePosition(new SweeperKeeperSuGK(this)));
+    suitablePositions.add(this.calculateSuitablePosition(new SweeperKeeperAtGK(this)));
+    suitablePositions.add(this.calculateSuitablePosition(new GoalkeeperDeGK(this)));
 
     return suitablePositions;
   }
