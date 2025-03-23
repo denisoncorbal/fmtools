@@ -2,67 +2,48 @@ package br.com.dgc.fmtools.positions_calculator_service.domain.model.position.mi
 
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.player.LinePlayer;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.Position;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.PositionNames;
 import java.util.List;
 
-public class WideMidfielderSuMRL extends Position implements MidfielderRightLeftPositions {
+public class WideMidfielderSuMRL extends Position {
 
-  public WideMidfielderSuMRL(LinePlayer initPlayer) {
-    super();
-    LinePlayer player = this.applyAttributeWeight(initPlayer);
-
-    List<Integer> normalAttributes =
+  public WideMidfielderSuMRL(LinePlayer player) {
+    super(
+        PositionNames.WIDE_MIDFIELDER_SU_MRL_NAME,
         List.of(
-            player.getCorners(),
-            player.getDribbling(),
-            player.getFinishing(),
-            player.getFreeKickTaking(),
-            player.getHeading(),
-            player.getLongShots(),
-            player.getLongThrows(),
-            player.getMarking(),
-            player.getPenaltyTaking(),
-            player.getAggression(),
-            player.getBravery(),
-            player.getDetermination(),
-            player.getFlair(),
-            player.getLeadership(),
-            player.getAcceleration(),
-            player.getAgility(),
-            player.getBalance(),
-            player.getJumpingReach(),
-            player.getNaturalFitness(),
-            player.getPace(),
-            player.getStrength());
-
-    List<Integer> preferableAttributes =
+            player.getCrossing() * MidfielderRightLeftWeights.CROSSING,
+            player.getFirstTouch() * MidfielderRightLeftWeights.FIRST_TOUCH,
+            player.getTechnique() * MidfielderRightLeftWeights.TECHNIQUE,
+            player.getAnticipation() * MidfielderRightLeftWeights.ANTICIPATION,
+            player.getComposure() * MidfielderRightLeftWeights.COMPOSURE,
+            player.getConcentration() * MidfielderRightLeftWeights.CONCENTRATION,
+            player.getOffTheBall() * MidfielderRightLeftWeights.OFF_THE_BALL,
+            player.getPositioning() * MidfielderRightLeftWeights.POSITIONING,
+            player.getVision() * MidfielderRightLeftWeights.VISION),
         List.of(
-            player.getCrossing(),
-            player.getFirstTouch(),
-            player.getTechnique(),
-            player.getAnticipation(),
-            player.getComposure(),
-            player.getConcentration(),
-            player.getOffTheBall(),
-            player.getPositioning(),
-            player.getVision());
-
-    List<Integer> keyAttributes =
+            player.getPassing() * MidfielderRightLeftWeights.PASSING * 2,
+            player.getTackling() * MidfielderRightLeftWeights.TACKLING * 2,
+            player.getDecisions() * MidfielderRightLeftWeights.DECISIONS * 2,
+            player.getTeamwork() * MidfielderRightLeftWeights.TEAMWORK * 2,
+            player.getWorkRate() * MidfielderRightLeftWeights.WORK_RATE * 2,
+            player.getStamina() * MidfielderRightLeftWeights.STAMINA * 2),
         List.of(
-            player.getPassing(),
-            player.getTackling(),
-            player.getDecisions(),
-            player.getTeamwork(),
-            player.getWorkRate(),
-            player.getStamina());
-
-    String name = "Wide Midfielder (Su) (MRL)";
-
-    int weight = 88;
-
-    this.normalAttributes = normalAttributes;
-    this.preferableAttributes = preferableAttributes;
-    this.keyAttributes = keyAttributes;
-    this.name = name;
-    this.weight = weight;
+                MidfielderRightLeftWeights.CROSSING,
+                MidfielderRightLeftWeights.FIRST_TOUCH,
+                MidfielderRightLeftWeights.TECHNIQUE,
+                MidfielderRightLeftWeights.ANTICIPATION,
+                MidfielderRightLeftWeights.COMPOSURE,
+                MidfielderRightLeftWeights.CONCENTRATION,
+                MidfielderRightLeftWeights.OFF_THE_BALL,
+                MidfielderRightLeftWeights.POSITIONING,
+                MidfielderRightLeftWeights.VISION,
+                MidfielderRightLeftWeights.PASSING * 2,
+                MidfielderRightLeftWeights.TACKLING * 2,
+                MidfielderRightLeftWeights.DECISIONS * 2,
+                MidfielderRightLeftWeights.TEAMWORK * 2,
+                MidfielderRightLeftWeights.WORK_RATE * 2,
+                MidfielderRightLeftWeights.STAMINA * 2)
+            .stream()
+            .reduce(0, Integer::sum));
   }
 }

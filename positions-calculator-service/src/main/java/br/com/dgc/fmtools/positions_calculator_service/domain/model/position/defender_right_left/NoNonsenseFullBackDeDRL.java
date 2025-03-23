@@ -2,67 +2,38 @@ package br.com.dgc.fmtools.positions_calculator_service.domain.model.position.de
 
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.player.LinePlayer;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.Position;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.PositionNames;
 import java.util.List;
 
-public class NoNonsenseFullBackDeDRL extends Position implements DefenderRightLeftPositions {
+public class NoNonsenseFullBackDeDRL extends Position {
 
-  public NoNonsenseFullBackDeDRL(LinePlayer initPlayer) {
-    super();
-    LinePlayer player = this.applyAttributeWeight(initPlayer);
-
-    List<Integer> normalAttributes =
+  public NoNonsenseFullBackDeDRL(LinePlayer player) {
+    super(
+        PositionNames.NO_NONSENSE_FULL_BACK_DE_DRL_NAME,
         List.of(
-            player.getCorners(),
-            player.getCrossing(),
-            player.getDribbling(),
-            player.getFinishing(),
-            player.getFirstTouch(),
-            player.getFreeKickTaking(),
-            player.getLongShots(),
-            player.getLongThrows(),
-            player.getPassing(),
-            player.getPenaltyTaking(),
-            player.getTechnique(),
-            player.getComposure(),
-            player.getDecisions(),
-            player.getDetermination(),
-            player.getFlair(),
-            player.getLeadership(),
-            player.getOffTheBall(),
-            player.getVision(),
-            player.getWorkRate(),
-            player.getAcceleration(),
-            player.getAgility(),
-            player.getBalance(),
-            player.getJumpingReach(),
-            player.getNaturalFitness(),
-            player.getPace(),
-            player.getStamina());
-
-    List<Integer> preferableAttributes =
+            player.getHeading() * DefenderRightLeftWeights.HEADING,
+            player.getAggression() * DefenderRightLeftWeights.AGGRESSION,
+            player.getBravery() * DefenderRightLeftWeights.BRAVERY,
+            player.getConcentration() * DefenderRightLeftWeights.CONCENTRATION,
+            player.getTeamwork() * DefenderRightLeftWeights.TEAMWORK),
         List.of(
-            player.getHeading(),
-            player.getAggression(),
-            player.getBravery(),
-            player.getConcentration(),
-            player.getTeamwork());
-
-    List<Integer> keyAttributes =
+            player.getMarking() * DefenderRightLeftWeights.MARKING * 2,
+            player.getTackling() * DefenderRightLeftWeights.TACKLING * 2,
+            player.getAnticipation() * DefenderRightLeftWeights.ANTICIPATION * 2,
+            player.getPositioning() * DefenderRightLeftWeights.POSITIONING * 2,
+            player.getStrength() * DefenderRightLeftWeights.STRENGTH * 2),
         List.of(
-            player.getMarking(),
-            player.getTackling(),
-            player.getAnticipation(),
-            player.getPositioning(),
-            player.getStrength());
-
-    String name = "No-Nonsense Full-Back (De) (DRL)";
-
-    int weight = 87;
-
-    this.normalAttributes = normalAttributes;
-    this.preferableAttributes = preferableAttributes;
-    this.keyAttributes = keyAttributes;
-    this.name = name;
-    this.weight = weight;
+                DefenderRightLeftWeights.HEADING,
+                DefenderRightLeftWeights.AGGRESSION,
+                DefenderRightLeftWeights.BRAVERY,
+                DefenderRightLeftWeights.CONCENTRATION,
+                DefenderRightLeftWeights.TEAMWORK,
+                DefenderRightLeftWeights.MARKING * 2,
+                DefenderRightLeftWeights.TACKLING * 2,
+                DefenderRightLeftWeights.ANTICIPATION * 2,
+                DefenderRightLeftWeights.POSITIONING * 2,
+                DefenderRightLeftWeights.STRENGTH * 2)
+            .stream()
+            .reduce(0, Integer::sum));
   }
 }

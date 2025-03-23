@@ -2,67 +2,62 @@ package br.com.dgc.fmtools.positions_calculator_service.domain.model.position.de
 
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.player.LinePlayer;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.Position;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.PositionNames;
 import java.util.List;
 
-public class LiberoSuDC extends Position implements DefenderCentrePositions {
+public class LiberoSuDC extends Position {
 
-  public LiberoSuDC(LinePlayer initPlayer) {
-    super();
-    LinePlayer player = this.applyAttributeWeight(initPlayer);
-
-    List<Integer> normalAttributes =
+  public LiberoSuDC(LinePlayer player) {
+    super(
+        PositionNames.LIBERO_SU_DC_NAME,
         List.of(
-            player.getCorners(),
-            player.getCrossing(),
-            player.getFinishing(),
-            player.getFreeKickTaking(),
-            player.getLongShots(),
-            player.getLongThrows(),
-            player.getPenaltyTaking(),
-            player.getAggression(),
-            player.getDetermination(),
-            player.getLeadership(),
-            player.getOffTheBall(),
-            player.getWorkRate(),
-            player.getAcceleration(),
-            player.getNaturalFitness());
-
-    List<Integer> preferableAttributes =
+            player.getDribbling() * DefenderCentreWeights.DRIBBLING,
+            player.getHeading() * DefenderCentreWeights.HEADING,
+            player.getTechnique() * DefenderCentreWeights.TECHNIQUE,
+            player.getBravery() * DefenderCentreWeights.BRAVERY,
+            player.getFlair() * DefenderCentreWeights.FLAIR,
+            player.getAgility() * DefenderCentreWeights.AGILITY,
+            player.getBalance() * DefenderCentreWeights.BALANCE,
+            player.getJumpingReach() * DefenderCentreWeights.JUMPING_REACH,
+            player.getStamina() * DefenderCentreWeights.STAMINA,
+            player.getStrength() * DefenderCentreWeights.STRENGTH),
         List.of(
-            player.getDribbling(),
-            player.getHeading(),
-            player.getTechnique(),
-            player.getBravery(),
-            player.getFlair(),
-            player.getAgility(),
-            player.getBalance(),
-            player.getJumpingReach(),
-            player.getStamina(),
-            player.getStrength());
-
-    List<Integer> keyAttributes =
+            player.getFirstTouch() * DefenderCentreWeights.FIRST_TOUCH * 2,
+            player.getMarking() * DefenderCentreWeights.MARKING * 2,
+            player.getPassing() * DefenderCentreWeights.PASSING * 2,
+            player.getTackling() * DefenderCentreWeights.TACKLING * 2,
+            player.getAnticipation() * DefenderCentreWeights.ANTICIPATION * 2,
+            player.getComposure() * DefenderCentreWeights.COMPOSURE * 2,
+            player.getConcentration() * DefenderCentreWeights.CONCENTRATION * 2,
+            player.getDecisions() * DefenderCentreWeights.DECISIONS * 2,
+            player.getPositioning() * DefenderCentreWeights.POSITIONING * 2,
+            player.getTeamwork() * DefenderCentreWeights.TEAMWORK * 2,
+            player.getVision() * DefenderCentreWeights.VISION * 2,
+            player.getPace() * DefenderCentreWeights.PACE * 2),
         List.of(
-            player.getFirstTouch(),
-            player.getMarking(),
-            player.getPassing(),
-            player.getTackling(),
-            player.getAnticipation(),
-            player.getComposure(),
-            player.getConcentration(),
-            player.getDecisions(),
-            player.getPositioning(),
-            player.getTeamwork(),
-            player.getVision(),
-            player.getPace());
-
-    String name = "Libero (Su) (DC)";
-
-    int weight = 103;
-
-    this.normalAttributes = normalAttributes;
-    this.preferableAttributes = preferableAttributes;
-    this.keyAttributes = keyAttributes;
-    this.name = name;
-    this.weight = weight;
+                DefenderCentreWeights.DRIBBLING,
+                DefenderCentreWeights.HEADING,
+                DefenderCentreWeights.TECHNIQUE,
+                DefenderCentreWeights.BRAVERY,
+                DefenderCentreWeights.FLAIR,
+                DefenderCentreWeights.AGILITY,
+                DefenderCentreWeights.BALANCE,
+                DefenderCentreWeights.JUMPING_REACH,
+                DefenderCentreWeights.STAMINA,
+                DefenderCentreWeights.STRENGTH,
+                DefenderCentreWeights.FIRST_TOUCH * 2,
+                DefenderCentreWeights.MARKING * 2,
+                DefenderCentreWeights.PASSING * 2,
+                DefenderCentreWeights.TACKLING * 2,
+                DefenderCentreWeights.ANTICIPATION * 2,
+                DefenderCentreWeights.COMPOSURE * 2,
+                DefenderCentreWeights.CONCENTRATION * 2,
+                DefenderCentreWeights.DECISIONS * 2,
+                DefenderCentreWeights.POSITIONING * 2,
+                DefenderCentreWeights.TEAMWORK * 2,
+                DefenderCentreWeights.VISION * 2,
+                DefenderCentreWeights.PACE * 2)
+            .stream()
+            .reduce(0, Integer::sum));
   }
 }

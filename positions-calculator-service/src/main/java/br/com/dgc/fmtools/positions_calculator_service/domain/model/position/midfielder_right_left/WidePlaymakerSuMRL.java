@@ -2,64 +2,38 @@ package br.com.dgc.fmtools.positions_calculator_service.domain.model.position.mi
 
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.player.LinePlayer;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.Position;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.PositionNames;
 import java.util.List;
 
-public class WidePlaymakerSuMRL extends Position implements MidfielderRightLeftPositions {
+public class WidePlaymakerSuMRL extends Position {
 
-  public WidePlaymakerSuMRL(LinePlayer initPlayer) {
-    super();
-    LinePlayer player = this.applyAttributeWeight(initPlayer);
-
-    List<Integer> normalAttributes =
+  public WidePlaymakerSuMRL(LinePlayer player) {
+    super(
+        PositionNames.WIDE_PLAYMAKER_SU_MRL_NAME,
         List.of(
-            player.getCorners(),
-            player.getCrossing(),
-            player.getFinishing(),
-            player.getFreeKickTaking(),
-            player.getHeading(),
-            player.getLongShots(),
-            player.getLongThrows(),
-            player.getMarking(),
-            player.getPenaltyTaking(),
-            player.getTackling(),
-            player.getAggression(),
-            player.getAnticipation(),
-            player.getBravery(),
-            player.getConcentration(),
-            player.getDetermination(),
-            player.getFlair(),
-            player.getLeadership(),
-            player.getPositioning(),
-            player.getWorkRate(),
-            player.getAcceleration(),
-            player.getBalance(),
-            player.getJumpingReach(),
-            player.getNaturalFitness(),
-            player.getPace(),
-            player.getStamina(),
-            player.getStrength());
-
-    List<Integer> preferableAttributes =
-        List.of(player.getDribbling(), player.getOffTheBall(), player.getAgility());
-
-    List<Integer> keyAttributes =
+            player.getDribbling() * MidfielderRightLeftWeights.DRIBBLING,
+            player.getOffTheBall() * MidfielderRightLeftWeights.OFF_THE_BALL,
+            player.getAgility() * MidfielderRightLeftWeights.AGILITY),
         List.of(
-            player.getFirstTouch(),
-            player.getPassing(),
-            player.getTechnique(),
-            player.getComposure(),
-            player.getDecisions(),
-            player.getTeamwork(),
-            player.getVision());
-
-    String name = "Wide Playmaker (Su) (MRL)";
-
-    int weight = 88;
-
-    this.normalAttributes = normalAttributes;
-    this.preferableAttributes = preferableAttributes;
-    this.keyAttributes = keyAttributes;
-    this.name = name;
-    this.weight = weight;
+            player.getFirstTouch() * MidfielderRightLeftWeights.FIRST_TOUCH * 2,
+            player.getPassing() * MidfielderRightLeftWeights.PASSING * 2,
+            player.getTechnique() * MidfielderRightLeftWeights.TECHNIQUE * 2,
+            player.getComposure() * MidfielderRightLeftWeights.COMPOSURE * 2,
+            player.getDecisions() * MidfielderRightLeftWeights.DECISIONS * 2,
+            player.getTeamwork() * MidfielderRightLeftWeights.TEAMWORK * 2,
+            player.getVision() * MidfielderRightLeftWeights.VISION * 2),
+        List.of(
+                MidfielderRightLeftWeights.DRIBBLING,
+                MidfielderRightLeftWeights.OFF_THE_BALL,
+                MidfielderRightLeftWeights.AGILITY,
+                MidfielderRightLeftWeights.FIRST_TOUCH * 2,
+                MidfielderRightLeftWeights.PASSING * 2,
+                MidfielderRightLeftWeights.TECHNIQUE * 2,
+                MidfielderRightLeftWeights.COMPOSURE * 2,
+                MidfielderRightLeftWeights.DECISIONS * 2,
+                MidfielderRightLeftWeights.TEAMWORK * 2,
+                MidfielderRightLeftWeights.VISION * 2)
+            .stream()
+            .reduce(0, Integer::sum));
   }
 }

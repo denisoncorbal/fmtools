@@ -2,67 +2,40 @@ package br.com.dgc.fmtools.positions_calculator_service.domain.model.position.mi
 
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.player.LinePlayer;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.Position;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.PositionNames;
 import java.util.List;
 
-public class WingerSuMRL extends Position implements MidfielderRightLeftPositions {
+public class WingerSuMRL extends Position {
 
-  public WingerSuMRL(LinePlayer initPlayer) {
-    super();
-    LinePlayer player = this.applyAttributeWeight(initPlayer);
-
-    List<Integer> normalAttributes =
+  public WingerSuMRL(LinePlayer player) {
+    super(
+        PositionNames.WINGER_SU_MRL_NAME,
         List.of(
-            player.getCorners(),
-            player.getFinishing(),
-            player.getFreeKickTaking(),
-            player.getHeading(),
-            player.getLongShots(),
-            player.getLongThrows(),
-            player.getMarking(),
-            player.getPenaltyTaking(),
-            player.getTackling(),
-            player.getAggression(),
-            player.getAnticipation(),
-            player.getBravery(),
-            player.getComposure(),
-            player.getConcentration(),
-            player.getDecisions(),
-            player.getDetermination(),
-            player.getFlair(),
-            player.getLeadership(),
-            player.getPositioning(),
-            player.getTeamwork(),
-            player.getVision(),
-            player.getBalance(),
-            player.getJumpingReach(),
-            player.getNaturalFitness(),
-            player.getStrength());
-
-    List<Integer> preferableAttributes =
+            player.getFirstTouch() * MidfielderRightLeftWeights.FIRST_TOUCH,
+            player.getPassing() * MidfielderRightLeftWeights.PASSING,
+            player.getWorkRate() * MidfielderRightLeftWeights.WORK_RATE,
+            player.getAgility() * MidfielderRightLeftWeights.AGILITY,
+            player.getStamina() * MidfielderRightLeftWeights.STAMINA),
         List.of(
-            player.getFirstTouch(),
-            player.getPassing(),
-            player.getWorkRate(),
-            player.getAgility(),
-            player.getStamina());
-
-    List<Integer> keyAttributes =
+            player.getCrossing() * MidfielderRightLeftWeights.CROSSING * 2,
+            player.getDribbling() * MidfielderRightLeftWeights.DRIBBLING * 2,
+            player.getTechnique() * MidfielderRightLeftWeights.TECHNIQUE * 2,
+            player.getOffTheBall() * MidfielderRightLeftWeights.OFF_THE_BALL * 2,
+            player.getAcceleration() * MidfielderRightLeftWeights.ACCELERATION * 2,
+            player.getPace() * MidfielderRightLeftWeights.PACE * 2),
         List.of(
-            player.getCrossing(),
-            player.getDribbling(),
-            player.getTechnique(),
-            player.getOffTheBall(),
-            player.getAcceleration(),
-            player.getPace());
-
-    String name = "Winger (Su) (MRL)";
-
-    int weight = 88;
-
-    this.normalAttributes = normalAttributes;
-    this.preferableAttributes = preferableAttributes;
-    this.keyAttributes = keyAttributes;
-    this.name = name;
-    this.weight = weight;
+                MidfielderRightLeftWeights.FIRST_TOUCH,
+                MidfielderRightLeftWeights.PASSING,
+                MidfielderRightLeftWeights.WORK_RATE,
+                MidfielderRightLeftWeights.AGILITY,
+                MidfielderRightLeftWeights.STAMINA,
+                MidfielderRightLeftWeights.CROSSING * 2,
+                MidfielderRightLeftWeights.DRIBBLING * 2,
+                MidfielderRightLeftWeights.TECHNIQUE * 2,
+                MidfielderRightLeftWeights.OFF_THE_BALL * 2,
+                MidfielderRightLeftWeights.ACCELERATION * 2,
+                MidfielderRightLeftWeights.PACE * 2)
+            .stream()
+            .reduce(0, Integer::sum));
   }
 }

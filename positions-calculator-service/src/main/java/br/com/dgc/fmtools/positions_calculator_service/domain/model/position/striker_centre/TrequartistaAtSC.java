@@ -2,67 +2,46 @@ package br.com.dgc.fmtools.positions_calculator_service.domain.model.position.st
 
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.player.LinePlayer;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.Position;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.PositionNames;
 import java.util.List;
 
-public class TrequartistaAtSC extends Position implements StrikerCentrePositions {
+public class TrequartistaAtSC extends Position {
 
-  public TrequartistaAtSC(LinePlayer initPlayer) {
-    super();
-    LinePlayer player = this.applyAttributeWeight(initPlayer);
-
-    List<Integer> normalAttributes =
+  public TrequartistaAtSC(LinePlayer player) {
+    super(
+        PositionNames.TREQUARTISTA_AT_SC_NAME,
         List.of(
-            player.getCorners(),
-            player.getCrossing(),
-            player.getFreeKickTaking(),
-            player.getHeading(),
-            player.getLongShots(),
-            player.getLongThrows(),
-            player.getMarking(),
-            player.getPenaltyTaking(),
-            player.getTackling(),
-            player.getAggression(),
-            player.getBravery(),
-            player.getConcentration(),
-            player.getDetermination(),
-            player.getLeadership(),
-            player.getPositioning(),
-            player.getTeamwork(),
-            player.getWorkRate(),
-            player.getJumpingReach(),
-            player.getNaturalFitness(),
-            player.getPace(),
-            player.getStamina(),
-            player.getStrength());
-
-    List<Integer> preferableAttributes =
+            player.getFinishing() * StrikerCentreWeights.FINISHING,
+            player.getAnticipation() * StrikerCentreWeights.ANTICIPATION,
+            player.getAgility() * StrikerCentreWeights.AGILITY,
+            player.getBalance() * StrikerCentreWeights.BALANCE),
         List.of(
-            player.getFinishing(),
-            player.getAnticipation(),
-            player.getAgility(),
-            player.getBalance());
-
-    List<Integer> keyAttributes =
+            player.getDribbling() * StrikerCentreWeights.DRIBBLING * 2,
+            player.getFirstTouch() * StrikerCentreWeights.FIRST_TOUCH * 2,
+            player.getPassing() * StrikerCentreWeights.PASSING * 2,
+            player.getTechnique() * StrikerCentreWeights.TECHNIQUE * 2,
+            player.getComposure() * StrikerCentreWeights.COMPOSURE * 2,
+            player.getDecisions() * StrikerCentreWeights.DECISIONS * 2,
+            player.getFlair() * StrikerCentreWeights.FLAIR * 2,
+            player.getOffTheBall() * StrikerCentreWeights.OFF_THE_BALL * 2,
+            player.getVision() * StrikerCentreWeights.VISION * 2,
+            player.getAcceleration() * StrikerCentreWeights.ACCELERATION * 2),
         List.of(
-            player.getDribbling(),
-            player.getFirstTouch(),
-            player.getPassing(),
-            player.getTechnique(),
-            player.getComposure(),
-            player.getDecisions(),
-            player.getFlair(),
-            player.getOffTheBall(),
-            player.getVision(),
-            player.getAcceleration());
-
-    String name = "Trequartista (At) (SC)";
-
-    int weight = 116;
-
-    this.normalAttributes = normalAttributes;
-    this.preferableAttributes = preferableAttributes;
-    this.keyAttributes = keyAttributes;
-    this.name = name;
-    this.weight = weight;
+                StrikerCentreWeights.FINISHING,
+                StrikerCentreWeights.ANTICIPATION,
+                StrikerCentreWeights.AGILITY,
+                StrikerCentreWeights.BALANCE,
+                StrikerCentreWeights.DRIBBLING * 2,
+                StrikerCentreWeights.FIRST_TOUCH * 2,
+                StrikerCentreWeights.PASSING * 2,
+                StrikerCentreWeights.TECHNIQUE * 2,
+                StrikerCentreWeights.COMPOSURE * 2,
+                StrikerCentreWeights.DECISIONS * 2,
+                StrikerCentreWeights.FLAIR * 2,
+                StrikerCentreWeights.OFF_THE_BALL * 2,
+                StrikerCentreWeights.VISION * 2,
+                StrikerCentreWeights.ACCELERATION * 2)
+            .stream()
+            .reduce(0, Integer::sum));
   }
 }

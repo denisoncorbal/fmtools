@@ -2,67 +2,40 @@ package br.com.dgc.fmtools.positions_calculator_service.domain.model.position.mi
 
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.player.LinePlayer;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.Position;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.PositionNames;
 import java.util.List;
 
-public class DeepLyingPlaymakerDeMC extends Position implements MidfielderCentrePositions {
+public class DeepLyingPlaymakerDeMC extends Position {
 
-  public DeepLyingPlaymakerDeMC(LinePlayer initPlayer) {
-    super();
-    LinePlayer player = this.applyAttributeWeight(initPlayer);
-
-    List<Integer> normalAttributes =
+  public DeepLyingPlaymakerDeMC(LinePlayer player) {
+    super(
+        PositionNames.DEEP_LYING_PLAYMAKER_DE_MC_NAME,
         List.of(
-            player.getCorners(),
-            player.getCrossing(),
-            player.getDribbling(),
-            player.getFinishing(),
-            player.getFreeKickTaking(),
-            player.getHeading(),
-            player.getLongShots(),
-            player.getLongThrows(),
-            player.getMarking(),
-            player.getPenaltyTaking(),
-            player.getAggression(),
-            player.getBravery(),
-            player.getConcentration(),
-            player.getDetermination(),
-            player.getFlair(),
-            player.getLeadership(),
-            player.getOffTheBall(),
-            player.getWorkRate(),
-            player.getAcceleration(),
-            player.getAgility(),
-            player.getJumpingReach(),
-            player.getNaturalFitness(),
-            player.getPace(),
-            player.getStamina(),
-            player.getStrength());
-
-    List<Integer> preferableAttributes =
+            player.getTackling() * MidfielderCentreWeights.TACKLING,
+            player.getAnticipation() * MidfielderCentreWeights.ANTICIPATION,
+            player.getPositioning() * MidfielderCentreWeights.POSITIONING,
+            player.getBalance() * MidfielderCentreWeights.BALANCE),
         List.of(
-            player.getTackling(),
-            player.getAnticipation(),
-            player.getPositioning(),
-            player.getBalance());
-
-    List<Integer> keyAttributes =
+            player.getFirstTouch() * MidfielderCentreWeights.FIRST_TOUCH * 2,
+            player.getPassing() * MidfielderCentreWeights.PASSING * 2,
+            player.getTechnique() * MidfielderCentreWeights.TECHNIQUE * 2,
+            player.getComposure() * MidfielderCentreWeights.COMPOSURE * 2,
+            player.getDecisions() * MidfielderCentreWeights.DECISIONS * 2,
+            player.getTeamwork() * MidfielderCentreWeights.TEAMWORK * 2,
+            player.getVision() * MidfielderCentreWeights.VISION * 2),
         List.of(
-            player.getFirstTouch(),
-            player.getPassing(),
-            player.getTechnique(),
-            player.getComposure(),
-            player.getDecisions(),
-            player.getTeamwork(),
-            player.getVision());
-
-    String name = "Deep Lying Playmaker (De) (MC)";
-
-    int weight = 99;
-
-    this.normalAttributes = normalAttributes;
-    this.preferableAttributes = preferableAttributes;
-    this.keyAttributes = keyAttributes;
-    this.name = name;
-    this.weight = weight;
+                MidfielderCentreWeights.TACKLING,
+                MidfielderCentreWeights.ANTICIPATION,
+                MidfielderCentreWeights.POSITIONING,
+                MidfielderCentreWeights.BALANCE,
+                MidfielderCentreWeights.FIRST_TOUCH * 2,
+                MidfielderCentreWeights.PASSING * 2,
+                MidfielderCentreWeights.TECHNIQUE * 2,
+                MidfielderCentreWeights.COMPOSURE * 2,
+                MidfielderCentreWeights.DECISIONS * 2,
+                MidfielderCentreWeights.TEAMWORK * 2,
+                MidfielderCentreWeights.VISION * 2)
+            .stream()
+            .reduce(0, Integer::sum));
   }
 }

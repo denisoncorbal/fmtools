@@ -2,67 +2,34 @@ package br.com.dgc.fmtools.positions_calculator_service.domain.model.position.de
 
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.player.LinePlayer;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.Position;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.PositionNames;
 import java.util.List;
 
-public class WingBackSuDRL extends Position implements DefenderRightLeftPositions {
+public class WingBackSuDRL extends Position {
 
-  public WingBackSuDRL(LinePlayer initPlayer) {
-    super();
-    LinePlayer player = this.applyAttributeWeight(initPlayer);
-
-    List<Integer> normalAttributes =
+  public WingBackSuDRL(LinePlayer player) {
+    super(
+        PositionNames.WING_BACK_SU_DRL_NAME,
         List.of(
-            player.getCorners(),
-            player.getFinishing(),
-            player.getFreeKickTaking(),
-            player.getHeading(),
-            player.getLongShots(),
-            player.getLongThrows(),
-            player.getPenaltyTaking(),
-            player.getAggression(),
-            player.getBravery(),
-            player.getComposure(),
-            player.getDetermination(),
-            player.getFlair(),
-            player.getLeadership(),
-            player.getVision(),
-            player.getBalance(),
-            player.getJumpingReach(),
-            player.getNaturalFitness(),
-            player.getStrength());
-
-    List<Integer> preferableAttributes =
+            player.getFirstTouch() * DefenderRightLeftWeights.FIRST_TOUCH,
+            player.getPassing() * DefenderRightLeftWeights.PASSING,
+            player.getTechnique() * DefenderRightLeftWeights.TECHNIQUE,
+            player.getAnticipation() * DefenderRightLeftWeights.ANTICIPATION,
+            player.getConcentration() * DefenderRightLeftWeights.CONCENTRATION,
+            player.getDecisions() * DefenderRightLeftWeights.DECISIONS,
+            player.getPositioning() * DefenderRightLeftWeights.POSITIONING,
+            player.getAgility() * DefenderRightLeftWeights.AGILITY,
+            player.getPace() * DefenderRightLeftWeights.PACE),
         List.of(
-            player.getFirstTouch(),
-            player.getPassing(),
-            player.getTechnique(),
-            player.getAnticipation(),
-            player.getConcentration(),
-            player.getDecisions(),
-            player.getPositioning(),
-            player.getAgility(),
-            player.getPace());
-
-    List<Integer> keyAttributes =
-        List.of(
-            player.getCrossing(),
-            player.getDribbling(),
-            player.getMarking(),
-            player.getTackling(),
-            player.getOffTheBall(),
-            player.getTeamwork(),
-            player.getWorkRate(),
-            player.getAcceleration(),
-            player.getStamina());
-
-    String name = "Wing-Back (Su) (DRL)";
-
-    int weight = 87;
-
-    this.normalAttributes = normalAttributes;
-    this.preferableAttributes = preferableAttributes;
-    this.keyAttributes = keyAttributes;
-    this.name = name;
-    this.weight = weight;
+            player.getCrossing() * DefenderRightLeftWeights.CROSSING * 2,
+            player.getDribbling() * DefenderRightLeftWeights.DRIBBLING * 2,
+            player.getMarking() * DefenderRightLeftWeights.MARKING * 2,
+            player.getTackling() * DefenderRightLeftWeights.TACKLING * 2,
+            player.getOffTheBall() * DefenderRightLeftWeights.OFF_THE_BALL * 2,
+            player.getTeamwork() * DefenderRightLeftWeights.TEAMWORK * 2,
+            player.getWorkRate() * DefenderRightLeftWeights.WORK_RATE * 2,
+            player.getAcceleration() * DefenderRightLeftWeights.ACCELERATION * 2,
+            player.getStamina() * DefenderRightLeftWeights.STAMINA * 2),
+        87);
   }
 }

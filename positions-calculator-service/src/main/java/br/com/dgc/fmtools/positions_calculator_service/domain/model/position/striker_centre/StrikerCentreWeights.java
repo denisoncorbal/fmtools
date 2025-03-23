@@ -1,0 +1,40 @@
+package br.com.dgc.fmtools.positions_calculator_service.domain.model.position.striker_centre;
+
+public final class StrikerCentreWeights {
+  public static final int CORNERS = 1;
+  public static final int CROSSING = 2;
+  public static final int DRIBBLING = 5;
+  public static final int FINISHING = 8;
+  public static final int FIRST_TOUCH = 6;
+  public static final int FREE_KICK_TAKING = 1;
+  public static final int HEADING = 6;
+  public static final int LONG_SHOTS = 2;
+  public static final int LONG_THROWS = 1;
+  public static final int MARKING = 1;
+  public static final int PASSING = 2;
+  public static final int PENALTY_TAKING = 1;
+  public static final int TACKLING = 1;
+  public static final int TECHNIQUE = 4;
+  public static final int AGGRESSION = 0;
+  public static final int ANTICIPATION = 5;
+  public static final int BRAVERY = 1;
+  public static final int COMPOSURE = 6;
+  public static final int CONCENTRATION = 2;
+  public static final int DECISIONS = 5;
+  public static final int DETERMINATION = 0;
+  public static final int FLAIR = 0;
+  public static final int LEADERSHIP = 1;
+  public static final int OFF_THE_BALL = 6;
+  public static final int POSITIONING = 2;
+  public static final int TEAMWORK = 1;
+  public static final int VISION = 2;
+  public static final int WORK_RATE = 2;
+  public static final int ACCELERATION = 10;
+  public static final int AGILITY = 6;
+  public static final int BALANCE = 2;
+  public static final int JUMPING_REACH = 5;
+  public static final int NATURAL_FITNESS = 0;
+  public static final int PACE = 7;
+  public static final int STAMINA = 6;
+  public static final int STRENGTH = 6;
+}

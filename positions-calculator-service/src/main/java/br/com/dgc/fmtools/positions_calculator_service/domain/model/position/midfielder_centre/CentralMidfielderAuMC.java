@@ -2,67 +2,44 @@ package br.com.dgc.fmtools.positions_calculator_service.domain.model.position.mi
 
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.player.LinePlayer;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.Position;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.PositionNames;
 import java.util.List;
 
-public class CentralMidfielderAuMC extends Position implements MidfielderCentrePositions {
+public class CentralMidfielderAuMC extends Position {
 
-  public CentralMidfielderAuMC(LinePlayer initPlayer) {
-    super();
-    LinePlayer player = this.applyAttributeWeight(initPlayer);
-
-    List<Integer> normalAttributes =
+  public CentralMidfielderAuMC(LinePlayer player) {
+    super(
+        PositionNames.CENTRAL_MIDFIELDER_AU_MC_NAME,
         List.of(
-            player.getCorners(),
-            player.getCrossing(),
-            player.getDribbling(),
-            player.getFinishing(),
-            player.getFreeKickTaking(),
-            player.getHeading(),
-            player.getLongShots(),
-            player.getLongThrows(),
-            player.getMarking(),
-            player.getPenaltyTaking(),
-            player.getAggression(),
-            player.getBravery(),
-            player.getDetermination(),
-            player.getFlair(),
-            player.getLeadership(),
-            player.getPositioning(),
-            player.getAcceleration(),
-            player.getAgility(),
-            player.getBalance(),
-            player.getJumpingReach(),
-            player.getNaturalFitness(),
-            player.getPace(),
-            player.getStrength());
-
-    List<Integer> preferableAttributes =
+            player.getTechnique() * MidfielderCentreWeights.TECHNIQUE,
+            player.getAnticipation() * MidfielderCentreWeights.ANTICIPATION,
+            player.getComposure() * MidfielderCentreWeights.COMPOSURE,
+            player.getConcentration() * MidfielderCentreWeights.CONCENTRATION,
+            player.getOffTheBall() * MidfielderCentreWeights.OFF_THE_BALL,
+            player.getVision() * MidfielderCentreWeights.VISION,
+            player.getWorkRate() * MidfielderCentreWeights.WORK_RATE,
+            player.getStamina() * MidfielderCentreWeights.STAMINA),
         List.of(
-            player.getTechnique(),
-            player.getAnticipation(),
-            player.getComposure(),
-            player.getConcentration(),
-            player.getOffTheBall(),
-            player.getVision(),
-            player.getWorkRate(),
-            player.getStamina());
-
-    List<Integer> keyAttributes =
+            player.getFirstTouch() * MidfielderCentreWeights.FIRST_TOUCH * 2,
+            player.getPassing() * MidfielderCentreWeights.PASSING * 2,
+            player.getTackling() * MidfielderCentreWeights.TACKLING * 2,
+            player.getDecisions() * MidfielderCentreWeights.DECISIONS * 2,
+            player.getTeamwork() * MidfielderCentreWeights.TEAMWORK * 2),
         List.of(
-            player.getFirstTouch(),
-            player.getPassing(),
-            player.getTackling(),
-            player.getDecisions(),
-            player.getTeamwork());
-
-    String name = "Central Midfielder (Au) (MC)";
-
-    int weight = 99;
-
-    this.normalAttributes = normalAttributes;
-    this.preferableAttributes = preferableAttributes;
-    this.keyAttributes = keyAttributes;
-    this.name = name;
-    this.weight = weight;
+                MidfielderCentreWeights.TECHNIQUE,
+                MidfielderCentreWeights.ANTICIPATION,
+                MidfielderCentreWeights.COMPOSURE,
+                MidfielderCentreWeights.CONCENTRATION,
+                MidfielderCentreWeights.OFF_THE_BALL,
+                MidfielderCentreWeights.VISION,
+                MidfielderCentreWeights.WORK_RATE,
+                MidfielderCentreWeights.STAMINA,
+                MidfielderCentreWeights.FIRST_TOUCH * 2,
+                MidfielderCentreWeights.PASSING * 2,
+                MidfielderCentreWeights.TACKLING * 2,
+                MidfielderCentreWeights.DECISIONS * 2,
+                MidfielderCentreWeights.TEAMWORK * 2)
+            .stream()
+            .reduce(0, Integer::sum));
   }
 }

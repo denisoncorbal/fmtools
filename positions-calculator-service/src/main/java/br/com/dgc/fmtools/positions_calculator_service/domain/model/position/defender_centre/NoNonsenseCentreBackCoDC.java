@@ -2,67 +2,38 @@ package br.com.dgc.fmtools.positions_calculator_service.domain.model.position.de
 
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.player.LinePlayer;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.Position;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.PositionNames;
 import java.util.List;
 
-public class NoNonsenseCentreBackCoDC extends Position implements DefenderCentrePositions {
+public class NoNonsenseCentreBackCoDC extends Position {
 
-  public NoNonsenseCentreBackCoDC(LinePlayer initPlayer) {
-    super();
-    LinePlayer player = this.applyAttributeWeight(initPlayer);
-
-    List<Integer> normalAttributes =
+  public NoNonsenseCentreBackCoDC(LinePlayer player) {
+    super(
+        PositionNames.NO_NONSENSE_CENTRE_BACK_CO_DC_NAME,
         List.of(
-            player.getCorners(),
-            player.getCrossing(),
-            player.getDribbling(),
-            player.getFinishing(),
-            player.getFirstTouch(),
-            player.getFreeKickTaking(),
-            player.getLongShots(),
-            player.getLongThrows(),
-            player.getPassing(),
-            player.getPenaltyTaking(),
-            player.getTechnique(),
-            player.getAggression(),
-            player.getComposure(),
-            player.getDecisions(),
-            player.getDetermination(),
-            player.getFlair(),
-            player.getLeadership(),
-            player.getOffTheBall(),
-            player.getTeamwork(),
-            player.getVision(),
-            player.getWorkRate(),
-            player.getAcceleration(),
-            player.getAgility(),
-            player.getBalance(),
-            player.getNaturalFitness(),
-            player.getStamina());
-
-    List<Integer> preferableAttributes =
+            player.getHeading() * DefenderCentreWeights.HEADING,
+            player.getBravery() * DefenderCentreWeights.BRAVERY,
+            player.getJumpingReach() * DefenderCentreWeights.JUMPING_REACH,
+            player.getStrength() * DefenderCentreWeights.STRENGTH),
         List.of(
-            player.getHeading(),
-            player.getBravery(),
-            player.getJumpingReach(),
-            player.getStrength());
-
-    List<Integer> keyAttributes =
+            player.getMarking() * DefenderCentreWeights.MARKING * 2,
+            player.getTackling() * DefenderCentreWeights.TACKLING * 2,
+            player.getAnticipation() * DefenderCentreWeights.ANTICIPATION * 2,
+            player.getConcentration() * DefenderCentreWeights.CONCENTRATION * 2,
+            player.getPositioning() * DefenderCentreWeights.POSITIONING * 2,
+            player.getPace() * DefenderCentreWeights.PACE * 2),
         List.of(
-            player.getMarking(),
-            player.getTackling(),
-            player.getAnticipation(),
-            player.getConcentration(),
-            player.getPositioning(),
-            player.getPace());
-
-    String name = "No-Nonsense Centre-Back (Co) (DC)";
-
-    int weight = 103;
-
-    this.normalAttributes = normalAttributes;
-    this.preferableAttributes = preferableAttributes;
-    this.keyAttributes = keyAttributes;
-    this.name = name;
-    this.weight = weight;
+                DefenderCentreWeights.HEADING,
+                DefenderCentreWeights.BRAVERY,
+                DefenderCentreWeights.JUMPING_REACH,
+                DefenderCentreWeights.STRENGTH,
+                DefenderCentreWeights.MARKING * 2,
+                DefenderCentreWeights.TACKLING * 2,
+                DefenderCentreWeights.ANTICIPATION * 2,
+                DefenderCentreWeights.CONCENTRATION * 2,
+                DefenderCentreWeights.POSITIONING * 2,
+                DefenderCentreWeights.PACE * 2)
+            .stream()
+            .reduce(0, Integer::sum));
   }
 }

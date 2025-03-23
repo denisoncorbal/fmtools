@@ -99,24 +99,15 @@ public abstract class Player {
   public abstract List<SuitablePosition> calculateSuitablePositions();
 
   protected SuitablePosition calculateSuitablePosition(Position position) {
-    int sumNormalAttributes =
-        position.getNormalAttributes().stream()
-            .reduce(0, (acumulator, element) -> acumulator += element);
     int sumPreferableAttributes =
-        position.getPreferableAttributes().stream()
-            .reduce(0, (acumulator, element) -> acumulator += element);
-    int sumKeyAttributes =
-        position.getKeyAttributes().stream()
-            .reduce(0, (acumulator, element) -> acumulator += element * 2);
+        position.getPreferableAttributes().stream().reduce(0, Integer::sum);
+    int sumKeyAttributes = position.getKeyAttributes().stream().reduce(0, Integer::sum);
 
-    int total = sumNormalAttributes + sumPreferableAttributes + sumKeyAttributes;
-    double totalWeight =
-        position.getWeight()
-            + (position.getPreferableAttributes().size() * 1.5)
-            + (position.getKeyAttributes().size() * 2);
+    int totalAttributes = sumPreferableAttributes + sumKeyAttributes;
 
-    int suitableValue = (int) (total / totalWeight);
-    int percentageSuitable = (int) (suitableValue * 100 / 20);
+    double suitableValue = totalAttributes / position.getWeight();
+
+    double percentageSuitable = suitableValue * 100 / 20;
 
     return new SuitablePosition(
         position.getName(),

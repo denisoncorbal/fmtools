@@ -2,67 +2,40 @@ package br.com.dgc.fmtools.positions_calculator_service.domain.model.position.de
 
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.player.LinePlayer;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.Position;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.PositionNames;
 import java.util.List;
 
-public class DeepLyingPlaymakerDeDM extends Position implements DefensiveMidfielderPositions {
+public class DeepLyingPlaymakerDeDM extends Position {
 
-  public DeepLyingPlaymakerDeDM(LinePlayer initPlayer) {
-    super();
-    LinePlayer player = this.applyAttributeWeight(initPlayer);
-
-    List<Integer> normalAttributes =
+  public DeepLyingPlaymakerDeDM(LinePlayer player) {
+    super(
+        PositionNames.DEEP_LYING_PLAYMAKER_DE_DM_NAME,
         List.of(
-            player.getCorners(),
-            player.getCrossing(),
-            player.getDribbling(),
-            player.getFinishing(),
-            player.getFreeKickTaking(),
-            player.getHeading(),
-            player.getLongShots(),
-            player.getLongThrows(),
-            player.getMarking(),
-            player.getPenaltyTaking(),
-            player.getAggression(),
-            player.getBravery(),
-            player.getConcentration(),
-            player.getDetermination(),
-            player.getFlair(),
-            player.getLeadership(),
-            player.getOffTheBall(),
-            player.getWorkRate(),
-            player.getAcceleration(),
-            player.getAgility(),
-            player.getJumpingReach(),
-            player.getNaturalFitness(),
-            player.getPace(),
-            player.getStamina(),
-            player.getStrength());
-
-    List<Integer> preferableAttributes =
+            player.getTackling() * DefensiveMidfielderWeights.TACKLING,
+            player.getAnticipation() * DefensiveMidfielderWeights.ANTICIPATION,
+            player.getPositioning() * DefensiveMidfielderWeights.POSITIONING,
+            player.getBalance() * DefensiveMidfielderWeights.BALANCE),
         List.of(
-            player.getTackling(),
-            player.getAnticipation(),
-            player.getPositioning(),
-            player.getBalance());
-
-    List<Integer> keyAttributes =
+            player.getFirstTouch() * DefensiveMidfielderWeights.FIRST_TOUCH * 2,
+            player.getPassing() * DefensiveMidfielderWeights.PASSING * 2,
+            player.getTechnique() * DefensiveMidfielderWeights.TECHNIQUE * 2,
+            player.getComposure() * DefensiveMidfielderWeights.COMPOSURE * 2,
+            player.getDecisions() * DefensiveMidfielderWeights.DECISIONS * 2,
+            player.getTeamwork() * DefensiveMidfielderWeights.TEAMWORK * 2,
+            player.getVision() * DefensiveMidfielderWeights.VISION * 2),
         List.of(
-            player.getFirstTouch(),
-            player.getPassing(),
-            player.getTechnique(),
-            player.getComposure(),
-            player.getDecisions(),
-            player.getTeamwork(),
-            player.getVision());
-
-    String name = "Deep Lying Playmaker (De) (DM)";
-
-    int weight = 98;
-
-    this.normalAttributes = normalAttributes;
-    this.preferableAttributes = preferableAttributes;
-    this.keyAttributes = keyAttributes;
-    this.name = name;
-    this.weight = weight;
+                DefensiveMidfielderWeights.TACKLING,
+                DefensiveMidfielderWeights.ANTICIPATION,
+                DefensiveMidfielderWeights.POSITIONING,
+                DefensiveMidfielderWeights.BALANCE,
+                DefensiveMidfielderWeights.FIRST_TOUCH * 2,
+                DefensiveMidfielderWeights.PASSING * 2,
+                DefensiveMidfielderWeights.TECHNIQUE * 2,
+                DefensiveMidfielderWeights.COMPOSURE * 2,
+                DefensiveMidfielderWeights.DECISIONS * 2,
+                DefensiveMidfielderWeights.TEAMWORK * 2,
+                DefensiveMidfielderWeights.VISION * 2)
+            .stream()
+            .reduce(0, Integer::sum));
   }
 }

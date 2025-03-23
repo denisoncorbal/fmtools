@@ -2,67 +2,50 @@ package br.com.dgc.fmtools.positions_calculator_service.domain.model.position.de
 
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.player.LinePlayer;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.Position;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.PositionNames;
 import java.util.List;
 
-public class BallPlayingDefenderCoDC extends Position implements DefenderCentrePositions {
+public class BallPlayingDefenderCoDC extends Position {
 
-  public BallPlayingDefenderCoDC(LinePlayer initPlayer) {
-    super();
-    LinePlayer player = this.applyAttributeWeight(initPlayer);
-
-    List<Integer> normalAttributes =
+  public BallPlayingDefenderCoDC(LinePlayer player) {
+    super(
+        PositionNames.BALL_PLAYING_DEFENDER_CO_DC_NAME,
         List.of(
-            player.getCorners(),
-            player.getCrossing(),
-            player.getDribbling(),
-            player.getFinishing(),
-            player.getFreeKickTaking(),
-            player.getLongShots(),
-            player.getLongThrows(),
-            player.getPenaltyTaking(),
-            player.getAggression(),
-            player.getDetermination(),
-            player.getFlair(),
-            player.getLeadership(),
-            player.getOffTheBall(),
-            player.getTeamwork(),
-            player.getWorkRate(),
-            player.getAcceleration(),
-            player.getAgility(),
-            player.getBalance(),
-            player.getNaturalFitness(),
-            player.getStamina());
-
-    List<Integer> preferableAttributes =
+            player.getFirstTouch() * DefenderCentreWeights.FIRST_TOUCH,
+            player.getHeading() * DefenderCentreWeights.HEADING,
+            player.getTechnique() * DefenderCentreWeights.TECHNIQUE,
+            player.getBravery() * DefenderCentreWeights.BRAVERY,
+            player.getVision() * DefenderCentreWeights.VISION,
+            player.getJumpingReach() * DefenderCentreWeights.JUMPING_REACH,
+            player.getStrength() * DefenderCentreWeights.STRENGTH),
         List.of(
-            player.getFirstTouch(),
-            player.getHeading(),
-            player.getTechnique(),
-            player.getBravery(),
-            player.getVision(),
-            player.getJumpingReach(),
-            player.getStrength());
-
-    List<Integer> keyAttributes =
+            player.getMarking() * DefenderCentreWeights.MARKING * 2,
+            player.getPassing() * DefenderCentreWeights.PASSING * 2,
+            player.getTackling() * DefenderCentreWeights.TACKLING * 2,
+            player.getAnticipation() * DefenderCentreWeights.ANTICIPATION * 2,
+            player.getComposure() * DefenderCentreWeights.COMPOSURE * 2,
+            player.getConcentration() * DefenderCentreWeights.CONCENTRATION * 2,
+            player.getDecisions() * DefenderCentreWeights.DECISIONS * 2,
+            player.getPositioning() * DefenderCentreWeights.POSITIONING * 2,
+            player.getPace() * DefenderCentreWeights.PACE * 2),
         List.of(
-            player.getMarking(),
-            player.getPassing(),
-            player.getTackling(),
-            player.getAnticipation(),
-            player.getComposure(),
-            player.getConcentration(),
-            player.getDecisions(),
-            player.getPositioning(),
-            player.getPace());
-
-    String name = "Ball Playing Defender (Co) (DC)";
-
-    int weight = 103;
-
-    this.normalAttributes = normalAttributes;
-    this.preferableAttributes = preferableAttributes;
-    this.keyAttributes = keyAttributes;
-    this.name = name;
-    this.weight = weight;
+                DefenderCentreWeights.FIRST_TOUCH,
+                DefenderCentreWeights.HEADING,
+                DefenderCentreWeights.TECHNIQUE,
+                DefenderCentreWeights.BRAVERY,
+                DefenderCentreWeights.VISION,
+                DefenderCentreWeights.JUMPING_REACH,
+                DefenderCentreWeights.STRENGTH,
+                DefenderCentreWeights.MARKING * 2,
+                DefenderCentreWeights.PASSING * 2,
+                DefenderCentreWeights.TACKLING * 2,
+                DefenderCentreWeights.ANTICIPATION * 2,
+                DefenderCentreWeights.COMPOSURE * 2,
+                DefenderCentreWeights.CONCENTRATION * 2,
+                DefenderCentreWeights.DECISIONS * 2,
+                DefenderCentreWeights.POSITIONING * 2,
+                DefenderCentreWeights.PACE * 2)
+            .stream()
+            .reduce(0, Integer::sum));
   }
 }

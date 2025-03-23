@@ -2,67 +2,54 @@ package br.com.dgc.fmtools.positions_calculator_service.domain.model.position.de
 
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.player.LinePlayer;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.Position;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.PositionNames;
 import java.util.List;
 
-public class SegundoVolanteAtDM extends Position implements DefensiveMidfielderPositions {
+public class SegundoVolanteAtDM extends Position {
 
-  public SegundoVolanteAtDM(LinePlayer initPlayer) {
-    super();
-    LinePlayer player = this.applyAttributeWeight(initPlayer);
-
-    List<Integer> normalAttributes =
+  public SegundoVolanteAtDM(LinePlayer player) {
+    super(
+        PositionNames.SEGUNDO_VOLANTE_AT_DM_NAME,
         List.of(
-            player.getCorners(),
-            player.getCrossing(),
-            player.getDribbling(),
-            player.getFreeKickTaking(),
-            player.getHeading(),
-            player.getLongThrows(),
-            player.getPenaltyTaking(),
-            player.getTechnique(),
-            player.getAggression(),
-            player.getBravery(),
-            player.getDetermination(),
-            player.getFlair(),
-            player.getLeadership(),
-            player.getTeamwork(),
-            player.getVision(),
-            player.getAgility(),
-            player.getJumpingReach(),
-            player.getNaturalFitness());
-
-    List<Integer> preferableAttributes =
+            player.getFirstTouch() * DefensiveMidfielderWeights.FIRST_TOUCH,
+            player.getMarking() * DefensiveMidfielderWeights.MARKING,
+            player.getComposure() * DefensiveMidfielderWeights.COMPOSURE,
+            player.getConcentration() * DefensiveMidfielderWeights.CONCENTRATION,
+            player.getDecisions() * DefensiveMidfielderWeights.DECISIONS,
+            player.getAcceleration() * DefensiveMidfielderWeights.ACCELERATION,
+            player.getBalance() * DefensiveMidfielderWeights.BALANCE,
+            player.getStrength() * DefensiveMidfielderWeights.STRENGTH),
         List.of(
-            player.getFirstTouch(),
-            player.getMarking(),
-            player.getComposure(),
-            player.getConcentration(),
-            player.getDecisions(),
-            player.getAcceleration(),
-            player.getBalance(),
-            player.getStrength());
-
-    List<Integer> keyAttributes =
+            player.getFinishing() * DefensiveMidfielderWeights.FINISHING * 2,
+            player.getLongShots() * DefensiveMidfielderWeights.LONG_SHOTS * 2,
+            player.getPassing() * DefensiveMidfielderWeights.PASSING * 2,
+            player.getTackling() * DefensiveMidfielderWeights.TACKLING * 2,
+            player.getAnticipation() * DefensiveMidfielderWeights.ANTICIPATION * 2,
+            player.getOffTheBall() * DefensiveMidfielderWeights.OFF_THE_BALL * 2,
+            player.getPositioning() * DefensiveMidfielderWeights.POSITIONING * 2,
+            player.getWorkRate() * DefensiveMidfielderWeights.WORK_RATE * 2,
+            player.getPace() * DefensiveMidfielderWeights.PACE * 2,
+            player.getStamina() * DefensiveMidfielderWeights.STAMINA * 2),
         List.of(
-            player.getFinishing(),
-            player.getLongShots(),
-            player.getPassing(),
-            player.getTackling(),
-            player.getAnticipation(),
-            player.getOffTheBall(),
-            player.getPositioning(),
-            player.getWorkRate(),
-            player.getPace(),
-            player.getStamina());
-
-    String name = "Segundo Voltante (At) (DM)";
-
-    int weight = 98;
-
-    this.normalAttributes = normalAttributes;
-    this.preferableAttributes = preferableAttributes;
-    this.keyAttributes = keyAttributes;
-    this.name = name;
-    this.weight = weight;
+                DefensiveMidfielderWeights.FIRST_TOUCH,
+                DefensiveMidfielderWeights.MARKING,
+                DefensiveMidfielderWeights.COMPOSURE,
+                DefensiveMidfielderWeights.CONCENTRATION,
+                DefensiveMidfielderWeights.DECISIONS,
+                DefensiveMidfielderWeights.ACCELERATION,
+                DefensiveMidfielderWeights.BALANCE,
+                DefensiveMidfielderWeights.STRENGTH,
+                DefensiveMidfielderWeights.FINISHING * 2,
+                DefensiveMidfielderWeights.LONG_SHOTS * 2,
+                DefensiveMidfielderWeights.PASSING * 2,
+                DefensiveMidfielderWeights.TACKLING * 2,
+                DefensiveMidfielderWeights.ANTICIPATION * 2,
+                DefensiveMidfielderWeights.OFF_THE_BALL * 2,
+                DefensiveMidfielderWeights.POSITIONING * 2,
+                DefensiveMidfielderWeights.WORK_RATE * 2,
+                DefensiveMidfielderWeights.PACE * 2,
+                DefensiveMidfielderWeights.STAMINA * 2)
+            .stream()
+            .reduce(0, Integer::sum));
   }
 }

@@ -2,67 +2,50 @@ package br.com.dgc.fmtools.positions_calculator_service.domain.model.position.de
 
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.player.LinePlayer;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.Position;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.PositionNames;
 import java.util.List;
 
-public class InvertedWingBackDeDRL extends Position implements DefenderRightLeftPositions {
+public class InvertedWingBackDeDRL extends Position {
 
-  public InvertedWingBackDeDRL(LinePlayer initPlayer) {
-    super();
-    LinePlayer player = this.applyAttributeWeight(initPlayer);
-
-    List<Integer> normalAttributes =
+  public InvertedWingBackDeDRL(LinePlayer player) {
+    super(
+        PositionNames.INVERTED_WING_BACK_DE_DRL_NAME,
         List.of(
-            player.getCorners(),
-            player.getCrossing(),
-            player.getFinishing(),
-            player.getFreeKickTaking(),
-            player.getHeading(),
-            player.getLongShots(),
-            player.getLongThrows(),
-            player.getPenaltyTaking(),
-            player.getAggression(),
-            player.getBravery(),
-            player.getComposure(),
-            player.getDetermination(),
-            player.getFlair(),
-            player.getLeadership(),
-            player.getVision(),
-            player.getBalance(),
-            player.getJumpingReach(),
-            player.getNaturalFitness(),
-            player.getPace(),
-            player.getStrength());
-
-    List<Integer> preferableAttributes =
+            player.getDribbling() * DefenderRightLeftWeights.DRIBBLING,
+            player.getFirstTouch() * DefenderRightLeftWeights.FIRST_TOUCH,
+            player.getTechnique() * DefenderRightLeftWeights.TECHNIQUE,
+            player.getConcentration() * DefenderRightLeftWeights.CONCENTRATION,
+            player.getOffTheBall() * DefenderRightLeftWeights.OFF_THE_BALL,
+            player.getAcceleration() * DefenderRightLeftWeights.ACCELERATION,
+            player.getAgility() * DefenderRightLeftWeights.AGILITY,
+            player.getStamina() * DefenderRightLeftWeights.STAMINA),
         List.of(
-            player.getDribbling(),
-            player.getFirstTouch(),
-            player.getTechnique(),
-            player.getConcentration(),
-            player.getOffTheBall(),
-            player.getAcceleration(),
-            player.getAgility(),
-            player.getStamina());
-
-    List<Integer> keyAttributes =
+            player.getMarking() * DefenderRightLeftWeights.MARKING * 2,
+            player.getPassing() * DefenderRightLeftWeights.PASSING * 2,
+            player.getTackling() * DefenderRightLeftWeights.TACKLING * 2,
+            player.getAnticipation() * DefenderRightLeftWeights.ANTICIPATION * 2,
+            player.getDecisions() * DefenderRightLeftWeights.DECISIONS * 2,
+            player.getPositioning() * DefenderRightLeftWeights.POSITIONING * 2,
+            player.getTeamwork() * DefenderRightLeftWeights.TEAMWORK * 2,
+            player.getWorkRate() * DefenderRightLeftWeights.WORK_RATE * 2),
         List.of(
-            player.getMarking(),
-            player.getPassing(),
-            player.getTackling(),
-            player.getAnticipation(),
-            player.getDecisions(),
-            player.getPositioning(),
-            player.getTeamwork(),
-            player.getWorkRate());
-
-    String name = "Inverted Wing-Back (De) (DRL)";
-
-    int weight = 87;
-
-    this.normalAttributes = normalAttributes;
-    this.preferableAttributes = preferableAttributes;
-    this.keyAttributes = keyAttributes;
-    this.name = name;
-    this.weight = weight;
+                DefenderRightLeftWeights.DRIBBLING,
+                DefenderRightLeftWeights.FIRST_TOUCH,
+                DefenderRightLeftWeights.TECHNIQUE,
+                DefenderRightLeftWeights.CONCENTRATION,
+                DefenderRightLeftWeights.OFF_THE_BALL,
+                DefenderRightLeftWeights.ACCELERATION,
+                DefenderRightLeftWeights.AGILITY,
+                DefenderRightLeftWeights.STAMINA,
+                DefenderRightLeftWeights.MARKING * 2,
+                DefenderRightLeftWeights.PASSING * 2,
+                DefenderRightLeftWeights.TACKLING * 2,
+                DefenderRightLeftWeights.ANTICIPATION * 2,
+                DefenderRightLeftWeights.DECISIONS * 2,
+                DefenderRightLeftWeights.POSITIONING * 2,
+                DefenderRightLeftWeights.TEAMWORK * 2,
+                DefenderRightLeftWeights.WORK_RATE * 2)
+            .stream()
+            .reduce(0, Integer::sum));
   }
 }

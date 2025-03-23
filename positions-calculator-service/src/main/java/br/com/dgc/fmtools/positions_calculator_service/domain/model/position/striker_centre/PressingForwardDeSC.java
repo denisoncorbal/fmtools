@@ -2,67 +2,48 @@ package br.com.dgc.fmtools.positions_calculator_service.domain.model.position.st
 
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.player.LinePlayer;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.Position;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.PositionNames;
 import java.util.List;
 
-public class PressingForwardDeSC extends Position implements StrikerCentrePositions {
+public class PressingForwardDeSC extends Position {
 
-  public PressingForwardDeSC(LinePlayer initPlayer) {
-    super();
-    LinePlayer player = this.applyAttributeWeight(initPlayer);
-
-    List<Integer> normalAttributes =
+  public PressingForwardDeSC(LinePlayer player) {
+    super(
+        PositionNames.PRESSING_FORWARD_DE_SC_NAME,
         List.of(
-            player.getCorners(),
-            player.getCrossing(),
-            player.getDribbling(),
-            player.getFinishing(),
-            player.getFreeKickTaking(),
-            player.getHeading(),
-            player.getLongShots(),
-            player.getLongThrows(),
-            player.getMarking(),
-            player.getPassing(),
-            player.getPenaltyTaking(),
-            player.getTackling(),
-            player.getTechnique(),
-            player.getDetermination(),
-            player.getFlair(),
-            player.getLeadership(),
-            player.getOffTheBall(),
-            player.getPositioning(),
-            player.getVision(),
-            player.getJumpingReach(),
-            player.getNaturalFitness());
-
-    List<Integer> preferableAttributes =
+            player.getFirstTouch() * StrikerCentreWeights.FIRST_TOUCH,
+            player.getComposure() * StrikerCentreWeights.COMPOSURE,
+            player.getConcentration() * StrikerCentreWeights.CONCENTRATION,
+            player.getAgility() * StrikerCentreWeights.AGILITY,
+            player.getBalance() * StrikerCentreWeights.BALANCE,
+            player.getStrength() * StrikerCentreWeights.STRENGTH),
         List.of(
-            player.getFirstTouch(),
-            player.getComposure(),
-            player.getConcentration(),
-            player.getAgility(),
-            player.getBalance(),
-            player.getStrength());
-
-    List<Integer> keyAttributes =
+            player.getAggression() * StrikerCentreWeights.AGGRESSION * 2,
+            player.getAnticipation() * StrikerCentreWeights.ANTICIPATION * 2,
+            player.getBravery() * StrikerCentreWeights.BRAVERY * 2,
+            player.getDecisions() * StrikerCentreWeights.DECISIONS * 2,
+            player.getTeamwork() * StrikerCentreWeights.TEAMWORK * 2,
+            player.getWorkRate() * StrikerCentreWeights.WORK_RATE * 2,
+            player.getAcceleration() * StrikerCentreWeights.ACCELERATION * 2,
+            player.getPace() * StrikerCentreWeights.PACE * 2,
+            player.getStamina() * StrikerCentreWeights.STAMINA * 2),
         List.of(
-            player.getAggression(),
-            player.getAnticipation(),
-            player.getBravery(),
-            player.getDecisions(),
-            player.getTeamwork(),
-            player.getWorkRate(),
-            player.getAcceleration(),
-            player.getPace(),
-            player.getStamina());
-
-    String name = "Pressing Forward (De) (SC)";
-
-    int weight = 116;
-
-    this.normalAttributes = normalAttributes;
-    this.preferableAttributes = preferableAttributes;
-    this.keyAttributes = keyAttributes;
-    this.name = name;
-    this.weight = weight;
+                StrikerCentreWeights.FIRST_TOUCH,
+                StrikerCentreWeights.COMPOSURE,
+                StrikerCentreWeights.CONCENTRATION,
+                StrikerCentreWeights.AGILITY,
+                StrikerCentreWeights.BALANCE,
+                StrikerCentreWeights.STRENGTH,
+                StrikerCentreWeights.AGGRESSION * 2,
+                StrikerCentreWeights.ANTICIPATION * 2,
+                StrikerCentreWeights.BRAVERY * 2,
+                StrikerCentreWeights.DECISIONS * 2,
+                StrikerCentreWeights.TEAMWORK * 2,
+                StrikerCentreWeights.WORK_RATE * 2,
+                StrikerCentreWeights.ACCELERATION * 2,
+                StrikerCentreWeights.PACE * 2,
+                StrikerCentreWeights.STAMINA * 2)
+            .stream()
+            .reduce(0, Integer::sum));
   }
 }

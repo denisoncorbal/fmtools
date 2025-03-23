@@ -2,68 +2,43 @@ package br.com.dgc.fmtools.positions_calculator_service.domain.model.position.go
 
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.player.GoalkeeperPlayer;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.Position;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.PositionNames;
 import java.util.List;
 
-public class GoalkeeperDeGK extends Position implements GoalkeeperPositions {
-  public GoalkeeperDeGK(GoalkeeperPlayer initPlayer) {
-    super();
-    GoalkeeperPlayer player = this.applyAttributeWeight(initPlayer);
-
-    List<Integer> normalAttributes =
+public class GoalkeeperDeGK extends Position {
+  public GoalkeeperDeGK(GoalkeeperPlayer player) {
+    super(
+        PositionNames.GOALKEEPER_DE_GK_NAME,
         List.of(
-            player.getEccentricity(),
-            player.getPassing(),
-            player.getRushingOut(),
-            player.getAggression(),
-            player.getBravery(),
-            player.getComposure(),
-            player.getDetermination(),
-            player.getFlair(),
-            player.getLeadership(),
-            player.getOffTheBall(),
-            player.getTeamwork(),
-            player.getAggression(),
-            player.getWorkRate(),
-            player.getAcceleration(),
-            player.getBalance(),
-            player.getJumpingReach(),
-            player.getNaturalFitness(),
-            player.getBalance(),
-            player.getStamina(),
-            player.getStrength(),
-            player.getFreeKickTaking(),
-            player.getPenaltyTaking(),
-            player.getTechnique(),
-            player.getFirstTouch(),
-            player.getPace());
-
-    List<Integer> preferableAttributes =
+            player.getOneOnOnes() * GoalkeeperWeights.ONE_ON_ONES,
+            player.getThrowing() * GoalkeeperWeights.THROWING,
+            player.getAnticipation() * GoalkeeperWeights.ANTICIPATION,
+            player.getDecisions() * GoalkeeperWeights.DECISIONS),
         List.of(
-            player.getOneOnOnes(),
-            player.getThrowing(),
-            player.getAnticipation(),
-            player.getDecisions());
-
-    List<Integer> keyAttributes =
+            player.getAerialReach() * GoalkeeperWeights.AERIAL_REACH * 2,
+            player.getCommandOfArea() * GoalkeeperWeights.COMMAND_OF_AREA * 2,
+            player.getCommunication() * GoalkeeperWeights.COMMUNICATION * 2,
+            player.getHandling() * GoalkeeperWeights.HANDLING * 2,
+            player.getKicking() * GoalkeeperWeights.KICKING * 2,
+            player.getReflexes() * GoalkeeperWeights.REFLEXES * 2,
+            player.getConcentration() * GoalkeeperWeights.CONCENTRATION * 2,
+            player.getPositioning() * GoalkeeperWeights.POSITIONING * 2,
+            player.getAgility() * GoalkeeperWeights.AGILITY * 2),
         List.of(
-            player.getAerialReach(),
-            player.getCommandOfArea(),
-            player.getCommunication(),
-            player.getHandling(),
-            player.getKicking(),
-            player.getReflexes(),
-            player.getConcentration(),
-            player.getPositioning(),
-            player.getAgility());
-
-    String name = "Goalkeeper (De) (GK)";
-
-    int weight = 113;
-
-    this.normalAttributes = normalAttributes;
-    this.preferableAttributes = preferableAttributes;
-    this.keyAttributes = keyAttributes;
-    this.name = name;
-    this.weight = weight;
+                GoalkeeperWeights.ONE_ON_ONES,
+                GoalkeeperWeights.THROWING,
+                GoalkeeperWeights.ANTICIPATION,
+                GoalkeeperWeights.DECISIONS,
+                GoalkeeperWeights.AERIAL_REACH * 2,
+                GoalkeeperWeights.COMMAND_OF_AREA * 2,
+                GoalkeeperWeights.COMMUNICATION * 2,
+                GoalkeeperWeights.HANDLING * 2,
+                GoalkeeperWeights.KICKING * 2,
+                GoalkeeperWeights.REFLEXES * 2,
+                GoalkeeperWeights.CONCENTRATION * 2,
+                GoalkeeperWeights.POSITIONING * 2,
+                GoalkeeperWeights.AGILITY * 2)
+            .stream()
+            .reduce(0, Integer::sum));
   }
 }

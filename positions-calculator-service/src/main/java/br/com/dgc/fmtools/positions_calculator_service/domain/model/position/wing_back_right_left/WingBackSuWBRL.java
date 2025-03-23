@@ -2,67 +2,54 @@ package br.com.dgc.fmtools.positions_calculator_service.domain.model.position.wi
 
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.player.LinePlayer;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.Position;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.PositionNames;
 import java.util.List;
 
-public class WingBackSuWBRL extends Position implements WingBackRightLeftPositions {
+public class WingBackSuWBRL extends Position {
 
-  public WingBackSuWBRL(LinePlayer initPlayer) {
-    super();
-    LinePlayer player = this.applyAttributeWeight(initPlayer);
-
-    List<Integer> normalAttributes =
+  public WingBackSuWBRL(LinePlayer player) {
+    super(
+        PositionNames.WING_BACK_SU_WBRL_NAME,
         List.of(
-            player.getCorners(),
-            player.getFinishing(),
-            player.getFreeKickTaking(),
-            player.getHeading(),
-            player.getLongShots(),
-            player.getLongThrows(),
-            player.getPenaltyTaking(),
-            player.getAggression(),
-            player.getBravery(),
-            player.getComposure(),
-            player.getDetermination(),
-            player.getFlair(),
-            player.getLeadership(),
-            player.getVision(),
-            player.getBalance(),
-            player.getJumpingReach(),
-            player.getNaturalFitness(),
-            player.getStrength());
-
-    List<Integer> preferableAttributes =
+            player.getFirstTouch() * WingBackRightLeftWeights.FIRST_TOUCH,
+            player.getPassing() * WingBackRightLeftWeights.PASSING,
+            player.getTechnique() * WingBackRightLeftWeights.TECHNIQUE,
+            player.getAnticipation() * WingBackRightLeftWeights.ANTICIPATION,
+            player.getConcentration() * WingBackRightLeftWeights.CONCENTRATION,
+            player.getDecisions() * WingBackRightLeftWeights.DECISIONS,
+            player.getPositioning() * WingBackRightLeftWeights.POSITIONING,
+            player.getAgility() * WingBackRightLeftWeights.AGILITY,
+            player.getPace() * WingBackRightLeftWeights.PACE),
         List.of(
-            player.getFirstTouch(),
-            player.getPassing(),
-            player.getTechnique(),
-            player.getAnticipation(),
-            player.getConcentration(),
-            player.getDecisions(),
-            player.getPositioning(),
-            player.getAgility(),
-            player.getPace());
-
-    List<Integer> keyAttributes =
+            player.getCrossing() * WingBackRightLeftWeights.CROSSING * 2,
+            player.getDribbling() * WingBackRightLeftWeights.DRIBBLING * 2,
+            player.getMarking() * WingBackRightLeftWeights.MARKING * 2,
+            player.getTackling() * WingBackRightLeftWeights.TACKLING * 2,
+            player.getOffTheBall() * WingBackRightLeftWeights.OFF_THE_BALL * 2,
+            player.getTeamwork() * WingBackRightLeftWeights.TEAMWORK * 2,
+            player.getWorkRate() * WingBackRightLeftWeights.WORK_RATE * 2,
+            player.getAcceleration() * WingBackRightLeftWeights.ACCELERATION * 2,
+            player.getStamina() * WingBackRightLeftWeights.STAMINA * 2),
         List.of(
-            player.getCrossing(),
-            player.getDribbling(),
-            player.getMarking(),
-            player.getTackling(),
-            player.getOffTheBall(),
-            player.getTeamwork(),
-            player.getWorkRate(),
-            player.getAcceleration(),
-            player.getStamina());
-
-    String name = "Wing-Back (Su) (WBRL)";
-
-    int weight = 85;
-
-    this.normalAttributes = normalAttributes;
-    this.preferableAttributes = preferableAttributes;
-    this.keyAttributes = keyAttributes;
-    this.name = name;
-    this.weight = weight;
+                WingBackRightLeftWeights.FIRST_TOUCH,
+                WingBackRightLeftWeights.PASSING,
+                WingBackRightLeftWeights.TECHNIQUE,
+                WingBackRightLeftWeights.ANTICIPATION,
+                WingBackRightLeftWeights.CONCENTRATION,
+                WingBackRightLeftWeights.DECISIONS,
+                WingBackRightLeftWeights.POSITIONING,
+                WingBackRightLeftWeights.AGILITY,
+                WingBackRightLeftWeights.PACE,
+                WingBackRightLeftWeights.CROSSING * 2,
+                WingBackRightLeftWeights.DRIBBLING * 2,
+                WingBackRightLeftWeights.MARKING * 2,
+                WingBackRightLeftWeights.TACKLING * 2,
+                WingBackRightLeftWeights.OFF_THE_BALL * 2,
+                WingBackRightLeftWeights.TEAMWORK * 2,
+                WingBackRightLeftWeights.WORK_RATE * 2,
+                WingBackRightLeftWeights.ACCELERATION * 2,
+                WingBackRightLeftWeights.STAMINA * 2)
+            .stream()
+            .reduce(0, Integer::sum));
   }
 }
