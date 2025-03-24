@@ -6,13 +6,13 @@ public abstract class Position {
   String name;
   UUID playerId;
   String playerName;
-  int percentage;
+  Double percentage;
 
   public Position(String name) {
     this.name = name;
   }
 
-  public Position(String name, UUID playerId, String playerName, int percentage) {
+  public Position(String name, UUID playerId, String playerName, Double percentage) {
     this.name = name;
     this.playerId = playerId;
     this.playerName = playerName;
@@ -31,7 +31,7 @@ public abstract class Position {
     return playerName;
   }
 
-  public int getPercentage() {
+  public Double getPercentage() {
     return percentage;
   }
 }

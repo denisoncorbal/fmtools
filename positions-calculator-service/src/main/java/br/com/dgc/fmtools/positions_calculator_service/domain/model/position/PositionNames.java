@@ -59,6 +59,7 @@ public final class PositionNames {
   public static final String WING_BACK_AT_DRL_NAME = "Wing-Back (At) (DRL)";
   public static final String WING_BACK_DE_DRL_NAME = "Wing-Back (De) (DRL)";
   public static final String WING_BACK_SU_DRL_NAME = "Wing-Back (Su) (DRL)";
+  public static final String WING_BACK_AU_DRL_NAME = "Wing-Back (Au) (DRL)";
 
   // DM
   public static final String ANCHOR_DE_DM_NAME = "Anchor (De) (DM)";

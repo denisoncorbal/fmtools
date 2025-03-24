@@ -4,20 +4,21 @@ import br.com.dgc.fmtools.formation_calculator_service.domain.model.TacticalStyl
 import br.com.dgc.fmtools.formation_calculator_service.domain.model.formations.FiveTwoOneTwoDmAmFormation;
 import br.com.dgc.fmtools.formation_calculator_service.domain.model.formations.FiveTwoThreeDmWideFormation;
 import br.com.dgc.fmtools.formation_calculator_service.domain.model.formations.FiveTwoTwoOneDmAmFormation;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.AdvancedForwardAt;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.AttackingMidfielderSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.CentralDefenderDe;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.DeepLyingForwardSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.DefensiveMidfielderDe;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.EngancheSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.GoalkeeperDe;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.LiberoSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.RegistaSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.RoamingPlaymakerSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.TrequartistaAt;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.WingBackAu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.WingBackDe;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.WingerSu;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.attacking_midfielder_centre.AttackingMidfielderSuAMC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.attacking_midfielder_centre.EngancheSuAMC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.attacking_midfielder_centre.TrequartistaAtAMC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.attacking_midfielder_right_left.WingerSuAMRL;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defender_centre.CentralDefenderDeDC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defender_centre.LiberoSuDC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defensive_midfielder.DefensiveMidfielderDeDM;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defensive_midfielder.RegistaSuDM;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defensive_midfielder.RoamingPlaymakerSuDM;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.goalkeeper.GoalkeeperDeGK;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.striker_centre.AdvancedForwardAtSC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.striker_centre.DeepLyingForwardSuSC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.striker_centre.TrequartistaAtSC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.wing_back_right_left.WingBackAuWBRL;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.wing_back_right_left.WingBackDeWBRL;
 import java.util.List;
 
 public class CatenaccioTacticalStyle extends TacticalStyle {
@@ -29,42 +30,42 @@ public class CatenaccioTacticalStyle extends TacticalStyle {
         List.of(
             new FiveTwoThreeDmWideFormation(
                 List.of(
-                    new CentralDefenderDe(),
-                    new CentralDefenderDe(),
-                    new LiberoSu(),
-                    new WingBackAu(),
-                    new WingBackAu(),
-                    new RoamingPlaymakerSu(),
-                    new DefensiveMidfielderDe(),
-                    new WingerSu(),
-                    new WingerSu(),
-                    new TrequartistaAt()),
-                new GoalkeeperDe()),
+                    new CentralDefenderDeDC(),
+                    new CentralDefenderDeDC(),
+                    new LiberoSuDC(),
+                    new WingBackAuWBRL(),
+                    new WingBackAuWBRL(),
+                    new RoamingPlaymakerSuDM(),
+                    new DefensiveMidfielderDeDM(),
+                    new WingerSuAMRL(),
+                    new WingerSuAMRL(),
+                    new TrequartistaAtSC()),
+                new GoalkeeperDeGK()),
             new FiveTwoOneTwoDmAmFormation(
                 List.of(
-                    new CentralDefenderDe(),
-                    new CentralDefenderDe(),
-                    new LiberoSu(),
-                    new WingBackDe(),
-                    new WingBackDe(),
-                    new DefensiveMidfielderDe(),
-                    new RegistaSu(),
-                    new TrequartistaAt(),
-                    new AdvancedForwardAt(),
-                    new DeepLyingForwardSu()),
-                new GoalkeeperDe()),
+                    new CentralDefenderDeDC(),
+                    new CentralDefenderDeDC(),
+                    new LiberoSuDC(),
+                    new WingBackDeWBRL(),
+                    new WingBackDeWBRL(),
+                    new DefensiveMidfielderDeDM(),
+                    new RegistaSuDM(),
+                    new TrequartistaAtAMC(),
+                    new AdvancedForwardAtSC(),
+                    new DeepLyingForwardSuSC()),
+                new GoalkeeperDeGK()),
             new FiveTwoTwoOneDmAmFormation(
                 List.of(
-                    new CentralDefenderDe(),
-                    new CentralDefenderDe(),
-                    new LiberoSu(),
-                    new WingBackAu(),
-                    new WingBackAu(),
-                    new RoamingPlaymakerSu(),
-                    new DefensiveMidfielderDe(),
-                    new EngancheSu(),
-                    new AttackingMidfielderSu(),
-                    new TrequartistaAt()),
-                new GoalkeeperDe())));
+                    new CentralDefenderDeDC(),
+                    new CentralDefenderDeDC(),
+                    new LiberoSuDC(),
+                    new WingBackAuWBRL(),
+                    new WingBackAuWBRL(),
+                    new RoamingPlaymakerSuDM(),
+                    new DefensiveMidfielderDeDM(),
+                    new EngancheSuAMC(),
+                    new AttackingMidfielderSuAMC(),
+                    new TrequartistaAtSC()),
+                new GoalkeeperDeGK())));
   }
 }

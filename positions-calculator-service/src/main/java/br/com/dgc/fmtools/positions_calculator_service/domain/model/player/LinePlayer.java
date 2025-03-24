@@ -46,6 +46,7 @@ import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.def
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.defender_right_left.InvertedWingBackSuDRL;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.defender_right_left.NoNonsenseFullBackDeDRL;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.defender_right_left.WingBackAtDRL;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.defender_right_left.WingBackAuDRL;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.defender_right_left.WingBackDeDRL;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.defender_right_left.WingBackSuDRL;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.defensive_midfielder.AnchorDeDM;
@@ -345,6 +346,7 @@ public class LinePlayer extends Player {
     suitablePositions.add(this.calculateSuitablePosition(new WideTargetForwardSuAMRL(this)));
     suitablePositions.add(this.calculateSuitablePosition(new WingBackAtDRL(this)));
     suitablePositions.add(this.calculateSuitablePosition(new WingBackAtWBRL(this)));
+    suitablePositions.add(this.calculateSuitablePosition(new WingBackAuDRL(this)));
     suitablePositions.add(this.calculateSuitablePosition(new WingBackAuWBRL(this)));
     suitablePositions.add(this.calculateSuitablePosition(new WingBackDeDRL(this)));
     suitablePositions.add(this.calculateSuitablePosition(new WingBackDeWBRL(this)));

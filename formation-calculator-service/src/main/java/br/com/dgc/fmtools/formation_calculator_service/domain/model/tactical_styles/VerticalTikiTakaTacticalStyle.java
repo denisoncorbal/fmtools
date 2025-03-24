@@ -4,24 +4,24 @@ import br.com.dgc.fmtools.formation_calculator_service.domain.model.TacticalStyl
 import br.com.dgc.fmtools.formation_calculator_service.domain.model.formations.FourFourTwoDiamondNarrowFormation;
 import br.com.dgc.fmtools.formation_calculator_service.domain.model.formations.FourThreeThreeDmWideFormation;
 import br.com.dgc.fmtools.formation_calculator_service.domain.model.formations.FourTwoThreeOneDmAmWideFormation;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.AttackingMidfielderSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.BallPlayingDefenderDe;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.BoxToBoxMidfielderSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.CarrileroSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.CentralDefenderDe;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.CompleteForwardAt;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.DeepLyingForwardAt;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.DeepLyingPlaymakerSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.DefensiveMidfielderDe;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.FalseNineSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.InsideForwardSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.InvertedWingerSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.MezzalaSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.PressingForwardAt;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.RegistaSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.SweeperKeeperSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.WingBackAt;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.WingBackSu;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.attacking_midfielder_centre.AttackingMidfielderSuAMC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.attacking_midfielder_right_left.InsideForwardSuAMRL;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.attacking_midfielder_right_left.InvertedWingerSuAMRL;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defender_centre.BallPlayingDefenderDeDC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defender_centre.CentralDefenderDeDC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defender_right_left.WingBackAtDRL;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defender_right_left.WingBackSuDRL;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defensive_midfielder.DeepLyingPlaymakerSuDM;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defensive_midfielder.DefensiveMidfielderDeDM;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defensive_midfielder.RegistaSuDM;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.goalkeeper.SweeperKeeperSuGK;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.midfielder_centre.BoxToBoxMidfielderSuMC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.midfielder_centre.CarrileroSuMC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.midfielder_centre.MezzalaSuMC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.striker_centre.CompleteForwardAtSC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.striker_centre.DeepLyingForwardAtSC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.striker_centre.FalseNineSuSC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.striker_centre.PressingForwardAtSC;
 import java.util.List;
 
 public class VerticalTikiTakaTacticalStyle extends TacticalStyle {
@@ -33,42 +33,42 @@ public class VerticalTikiTakaTacticalStyle extends TacticalStyle {
         List.of(
             new FourThreeThreeDmWideFormation(
                 List.of(
-                    new WingBackSu(),
-                    new BallPlayingDefenderDe(),
-                    new CentralDefenderDe(),
-                    new WingBackAt(),
-                    new RegistaSu(),
-                    new MezzalaSu(),
-                    new BoxToBoxMidfielderSu(),
-                    new InsideForwardSu(),
-                    new InvertedWingerSu(),
-                    new PressingForwardAt()),
-                new SweeperKeeperSu()),
+                    new WingBackSuDRL(),
+                    new BallPlayingDefenderDeDC(),
+                    new CentralDefenderDeDC(),
+                    new WingBackAtDRL(),
+                    new RegistaSuDM(),
+                    new MezzalaSuMC(),
+                    new BoxToBoxMidfielderSuMC(),
+                    new InsideForwardSuAMRL(),
+                    new InvertedWingerSuAMRL(),
+                    new PressingForwardAtSC()),
+                new SweeperKeeperSuGK()),
             new FourFourTwoDiamondNarrowFormation(
                 List.of(
-                    new WingBackSu(),
-                    new CentralDefenderDe(),
-                    new BallPlayingDefenderDe(),
-                    new WingBackAt(),
-                    new DeepLyingPlaymakerSu(),
-                    new MezzalaSu(),
-                    new CarrileroSu(),
-                    new AttackingMidfielderSu(),
-                    new CompleteForwardAt(),
-                    new FalseNineSu()),
-                new SweeperKeeperSu()),
+                    new WingBackSuDRL(),
+                    new CentralDefenderDeDC(),
+                    new BallPlayingDefenderDeDC(),
+                    new WingBackAtDRL(),
+                    new DeepLyingPlaymakerSuDM(),
+                    new MezzalaSuMC(),
+                    new CarrileroSuMC(),
+                    new AttackingMidfielderSuAMC(),
+                    new CompleteForwardAtSC(),
+                    new FalseNineSuSC()),
+                new SweeperKeeperSuGK()),
             new FourTwoThreeOneDmAmWideFormation(
                 List.of(
-                    new WingBackSu(),
-                    new WingBackSu(),
-                    new BallPlayingDefenderDe(),
-                    new CentralDefenderDe(),
-                    new DeepLyingPlaymakerSu(),
-                    new DefensiveMidfielderDe(),
-                    new InvertedWingerSu(),
-                    new AttackingMidfielderSu(),
-                    new InsideForwardSu(),
-                    new DeepLyingForwardAt()),
-                new SweeperKeeperSu())));
+                    new WingBackSuDRL(),
+                    new WingBackSuDRL(),
+                    new BallPlayingDefenderDeDC(),
+                    new CentralDefenderDeDC(),
+                    new DeepLyingPlaymakerSuDM(),
+                    new DefensiveMidfielderDeDM(),
+                    new InvertedWingerSuAMRL(),
+                    new AttackingMidfielderSuAMC(),
+                    new InsideForwardSuAMRL(),
+                    new DeepLyingForwardAtSC()),
+                new SweeperKeeperSuGK())));
   }
 }

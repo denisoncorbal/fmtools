@@ -1,8 +1,9 @@
 package br.com.dgc.fmtools.positions_calculator_service.domain.model.player;
 
+import java.util.List;
+
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.Position;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.SuitablePosition;
-import java.util.List;
 
 public abstract class Player {
 
@@ -35,7 +36,8 @@ public abstract class Player {
   protected int firstTouch;
   protected int passing;
 
-  public Player() {}
+  public Player() {
+  }
 
   public Player(
       String name,
@@ -99,13 +101,12 @@ public abstract class Player {
   public abstract List<SuitablePosition> calculateSuitablePositions();
 
   protected SuitablePosition calculateSuitablePosition(Position position) {
-    int sumPreferableAttributes =
-        position.getPreferableAttributes().stream().reduce(0, Integer::sum);
+    int sumPreferableAttributes = position.getPreferableAttributes().stream().reduce(0, Integer::sum);
     int sumKeyAttributes = position.getKeyAttributes().stream().reduce(0, Integer::sum);
 
     int totalAttributes = sumPreferableAttributes + sumKeyAttributes;
 
-    double suitableValue = totalAttributes / position.getWeight();
+    double suitableValue = ((double) totalAttributes) / position.getWeight();
 
     double percentageSuitable = suitableValue * 100 / 20;
 

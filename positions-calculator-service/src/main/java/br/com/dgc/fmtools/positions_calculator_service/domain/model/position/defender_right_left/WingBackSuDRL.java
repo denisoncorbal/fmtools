@@ -30,6 +30,26 @@ public class WingBackSuDRL extends Position {
             player.getWorkRate() * DefenderRightLeftWeights.WORK_RATE * 2,
             player.getAcceleration() * DefenderRightLeftWeights.ACCELERATION * 2,
             player.getStamina() * DefenderRightLeftWeights.STAMINA * 2),
-        87);
+        List.of(
+                DefenderRightLeftWeights.FIRST_TOUCH,
+                DefenderRightLeftWeights.PASSING,
+                DefenderRightLeftWeights.TECHNIQUE,
+                DefenderRightLeftWeights.ANTICIPATION,
+                DefenderRightLeftWeights.CONCENTRATION,
+                DefenderRightLeftWeights.DECISIONS,
+                DefenderRightLeftWeights.POSITIONING,
+                DefenderRightLeftWeights.AGILITY,
+                DefenderRightLeftWeights.PACE,
+                DefenderRightLeftWeights.CROSSING * 2,
+                DefenderRightLeftWeights.DRIBBLING * 2,
+                DefenderRightLeftWeights.MARKING * 2,
+                DefenderRightLeftWeights.TACKLING * 2,
+                DefenderRightLeftWeights.OFF_THE_BALL * 2,
+                DefenderRightLeftWeights.TEAMWORK * 2,
+                DefenderRightLeftWeights.WORK_RATE * 2,
+                DefenderRightLeftWeights.ACCELERATION * 2,
+                DefenderRightLeftWeights.STAMINA * 2)
+            .stream()
+            .reduce(0, Integer::sum));
   }
 }

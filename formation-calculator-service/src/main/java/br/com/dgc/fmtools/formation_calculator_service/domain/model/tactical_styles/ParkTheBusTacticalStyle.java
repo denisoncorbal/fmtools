@@ -4,24 +4,25 @@ import br.com.dgc.fmtools.formation_calculator_service.domain.model.TacticalStyl
 import br.com.dgc.fmtools.formation_calculator_service.domain.model.formations.FourFourTwoFormation;
 import br.com.dgc.fmtools.formation_calculator_service.domain.model.formations.FourThreeThreeDmWideFormation;
 import br.com.dgc.fmtools.formation_calculator_service.domain.model.formations.FourTwoFourDmWideFormation;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.BallWinningMidfielderDe;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.CentralDefenderDe;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.CentralMidfielderDe;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.DeepLyingPlaymakerDe;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.DeepLyingPlaymakerSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.DefensiveMidfielderDe;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.DefensiveWingerSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.FullBackAu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.FullBackDe;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.FullBackSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.GoalkeeperDe;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.InvertedWingerSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.NoNonsenseCentreBackDe;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.PoacherAt;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.PressingForwardAt;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.PressingForwardDe;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.WideTargetForwardSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.WingerSu;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.attacking_midfielder_right_left.InvertedWingerSuAMRL;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.attacking_midfielder_right_left.WideTargetForwardSuAMRL;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.attacking_midfielder_right_left.WingerSuAMRL;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defender_centre.CentralDefenderDeDC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defender_centre.NoNonsenseCentreBackDeDC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defender_right_left.FullBackAuDRL;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defender_right_left.FullBackDeDRL;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defender_right_left.FullBackSuDRL;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defensive_midfielder.DeepLyingPlaymakerSuDM;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defensive_midfielder.DefensiveMidfielderDeDM;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.goalkeeper.GoalkeeperDeGK;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.midfielder_centre.BallWinningMidfielderDeMC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.midfielder_centre.CentralMidfielderDeMC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.midfielder_centre.DeepLyingPlaymakerDeMC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.midfielder_centre.DeepLyingPlaymakerSuMC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.midfielder_right_left.DefensiveWingerSuMRL;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.striker_centre.PoacherAtSC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.striker_centre.PressingForwardAtSC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.striker_centre.PressingForwardDeSC;
 import java.util.List;
 
 public class ParkTheBusTacticalStyle extends TacticalStyle {
@@ -33,42 +34,42 @@ public class ParkTheBusTacticalStyle extends TacticalStyle {
         List.of(
             new FourFourTwoFormation(
                 List.of(
-                    new FullBackAu(),
-                    new FullBackAu(),
-                    new NoNonsenseCentreBackDe(),
-                    new NoNonsenseCentreBackDe(),
-                    new DefensiveWingerSu(),
-                    new DefensiveWingerSu(),
-                    new BallWinningMidfielderDe(),
-                    new DeepLyingPlaymakerDe(),
-                    new PressingForwardAt(),
-                    new PressingForwardDe()),
-                new GoalkeeperDe()),
+                    new FullBackAuDRL(),
+                    new FullBackAuDRL(),
+                    new NoNonsenseCentreBackDeDC(),
+                    new NoNonsenseCentreBackDeDC(),
+                    new DefensiveWingerSuMRL(),
+                    new DefensiveWingerSuMRL(),
+                    new BallWinningMidfielderDeMC(),
+                    new DeepLyingPlaymakerDeMC(),
+                    new PressingForwardAtSC(),
+                    new PressingForwardDeSC()),
+                new GoalkeeperDeGK()),
             new FourTwoFourDmWideFormation(
                 List.of(
-                    new FullBackSu(),
-                    new CentralDefenderDe(),
-                    new NoNonsenseCentreBackDe(),
-                    new FullBackAu(),
-                    new DeepLyingPlaymakerSu(),
-                    new DefensiveMidfielderDe(),
-                    new InvertedWingerSu(),
-                    new WideTargetForwardSu(),
-                    new PoacherAt(),
-                    new PressingForwardDe()),
-                new GoalkeeperDe()),
+                    new FullBackSuDRL(),
+                    new CentralDefenderDeDC(),
+                    new NoNonsenseCentreBackDeDC(),
+                    new FullBackAuDRL(),
+                    new DeepLyingPlaymakerSuDM(),
+                    new DefensiveMidfielderDeDM(),
+                    new InvertedWingerSuAMRL(),
+                    new WideTargetForwardSuAMRL(),
+                    new PoacherAtSC(),
+                    new PressingForwardDeSC()),
+                new GoalkeeperDeGK()),
             new FourThreeThreeDmWideFormation(
                 List.of(
-                    new FullBackSu(),
-                    new CentralDefenderDe(),
-                    new NoNonsenseCentreBackDe(),
-                    new FullBackDe(),
-                    new DefensiveMidfielderDe(),
-                    new DeepLyingPlaymakerSu(),
-                    new CentralMidfielderDe(),
-                    new InvertedWingerSu(),
-                    new WingerSu(),
-                    new PressingForwardDe()),
-                new GoalkeeperDe())));
+                    new FullBackSuDRL(),
+                    new CentralDefenderDeDC(),
+                    new NoNonsenseCentreBackDeDC(),
+                    new FullBackDeDRL(),
+                    new DefensiveMidfielderDeDM(),
+                    new DeepLyingPlaymakerSuMC(),
+                    new CentralMidfielderDeMC(),
+                    new InvertedWingerSuAMRL(),
+                    new WingerSuAMRL(),
+                    new PressingForwardDeSC()),
+                new GoalkeeperDeGK())));
   }
 }

@@ -4,26 +4,27 @@ import br.com.dgc.fmtools.formation_calculator_service.domain.model.TacticalStyl
 import br.com.dgc.fmtools.formation_calculator_service.domain.model.formations.FiveTwoThreeDmWideFormation;
 import br.com.dgc.fmtools.formation_calculator_service.domain.model.formations.FourThreeThreeDmWideFormation;
 import br.com.dgc.fmtools.formation_calculator_service.domain.model.formations.FourTwoThreeOneDmAmWideFormation;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.AdvancedPlaymakerAt;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.AdvancedPlaymakerSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.AttackingMidfielderSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.BallPlayingDefenderDe;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.CentralDefenderCo;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.CentralDefenderDe;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.CompleteForwardAt;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.DeepLyingForwardAt;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.DeepLyingPlaymakerSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.DefensiveMidfielderDe;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.GoalkeeperDe;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.InsideForwardAt;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.InsideForwardSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.InvertedWingerSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.RoamingPlaymakerSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.SweeperKeeperAt;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.WideCentreBackSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.WingBackAt;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.WingBackSu;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.WingerSu;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.attacking_midfielder_centre.AttackingMidfielderSuAMC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.attacking_midfielder_right_left.AdvancedPlaymakerSuAMRL;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.attacking_midfielder_right_left.InsideForwardAtAMRL;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.attacking_midfielder_right_left.InsideForwardSuAMRL;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.attacking_midfielder_right_left.InvertedWingerSuAMRL;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.attacking_midfielder_right_left.WingerSuAMRL;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defender_centre.BallPlayingDefenderDeDC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defender_centre.CentralDefenderCoDC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defender_centre.CentralDefenderDeDC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defender_centre.WideCentreBackSuDC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defender_right_left.WingBackAtDRL;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defender_right_left.WingBackSuDRL;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defensive_midfielder.DeepLyingPlaymakerSuDM;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.defensive_midfielder.DefensiveMidfielderDeDM;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.goalkeeper.GoalkeeperDeGK;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.goalkeeper.SweeperKeeperAtGK;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.midfielder_centre.AdvancedPlaymakerAtMC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.midfielder_centre.RoamingPlaymakerSuMC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.striker_centre.CompleteForwardAtSC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.striker_centre.DeepLyingForwardAtSC;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.positions.wing_back_right_left.WingBackSuWBRL;
 import java.util.List;
 
 public class TikiTakaTacticalStyle extends TacticalStyle {
@@ -35,42 +36,42 @@ public class TikiTakaTacticalStyle extends TacticalStyle {
         List.of(
             new FourThreeThreeDmWideFormation(
                 List.of(
-                    new WingBackSu(),
-                    new WingBackSu(),
-                    new CentralDefenderDe(),
-                    new BallPlayingDefenderDe(),
-                    new DeepLyingPlaymakerSu(),
-                    new RoamingPlaymakerSu(),
-                    new AdvancedPlaymakerAt(),
-                    new InsideForwardSu(),
-                    new WingerSu(),
-                    new DeepLyingForwardAt()),
-                new SweeperKeeperAt()),
+                    new WingBackSuDRL(),
+                    new WingBackSuDRL(),
+                    new CentralDefenderDeDC(),
+                    new BallPlayingDefenderDeDC(),
+                    new DeepLyingPlaymakerSuDM(),
+                    new RoamingPlaymakerSuMC(),
+                    new AdvancedPlaymakerAtMC(),
+                    new InsideForwardSuAMRL(),
+                    new WingerSuAMRL(),
+                    new DeepLyingForwardAtSC()),
+                new SweeperKeeperAtGK()),
             new FourTwoThreeOneDmAmWideFormation(
                 List.of(
-                    new WingBackSu(),
-                    new WingBackAt(),
-                    new CentralDefenderDe(),
-                    new BallPlayingDefenderDe(),
-                    new DeepLyingPlaymakerSu(),
-                    new DefensiveMidfielderDe(),
-                    new InsideForwardAt(),
-                    new AttackingMidfielderSu(),
-                    new InvertedWingerSu(),
-                    new CompleteForwardAt()),
-                new GoalkeeperDe()),
+                    new WingBackSuDRL(),
+                    new WingBackAtDRL(),
+                    new CentralDefenderDeDC(),
+                    new BallPlayingDefenderDeDC(),
+                    new DeepLyingPlaymakerSuDM(),
+                    new DefensiveMidfielderDeDM(),
+                    new InsideForwardAtAMRL(),
+                    new AttackingMidfielderSuAMC(),
+                    new InvertedWingerSuAMRL(),
+                    new CompleteForwardAtSC()),
+                new GoalkeeperDeGK()),
             new FiveTwoThreeDmWideFormation(
                 List.of(
-                    new WideCentreBackSu(),
-                    new CentralDefenderCo(),
-                    new BallPlayingDefenderDe(),
-                    new WingBackSu(),
-                    new WingBackSu(),
-                    new DeepLyingPlaymakerSu(),
-                    new DefensiveMidfielderDe(),
-                    new AdvancedPlaymakerSu(),
-                    new InvertedWingerSu(),
-                    new CompleteForwardAt()),
-                new SweeperKeeperAt())));
+                    new WideCentreBackSuDC(),
+                    new CentralDefenderCoDC(),
+                    new BallPlayingDefenderDeDC(),
+                    new WingBackSuWBRL(),
+                    new WingBackSuWBRL(),
+                    new DeepLyingPlaymakerSuDM(),
+                    new DefensiveMidfielderDeDM(),
+                    new AdvancedPlaymakerSuAMRL(),
+                    new InvertedWingerSuAMRL(),
+                    new CompleteForwardAtSC()),
+                new SweeperKeeperAtGK())));
   }
 }
