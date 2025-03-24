@@ -4,13 +4,8 @@ import br.com.dgc.fmtools.formation_calculator_service.domain.model.formations.B
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class Formation {
-
-  private final Logger log = LoggerFactory.getLogger(Formation.class);
-
   String name;
   List<Position> linePositions = new ArrayList<Position>(10);
   Position goalkeeperPosition;
