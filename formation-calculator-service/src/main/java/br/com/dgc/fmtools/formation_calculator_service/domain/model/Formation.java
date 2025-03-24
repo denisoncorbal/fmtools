@@ -1,13 +1,11 @@
 package br.com.dgc.fmtools.formation_calculator_service.domain.model;
 
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.formations.BruteForceBetterFormationCalculation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.formations.BruteForceBetterFormationCalculation;
 
 public abstract class Formation {
 
@@ -31,11 +29,12 @@ public abstract class Formation {
   }
 
   void calculatePercentage() {
-    this.averagePercentage = (this.linePositions.stream()
-        .collect(Collectors.summarizingDouble((position) -> position.percentage))
-        .getSum()
-        + this.goalkeeperPosition.percentage)
-        / (this.linePositions.size() + 1);
+    this.averagePercentage =
+        (this.linePositions.stream()
+                    .collect(Collectors.summarizingDouble((position) -> position.percentage))
+                    .getSum()
+                + this.goalkeeperPosition.percentage)
+            / (this.linePositions.size() + 1);
   }
 
   public String getName() {

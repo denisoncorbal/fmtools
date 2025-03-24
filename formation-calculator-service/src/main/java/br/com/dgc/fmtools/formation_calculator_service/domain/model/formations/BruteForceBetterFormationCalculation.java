@@ -1,5 +1,7 @@
 package br.com.dgc.fmtools.formation_calculator_service.domain.model.formations;
 
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.Formation;
+import br.com.dgc.fmtools.formation_calculator_service.domain.model.Position;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -8,9 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.Formation;
-import br.com.dgc.fmtools.formation_calculator_service.domain.model.Position;
 
 public class BruteForceBetterFormationCalculation {
 
@@ -30,7 +29,8 @@ public class BruteForceBetterFormationCalculation {
     formation.setGoalkeeperPosition(
         allGoalkeeperPlayersPositions.stream()
             .filter(
-                (position) -> position.getName().equals(formation.getGoalkeeperPosition().getName()))
+                (position) ->
+                    position.getName().equals(formation.getGoalkeeperPosition().getName()))
             .sorted(Comparator.comparingDouble(Position::getPercentage).reversed())
             .findFirst()
             .get());
@@ -42,15 +42,17 @@ public class BruteForceBetterFormationCalculation {
     iterator = 0;
     for (Position pos : formation.getLinePositions()) {
       possiblePositionsMatrix.add(new ArrayList<Position>());
-      for (Position insidePos : allLinePlayerPositions.stream()
-          .filter(
-              (linePosition) -> linePosition.getName().equals(pos.getName())
-                  && !possiblePositionsMatrix.get(iterator).stream()
-                      .map(Position::getPlayerId)
-                      .distinct()
-                      .collect(Collectors.toList())
-                      .contains(linePosition.getPlayerId()))
-          .collect(Collectors.toList())) {
+      for (Position insidePos :
+          allLinePlayerPositions.stream()
+              .filter(
+                  (linePosition) ->
+                      linePosition.getName().equals(pos.getName())
+                          && !possiblePositionsMatrix.get(iterator).stream()
+                              .map(Position::getPlayerId)
+                              .distinct()
+                              .collect(Collectors.toList())
+                              .contains(linePosition.getPlayerId()))
+              .collect(Collectors.toList())) {
         possiblePositionsMatrix.get(iterator).add(insidePos);
       }
       iterator++;
