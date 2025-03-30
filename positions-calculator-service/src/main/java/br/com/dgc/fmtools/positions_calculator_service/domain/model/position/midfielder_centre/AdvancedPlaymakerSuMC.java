@@ -1,10 +1,9 @@
 package br.com.dgc.fmtools.positions_calculator_service.domain.model.position.midfielder_centre;
 
-import java.util.List;
-
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.player.LinePlayer;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.Position;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.PositionNames;
+import java.util.List;
 
 public class AdvancedPlaymakerSuMC extends Position {
 
@@ -26,18 +25,18 @@ public class AdvancedPlaymakerSuMC extends Position {
             player.getTeamwork() * MidfielderCentreWeights.TEAMWORK * 2,
             player.getVision() * MidfielderCentreWeights.VISION * 2),
         List.of(
-            MidfielderCentreWeights.DRIBBLING,
-            MidfielderCentreWeights.ANTICIPATION,
-            MidfielderCentreWeights.FLAIR,
-            MidfielderCentreWeights.AGILITY,
-            MidfielderCentreWeights.FIRST_TOUCH * 2,
-            MidfielderCentreWeights.PASSING * 2,
-            MidfielderCentreWeights.TECHNIQUE * 2,
-            MidfielderCentreWeights.COMPOSURE * 2,
-            MidfielderCentreWeights.DECISIONS * 2,
-            MidfielderCentreWeights.OFF_THE_BALL * 2,
-            MidfielderCentreWeights.TEAMWORK * 2,
-            MidfielderCentreWeights.VISION * 2)
+                MidfielderCentreWeights.DRIBBLING,
+                MidfielderCentreWeights.ANTICIPATION,
+                MidfielderCentreWeights.FLAIR,
+                MidfielderCentreWeights.AGILITY,
+                MidfielderCentreWeights.FIRST_TOUCH * 2,
+                MidfielderCentreWeights.PASSING * 2,
+                MidfielderCentreWeights.TECHNIQUE * 2,
+                MidfielderCentreWeights.COMPOSURE * 2,
+                MidfielderCentreWeights.DECISIONS * 2,
+                MidfielderCentreWeights.OFF_THE_BALL * 2,
+                MidfielderCentreWeights.TEAMWORK * 2,
+                MidfielderCentreWeights.VISION * 2)
             .stream()
             .reduce(0, Integer::sum));
   }

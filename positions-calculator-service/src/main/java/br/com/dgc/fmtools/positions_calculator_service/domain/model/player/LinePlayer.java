@@ -1,8 +1,5 @@
 package br.com.dgc.fmtools.positions_calculator_service.domain.model.player;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.SuitablePosition;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.attacking_midfielder_centre.AdvancedPlaymakerAtAMC;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.attacking_midfielder_centre.AdvancedPlaymakerSuAMC;
@@ -113,6 +110,8 @@ import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.win
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.wing_back_right_left.WingBackAuWBRL;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.wing_back_right_left.WingBackDeWBRL;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.wing_back_right_left.WingBackSuWBRL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LinePlayer extends Player {
 

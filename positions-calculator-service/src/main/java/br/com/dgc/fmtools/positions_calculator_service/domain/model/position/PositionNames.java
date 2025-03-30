@@ -54,8 +54,7 @@ public final class PositionNames {
   public static final String INVERTED_WING_BACK_AU_DRL_NAME = "Inverted Wing-Back (Au) (DRL)";
   public static final String INVERTED_WING_BACK_DE_DRL_NAME = "Inverted Wing-Back (De) (DRL)";
   public static final String INVERTED_WING_BACK_SU_DRL_NAME = "Inverted Wing-Back (Su) (DRL)";
-  public static final String NO_NONSENSE_FULL_BACK_DE_DRL_NAME =
-      "No-Nonsense Full-Back (De) (DRL)";
+  public static final String NO_NONSENSE_FULL_BACK_DE_DRL_NAME = "No-Nonsense Full-Back (De) (DRL)";
   public static final String WING_BACK_AT_DRL_NAME = "Wing-Back (At) (DRL)";
   public static final String WING_BACK_DE_DRL_NAME = "Wing-Back (De) (DRL)";
   public static final String WING_BACK_SU_DRL_NAME = "Wing-Back (Su) (DRL)";

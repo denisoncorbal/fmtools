@@ -1,10 +1,9 @@
 package br.com.dgc.fmtools.positions_calculator_service.domain.model.position.goalkeeper;
 
-import java.util.List;
-
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.player.GoalkeeperPlayer;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.Position;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.PositionNames;
+import java.util.List;
 
 public class SweeperKeeperAtGK extends Position {
   public SweeperKeeperAtGK(GoalkeeperPlayer player) {
@@ -33,26 +32,26 @@ public class SweeperKeeperAtGK extends Position {
             player.getPositioning() * GoalkeeperWeights.POSITIONING * 2,
             player.getAgility() * GoalkeeperWeights.AGILITY * 2),
         List.of(
-            GoalkeeperWeights.AERIAL_REACH,
-            GoalkeeperWeights.COMMUNICATION,
-            GoalkeeperWeights.ECCENTRICITY,
-            GoalkeeperWeights.FIRST_TOUCH,
-            GoalkeeperWeights.HANDLING,
-            GoalkeeperWeights.PASSING,
-            GoalkeeperWeights.THROWING,
-            GoalkeeperWeights.DECISIONS,
-            GoalkeeperWeights.VISION,
-            GoalkeeperWeights.ACCELERATION,
-            GoalkeeperWeights.COMMAND_OF_AREA * 2,
-            GoalkeeperWeights.KICKING * 2,
-            GoalkeeperWeights.ONE_ON_ONES * 2,
-            GoalkeeperWeights.REFLEXES * 2,
-            GoalkeeperWeights.RUSHING_OUT * 2,
-            GoalkeeperWeights.ANTICIPATION * 2,
-            GoalkeeperWeights.COMPOSURE * 2,
-            GoalkeeperWeights.CONCENTRATION * 2,
-            GoalkeeperWeights.POSITIONING * 2,
-            GoalkeeperWeights.AGILITY * 2)
+                GoalkeeperWeights.AERIAL_REACH,
+                GoalkeeperWeights.COMMUNICATION,
+                GoalkeeperWeights.ECCENTRICITY,
+                GoalkeeperWeights.FIRST_TOUCH,
+                GoalkeeperWeights.HANDLING,
+                GoalkeeperWeights.PASSING,
+                GoalkeeperWeights.THROWING,
+                GoalkeeperWeights.DECISIONS,
+                GoalkeeperWeights.VISION,
+                GoalkeeperWeights.ACCELERATION,
+                GoalkeeperWeights.COMMAND_OF_AREA * 2,
+                GoalkeeperWeights.KICKING * 2,
+                GoalkeeperWeights.ONE_ON_ONES * 2,
+                GoalkeeperWeights.REFLEXES * 2,
+                GoalkeeperWeights.RUSHING_OUT * 2,
+                GoalkeeperWeights.ANTICIPATION * 2,
+                GoalkeeperWeights.COMPOSURE * 2,
+                GoalkeeperWeights.CONCENTRATION * 2,
+                GoalkeeperWeights.POSITIONING * 2,
+                GoalkeeperWeights.AGILITY * 2)
             .stream()
             .reduce(0, Integer::sum));
   }
