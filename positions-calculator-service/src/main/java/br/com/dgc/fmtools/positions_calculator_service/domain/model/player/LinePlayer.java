@@ -1,5 +1,8 @@
 package br.com.dgc.fmtools.positions_calculator_service.domain.model.player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.SuitablePosition;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.attacking_midfielder_centre.AdvancedPlaymakerAtAMC;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.attacking_midfielder_centre.AdvancedPlaymakerSuAMC;
@@ -80,6 +83,7 @@ import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.mid
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.midfielder_right_left.InvertedWingerAtMRL;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.midfielder_right_left.InvertedWingerSuMRL;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.midfielder_right_left.WideMidfielderAtMRL;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.midfielder_right_left.WideMidfielderAuMRL;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.midfielder_right_left.WideMidfielderDeMRL;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.midfielder_right_left.WideMidfielderSuMRL;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.midfielder_right_left.WidePlaymakerAtMRL;
@@ -102,14 +106,13 @@ import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.str
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.wing_back_right_left.CompleteWingBackAtWBRL;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.wing_back_right_left.CompleteWingBackSuWBRL;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.wing_back_right_left.InvertedWingBackAtWBRL;
+import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.wing_back_right_left.InvertedWingBackAuWBRL;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.wing_back_right_left.InvertedWingBackDeWBRL;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.wing_back_right_left.InvertedWingBackSuWBRL;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.wing_back_right_left.WingBackAtWBRL;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.wing_back_right_left.WingBackAuWBRL;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.wing_back_right_left.WingBackDeWBRL;
 import br.com.dgc.fmtools.positions_calculator_service.domain.model.position.wing_back_right_left.WingBackSuWBRL;
-import java.util.ArrayList;
-import java.util.List;
 
 public class LinePlayer extends Player {
 
@@ -303,6 +306,7 @@ public class LinePlayer extends Player {
     suitablePositions.add(this.calculateSuitablePosition(new InvertedWingBackAtDRL(this)));
     suitablePositions.add(this.calculateSuitablePosition(new InvertedWingBackAtWBRL(this)));
     suitablePositions.add(this.calculateSuitablePosition(new InvertedWingBackAuDRL(this)));
+    suitablePositions.add(this.calculateSuitablePosition(new InvertedWingBackAuWBRL(this)));
     suitablePositions.add(this.calculateSuitablePosition(new InvertedWingBackDeDRL(this)));
     suitablePositions.add(this.calculateSuitablePosition(new InvertedWingBackDeWBRL(this)));
     suitablePositions.add(this.calculateSuitablePosition(new InvertedWingBackSuDRL(this)));
@@ -338,6 +342,7 @@ public class LinePlayer extends Player {
     suitablePositions.add(this.calculateSuitablePosition(new WideCentreBackDeDC(this)));
     suitablePositions.add(this.calculateSuitablePosition(new WideCentreBackSuDC(this)));
     suitablePositions.add(this.calculateSuitablePosition(new WideMidfielderAtMRL(this)));
+    suitablePositions.add(this.calculateSuitablePosition(new WideMidfielderAuMRL(this)));
     suitablePositions.add(this.calculateSuitablePosition(new WideMidfielderDeMRL(this)));
     suitablePositions.add(this.calculateSuitablePosition(new WideMidfielderSuMRL(this)));
     suitablePositions.add(this.calculateSuitablePosition(new WidePlaymakerAtMRL(this)));

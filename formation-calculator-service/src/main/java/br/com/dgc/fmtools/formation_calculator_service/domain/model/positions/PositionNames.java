@@ -18,7 +18,7 @@ public final class PositionNames {
   public static final String INVERTED_WINGER_AT_AMRL_NAME = "Inverted Winger (At) (AMRL)";
   public static final String INVERTED_WINGER_SU_AMRL_NAME = "Inverted Winger (Su) (AMRL)";
   public static final String RAUMDEUTER_AT_AMRL_NAME = "Raumdeuter (At) (AMRL)";
-  public static final String TREQUARTISTA_AT_AMRL_NAME = "Trequartista (Su) (AMRL)";
+  public static final String TREQUARTISTA_AT_AMRL_NAME = "Trequartista (At) (AMRL)";
   public static final String WIDE_TARGET_FORWARD_AT_AMRL_NAME = "Wide Target Forward (At) (AMRL)";
   public static final String WIDE_TARGET_FORWARD_SU_AMRL_NAME = "Wide Target Forward (Su) (AMRL)";
   public static final String WINGER_AT_AMRL_NAME = "Winger (At) (AMRL)";
@@ -45,7 +45,7 @@ public final class PositionNames {
 
   // DRL
   public static final String COMPLETE_WING_BACK_AT_DRL_NAME = "Complete Wing-Back (At) (DRL)";
-  public static final String COMPLETE_WING_BACK_SU_DRL_NAME = "Complete Wing-Back (At) (DRL)";
+  public static final String COMPLETE_WING_BACK_SU_DRL_NAME = "Complete Wing-Back (Su) (DRL)";
   public static final String FULL_BACK_AT_DRL_NAME = "Full-Back (At) (DRL)";
   public static final String FULL_BACK_AU_DRL_NAME = "Full-Back (Au) (DRL)";
   public static final String FULL_BACK_DE_DRL_NAME = "Full-Back (De) (DRL)";
@@ -55,7 +55,7 @@ public final class PositionNames {
   public static final String INVERTED_WING_BACK_DE_DRL_NAME = "Inverted Wing-Back (De) (DRL)";
   public static final String INVERTED_WING_BACK_SU_DRL_NAME = "Inverted Wing-Back (Su) (DRL)";
   public static final String NO_NONSENSE_FULL_BACK_DE_DRL_NAME =
-      "No-Nonsense Centre-Back (St) (DC)";
+      "No-Nonsense Full-Back (De) (DRL)";
   public static final String WING_BACK_AT_DRL_NAME = "Wing-Back (At) (DRL)";
   public static final String WING_BACK_DE_DRL_NAME = "Wing-Back (De) (DRL)";
   public static final String WING_BACK_SU_DRL_NAME = "Wing-Back (Su) (DRL)";
@@ -135,6 +135,7 @@ public final class PositionNames {
   public static final String COMPLETE_WING_BACK_AT_WBRL_NAME = "Complete Wing-Back (At) (WBRL)";
   public static final String COMPLETE_WING_BACK_SU_WBRL_NAME = "Complete Wing-Back (Su) (WBRL)";
   public static final String INVERTED_WING_BACK_AT_WBRL_NAME = "Inverted Wing-Back (At) (WBRL)";
+  public static final String INVERTED_WING_BACK_AU_WBRL_NAME = "Inverted Wing-Back (Au) (WBRL)";
   public static final String INVERTED_WING_BACK_DE_WBRL_NAME = "Inverted Wing-Back (De) (WBRL)";
   public static final String INVERTED_WING_BACK_SU_WBRL_NAME = "Inverted Wing-Back (Su) (WBRL)";
   public static final String WING_BACK_AT_WBRL_NAME = "Wing-Back (At) (WBRL)";
