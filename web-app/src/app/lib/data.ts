@@ -1,4 +1,4 @@
-import { GoalkeeperPlayer, LinePlayer, SuitablePosition } from "./definitions";
+import { GoalkeeperPlayer, LinePlayer, SuitablePosition, TacticalStyle } from "./definitions";
 
 export async function fetchAllLinePlayers(): Promise<LinePlayer[]> {
     let res = null;
@@ -63,4 +63,17 @@ export async function fetchGoalkeeperPlayerById(id: string): Promise<GoalkeeperP
         });
     }
     return res.json() as Promise<GoalkeeperPlayer>;
+}
+
+export async function fetchFormations(id: string): Promise<TacticalStyle[]> {
+    let res = null;
+    try {
+        res = await fetch("http://localhost:8083/v1/api/calculateFormation/" + id);
+    } catch (error) {
+        return new Promise((resolve) => {
+            console.error((error as Error).message);
+            resolve({} as TacticalStyle[]);
+        });
+    }
+    return res.json() as Promise<TacticalStyle[]>;
 }

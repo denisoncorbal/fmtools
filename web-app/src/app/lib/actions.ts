@@ -2,7 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { GoalkeeperPlayer, LinePlayer } from "./definitions";
+import { Agent, fetch as ft } from "undici";
+import { CalculateFormationsRequest, GoalkeeperPlayer, LinePlayer } from "./definitions";
 
 export async function createLinePlayer(formData: FormData) {
     const newLinePlayer: LinePlayer = {
@@ -261,4 +262,27 @@ export async function calculateGoalkeeperPositions(formData: FormData) {
 
     revalidatePath('/positions-calculator/positions-result/' + formData.get("player-type") + "/" + formData.get("select-player")?.toString());
     redirect('/positions-calculator/positions-result/' + formData.get("player-type") + "/" + formData.get("select-player")?.toString());
+}
+
+export async function calculateFormations(formData: FormData) {
+    const calculateFormationsRequest: CalculateFormationsRequest = {
+        linePlayersIds: [],
+        goalkeeperPlayersIds: []
+    };
+    formData.keys().filter((k) => k.includes("line")).forEach((v) => calculateFormationsRequest.linePlayersIds.push(formData.get(v)!.toString()));
+    formData.keys().filter((k) => k.includes("goalkeeper")).forEach((v) => calculateFormationsRequest.goalkeeperPlayersIds.push(formData.get(v)!.toString()));
+
+    const res = await ft("http://localhost:8083/v1/api/calculateFormation", {
+        method: "POST",
+        body: JSON.stringify(calculateFormationsRequest),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        dispatcher: new Agent({ headersTimeout: (60000 * 25) })
+    })
+
+    const id = await res.json();
+
+    revalidatePath('/formations-calculator/formations-result/' + id);
+    redirect('/formations-calculator/formations-result/' + id);
 }

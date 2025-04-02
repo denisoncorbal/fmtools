@@ -22,7 +22,7 @@ export default function Home() {
           <Link href={"/positions-calculator"}>Positions Calculator</Link>
         </Col>
         <Col>
-          <Link href={"#"}>Formation Calculator</Link>
+          <Link href={"/formations-calculator"}>Formation Calculator</Link>
         </Col>
       </Row>
     </Container>

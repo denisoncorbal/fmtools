@@ -112,3 +112,41 @@ export function isSuitablePosition(suitablePosition: object): suitablePosition i
 export function isSuitablePositionArray(suitablePositions: object[]): suitablePositions is SuitablePosition[] {
     return suitablePositions.length > 0 && suitablePositions.every((suitablePosition) => Object.keys(suitablePosition).includes("percentage"));
 }
+
+export type CalculateFormationsRequest = {
+    linePlayersIds: string[],
+    goalkeeperPlayersIds: string[]
+}
+
+export type Formation = {
+    linePositions: [
+        {
+            name: string,
+            playerId: string,
+            playerName: string,
+            percentage: number
+        }
+    ],
+    goalkeeperPosition: {
+        name: string,
+        playerId: string,
+        playerName: string,
+        percentage: number
+    },
+    name: string,
+    averagePercentage: number
+}
+
+export type TacticalStyle = {
+    name: string,
+    mentality: 'very defensive' | 'defensive' | 'cautious' | 'balanced' | 'positive' | 'attacking' | 'very attacking',
+    preferableFormations: Formation[]
+}
+
+export function isSuitableTacticalStyle(tacticalStyle: object): tacticalStyle is TacticalStyle {
+    return Object.keys(tacticalStyle).includes("preferableFormations");
+}
+
+export function isSuitableTacticalStyleArray(tacticalStyles: object[]): tacticalStyles is SuitablePosition[] {
+    return tacticalStyles.length > 0 && tacticalStyles.every((tacticalStyle) => Object.keys(tacticalStyle).includes("preferableFormations"));
+}
