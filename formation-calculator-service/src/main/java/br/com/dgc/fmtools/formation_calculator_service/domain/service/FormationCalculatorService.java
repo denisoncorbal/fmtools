@@ -18,6 +18,13 @@ import br.com.dgc.fmtools.formation_calculator_service.domain.model.tactical_sty
 import br.com.dgc.fmtools.formation_calculator_service.domain.model.tactical_styles.TikiTakaTacticalStyle;
 import br.com.dgc.fmtools.formation_calculator_service.domain.model.tactical_styles.VerticalTikiTakaTacticalStyle;
 import br.com.dgc.fmtools.formation_calculator_service.domain.model.tactical_styles.WingPlayTacticalStyle;
+import br.com.dgc.fmtools.formation_calculator_service.domain.repository.FormationsRepository;
+import br.com.dgc.fmtools.formation_calculator_service.domain.repository.dao.Formations;
+import br.com.dgc.fmtools.formation_calculator_service.web.dto.response.CalculateFormationResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -28,19 +35,23 @@ import org.springframework.stereotype.Service;
 @Service
 public class FormationCalculatorService {
   private final Logger log = LoggerFactory.getLogger(FormationCalculatorService.class);
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   private PositionsCalculatorClientService positionsCalculatorClientService;
   private SquadManagerClientService squadManagerClientService;
+  private FormationsRepository formationsRepository;
 
   public FormationCalculatorService(
       PositionsCalculatorClientService positionsCalculatorClientService,
-      SquadManagerClientService squadManagerClientService) {
+      SquadManagerClientService squadManagerClientService,
+      FormationsRepository formationsRepository) {
     this.positionsCalculatorClientService = positionsCalculatorClientService;
     this.squadManagerClientService = squadManagerClientService;
+    this.formationsRepository = formationsRepository;
   }
 
-  public List<TacticalStyle> calculateFormation(
-      List<UUID> linePlayersIds, List<UUID> goalkeeperPlayersIds) {
+  public UUID calculateFormation(List<UUID> linePlayersIds, List<UUID> goalkeeperPlayersIds)
+      throws JsonProcessingException {
     log.info("Begin to Calculate Formation");
 
     List<Position> linePositions = new ArrayList<Position>();
@@ -92,6 +103,16 @@ public class FormationCalculatorService {
 
     log.info("Finished calculating formation for tactical styles");
 
-    return tacticalStylesList;
+    return this.formationsRepository
+        .save(new Formations(this.objectMapper.writeValueAsString(tacticalStylesList)))
+        .getId();
+  }
+
+  public List<CalculateFormationResponse> getCalculatedFormations(UUID id)
+      throws JsonMappingException, JsonProcessingException {
+
+    return this.objectMapper.readValue(
+        this.formationsRepository.findById(id).get().getFormations(),
+        new TypeReference<List<CalculateFormationResponse>>() {});
   }
 }
