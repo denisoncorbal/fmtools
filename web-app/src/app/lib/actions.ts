@@ -278,11 +278,15 @@ export async function calculateFormations(formData: FormData) {
         headers: {
             "Content-Type": "application/json"
         },
-        dispatcher: new Agent({ headersTimeout: (60000 * 25) })
+        dispatcher: new Agent({ headersTimeout: (60000 * 30) })
     })
 
-    const id = await res.json();
+    if(res.status == 201){
+        const id = await res.json();
 
-    revalidatePath('/formations-calculator/formations-result/' + id);
-    redirect('/formations-calculator/formations-result/' + id);
+        revalidatePath('/formations-calculator/formations-result/' + id);
+        redirect('/formations-calculator/formations-result/' + id);
+    }
+
+    redirect('/timeout');
 }

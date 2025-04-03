@@ -27,7 +27,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -50,8 +54,9 @@ public class FormationCalculatorService {
     this.formationsRepository = formationsRepository;
   }
 
-  public UUID calculateFormation(List<UUID> linePlayersIds, List<UUID> goalkeeperPlayersIds)
-      throws JsonProcessingException {
+  public Optional<UUID> calculateFormation(
+      List<UUID> linePlayersIds, List<UUID> goalkeeperPlayersIds)
+      throws JsonProcessingException, InterruptedException {
     log.info("Begin to Calculate Formation");
 
     List<Position> linePositions = new ArrayList<Position>();
@@ -98,14 +103,31 @@ public class FormationCalculatorService {
             new CatenaccioTacticalStyle(),
             new ParkTheBusTacticalStyle());
     log.info("Calculating formation for tactical styles");
-    tacticalStylesList.forEach(
-        (tacticalStyle) -> tacticalStyle.calculateFormations(linePositions, goalkeeperPositions));
 
-    log.info("Finished calculating formation for tactical styles");
+    ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor();
+    for (TacticalStyle tacticalStyle : tacticalStylesList) {
+      executorService.submit(
+          () -> tacticalStyle.calculateFormations(linePositions, goalkeeperPositions));
+    }
+    executorService.shutdown();
+    if (executorService.awaitTermination(30, TimeUnit.MINUTES)) {
+      log.info("Finished calculating formation for tactical styles");
 
-    return this.formationsRepository
-        .save(new Formations(this.objectMapper.writeValueAsString(tacticalStylesList)))
-        .getId();
+      return Optional.of(
+          this.formationsRepository
+              .save(new Formations(this.objectMapper.writeValueAsString(tacticalStylesList)))
+              .getId());
+    }
+    ;
+    // tacticalStylesList.stream()
+    // .parallel()
+    // .forEach(
+    // (tacticalStyle) -> tacticalStyle.calculateFormations(linePositions,
+    // goalkeeperPositions));
+
+    log.info("Timeout for calculation");
+
+    return Optional.empty();
   }
 
   public List<CalculateFormationResponse> getCalculatedFormations(UUID id)

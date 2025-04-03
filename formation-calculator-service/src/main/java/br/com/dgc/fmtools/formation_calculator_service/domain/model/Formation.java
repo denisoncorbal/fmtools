@@ -19,8 +19,8 @@ public abstract class Formation {
 
   void calculateBetterFormation(
       List<Position> allLinePlayersPositions, List<Position> allGoalkeeperPlayersPositions) {
-    BruteForceBetterFormationCalculation.calculateBetterFormation(
-        this, allLinePlayersPositions, allGoalkeeperPlayersPositions);
+    new BruteForceBetterFormationCalculation()
+        .calculateBetterFormation(this, allLinePlayersPositions, allGoalkeeperPlayersPositions);
   }
 
   void calculatePercentage() {

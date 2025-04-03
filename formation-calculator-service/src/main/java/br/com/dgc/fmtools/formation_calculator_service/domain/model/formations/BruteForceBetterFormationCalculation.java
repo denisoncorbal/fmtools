@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
 
 public class BruteForceBetterFormationCalculation {
 
-  private static int iterator = 0;
+  private int iterator = 0;
 
-  public static void calculateBetterFormation(
+  public void calculateBetterFormation(
       Formation formation,
       List<Position> allLinePlayersPositions,
       List<Position> allGoalkeeperPlayersPositions) {
@@ -24,7 +24,7 @@ public class BruteForceBetterFormationCalculation {
     calculateBetterLinePlayers(formation, allLinePlayersPositions);
   }
 
-  private static void calculateBetterGoalkeeper(
+  private void calculateBetterGoalkeeper(
       Formation formation, List<Position> allGoalkeeperPlayersPositions) {
     formation.setGoalkeeperPosition(
         allGoalkeeperPlayersPositions.stream()
@@ -36,7 +36,7 @@ public class BruteForceBetterFormationCalculation {
             .get());
   }
 
-  private static void calculateBetterLinePlayers(
+  private void calculateBetterLinePlayers(
       Formation formation, List<Position> allLinePlayerPositions) {
     List<List<Position>> possiblePositionsMatrix = new ArrayList<List<Position>>();
     iterator = 0;
@@ -61,7 +61,7 @@ public class BruteForceBetterFormationCalculation {
     formation.setLinePositions(getOptimalPositions(possiblePositionsMatrix));
   }
 
-  public static List<Position> getOptimalPositions(List<List<Position>> matrix) {
+  public List<Position> getOptimalPositions(List<List<Position>> matrix) {
     // Mapa para armazenar os estados de soluções parciais: chave será o conjunto de
     // jogadores usados
     // e o valor será a soma máxima de porcentagens.

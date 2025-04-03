@@ -29,12 +29,14 @@ public class FormationCalculatorController {
   @PostMapping("/calculateFormation")
   public ResponseEntity<UUID> calculateFormation(
       @RequestBody CalculateFormationRequest calculateFormationRequest)
-      throws JsonProcessingException {
+      throws InterruptedException, Exception {
     return ResponseEntity.status(HttpStatus.CREATED.value())
         .body(
-            this.formationCalculatorService.calculateFormation(
-                calculateFormationRequest.linePlayersIds(),
-                calculateFormationRequest.goalkeeperPlayersIds()));
+            this.formationCalculatorService
+                .calculateFormation(
+                    calculateFormationRequest.linePlayersIds(),
+                    calculateFormationRequest.goalkeeperPlayersIds())
+                .orElseThrow(() -> new Exception("Timeout")));
   }
 
   @GetMapping("/calculateFormation/{id}")
