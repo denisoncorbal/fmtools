@@ -1,0 +1,7 @@
+.card_results {
+    overflow-y: scroll;
+    max-height: 94vh;
+    :nth-child(odd) {
+        --bs-card-bg: var(--bs-secondary-bg);
+    }
+}

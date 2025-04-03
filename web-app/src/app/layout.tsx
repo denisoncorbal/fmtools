@@ -1,6 +1,8 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import type { Metadata } from "next";
 import "./globals.css";
+import '@fortawesome/fontawesome-svg-core/styles.css'
+import GeneralNavbar from "./component/general-navbar";
 
 export const metadata: Metadata = {
   title: "FMTools",
@@ -15,6 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <GeneralNavbar />
         {children}
       </body>
     </html>

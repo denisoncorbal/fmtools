@@ -2,6 +2,7 @@
 
 import { GoalkeeperPlayer, isSuitablePositionArray, LinePlayer, SuitablePosition } from "@/app/lib/definitions";
 import { Card, CardBody, CardTitle, Col, Container, Row } from "react-bootstrap";
+import styles from "./position-results-list.module.css";
 
 interface PositionsResultsListProps {
     positionsResults: SuitablePosition[],
@@ -14,26 +15,23 @@ export default function PositionsResultsList(props: PositionsResultsListProps) {
         <Container>
             <Row>
                 <Col>
-                    <Card>
+                    <Card className="m-1 p-1">
                         <CardTitle>
                             {props.playerData.name}
                         </CardTitle>
-                        <CardBody>
+                        <CardBody className="d-flex flex-row flex-wrap align-items-center justify-content-start">
                             {Object.entries(props.playerData).map(([key, value], index) =>
-                                key != "name" && <p key={index}>{key}: {value}</p>
+                                key != "name" && <p className="m-1" key={index}>{key}: {value}</p>
                             )}
                         </CardBody>
                     </Card>
 
                 </Col>
-                <Col>
+                <Col className={styles.card_results} >
                     {
                         isSuitablePositionArray(props.positionsResults) && props.positionsResults.sort(sortPositionResults).map((position, index) =>
-                            <Card key={index}>
-                                <Card.Title>{position.name}</Card.Title>
-                                <Card.Body>
-                                    <p>Adaptation: {position.percentage}</p>
-                                </Card.Body>
+                            <Card key={index} className="m-1 p-1">
+                                <Card.Title className="p-1">{position.name} - {parseFloat(position.percentage.toFixed(2))}%</Card.Title>
                             </Card>
                         )
                     }

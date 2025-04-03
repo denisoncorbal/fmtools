@@ -21,6 +21,16 @@
             "database": "postgres",
             "username": "postgres",
             "group": "fmtools"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 15434,
+            "driver": "PostgreSQL",
+            "name": "formations-calculator-service",
+            "group": "fmtools",
+            "database": "postgres",
+            "username": "postgres"
         }
     ],
     "java.compile.nullAnalysis.mode": "automatic"

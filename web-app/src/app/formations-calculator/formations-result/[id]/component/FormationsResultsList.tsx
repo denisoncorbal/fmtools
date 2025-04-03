@@ -1,7 +1,7 @@
 'use client'
 
 import { isSuitableTacticalStyleArray, TacticalStyle } from "@/app/lib/definitions";
-import { Card, Col, Container, Row } from "react-bootstrap";
+import { Accordion, AccordionBody, AccordionHeader, AccordionItem, Col, Container, Row } from "react-bootstrap";
 
 interface FormationsResultsListProps {
     formationsResults: TacticalStyle[],
@@ -14,23 +14,27 @@ export default function FormationsResultsList(props: FormationsResultsListProps)
                 <Col>
                     {
                         isSuitableTacticalStyleArray(props.formationsResults) && props.formationsResults.sort(sortFormationResults).map((formation, index) =>
-                            <Card key={"tacticalStyle-" + index}>
-                                <Card.Title>{formation.name}</Card.Title>
-                                <Card.Body>
-                                    <p>Mentality: {formation.mentality}</p>
-                                    {formation.preferableFormations.map((pf, pfIndex) =>
-                                        <Card key={"formation-" + index + "-" + pfIndex}>
-                                            <Card.Title>{pf.name}: {pf.averagePercentage}</Card.Title>
-                                            <Card.Body>
-                                                <p>{pf.goalkeeperPosition.name}: {pf.goalkeeperPosition.playerName}</p>
-                                                {pf.linePositions.map((lp, lpIndex) =>
-                                                    <p key={"player-" + index + "-" + pfIndex + "-" + lpIndex}>{lp.name}: {lp.playerName}</p>
-                                                )}
-                                            </Card.Body>
-                                        </Card>
-                                    )}
-                                </Card.Body>
-                            </Card>
+                            <Accordion key={"tacticalStyle-" + index} defaultActiveKey="0">
+                                <Accordion.Item eventKey={index.toString()}>
+                                    <AccordionHeader>{formation.name} {parseFloat((formation.preferableFormations.reduce((prev, formation) => prev += formation.averagePercentage, 0) / formation.preferableFormations.length).toFixed(2))}%</AccordionHeader>
+                                    <AccordionBody>
+                                        <p>Mentality: {formation.mentality}</p>
+                                        {formation.preferableFormations.map((pf, pfIndex) =>
+                                            <Accordion key={"formation-" + index + "-" + pfIndex} defaultActiveKey="0-0">
+                                                <AccordionItem eventKey={index.toString() + "-" + pfIndex.toString()}>
+                                                    <AccordionHeader>{pf.name}: {parseFloat(pf.averagePercentage.toFixed(2))}%</AccordionHeader>
+                                                    <AccordionBody>
+                                                        <p>{pf.goalkeeperPosition.name}: {pf.goalkeeperPosition.playerName} {"(" + parseFloat(pf.goalkeeperPosition.percentage.toFixed(2)) + "%)"}</p>
+                                                        {pf.linePositions.map((lp, lpIndex) =>
+                                                            <p key={"player-" + index + "-" + pfIndex + "-" + lpIndex}>{lp.name}: {lp.playerName} {"(" + parseFloat(lp.percentage.toFixed(2)) + "%)"}</p>
+                                                        )}
+                                                    </AccordionBody>
+                                                </AccordionItem>
+                                            </Accordion>
+                                        )}
+                                    </AccordionBody>
+                                </Accordion.Item>
+                            </Accordion>
                         )
                     }
                 </Col>
