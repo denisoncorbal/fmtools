@@ -1,0 +1,15 @@
+V	260502153241Z		1000	unknown	/C=BR/ST=DF/L=Brasilia/O=Self Organization/OU=Self Organization Reverse Proxy/CN=traefik.docker.localhost
+V	260502164547Z		1001	unknown	/C=BR/ST=DF/L=Brasilia/O=Self Organization/OU=Self Organization Squad Manager Service/CN=squad-manager-service.docker.localhost
+V	260502164841Z		1002	unknown	/C=BR/ST=DF/L=Brasilia/O=Self Organization/OU=Self Organization Web App/CN=webapp.docker.localhost
+V	260502165451Z		1003	unknown	/C=BR/ST=DF/L=Brasilia/O=Self Organization/OU=Self Organization Web App Client[/CN=webapp.docker.localhost
+V	260504124110Z		1004	unknown	/C=BR/ST=DF/L=Brasilia/O=Self Organization/OU=Self Organization Client Squad Manager Service/CN=squad-manager-service.docker.localhost
+V	260509173115Z		1005	unknown	/C=BR/ST=DF/L=Brasilia/O=Sefl Organization/OU=Self Organization Squad Manager Database/CN=squad-manager-db.docker.localhost
+V	260511101414Z		1006	unknown	/C=BR/ST=DF/L=Brasilia/O=Self Organization/OU=Self Organization Squad Manager Database/CN=squad-manager-db.docker.localhost
+V	260511230539Z		1009	unknown	/C=BR/ST=DF/L=Brasilia/O=Self Organization/OU=Self Organization Positions Calculator Database/CN=positions-calculator-db.docker.localhost
+V	260511230733Z		100A	unknown	/C=BR/ST=DF/L=Brasilia/O=Self Organization/OU=Self Organization Formation Calculator Database/CN=formation-calculator-db.docker.localhost
+V	260512105832Z		100B	unknown	/C=BR/ST=DF/L=Brasilia/O=Self Organization/OU=Self Organization Wildcard/CN=*.docker.localhost
+V	260514041333Z		100D	unknown	/C=BR/ST=DF/L=Brasilia/O=Self Organization/OU=Self Organization Formation Calculator Service/CN=formation-calculator-service.docker.localhost
+V	260611143316Z		100E	unknown	/C=BR/ST=DF/L=Brasilia/O=Self Organization/OU=Self Organization Tempo Monitoring/CN=tempo.docker.localhost
+V	260618090444Z		100F	unknown	/C=BR/ST=DF/L=Brasilia/O=Self Organization/OU=Self Organization Prometheus Monitoring/CN=prometheus.docker.localhost
+V	260618115231Z		1010	unknown	/C=BR/ST=DF/L=Brasilia/O=Self Organization/OU=Self Organization Loki Monitoring/CN=loki.docker.localhost
+V	260618165216Z		1011	unknown	/C=BR/ST=DF/L=Brasilia/O=Self Organization/OU=Self Organization Grafana Monitoring/CN=grafana.docker.localhost
