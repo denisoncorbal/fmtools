@@ -12,6 +12,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./squad-manager-service
+    defaults:
+      run:
+        working-directory: ${{ env.working-directory }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,9 +26,10 @@ jobs:
         with:
           node-version: 22
           cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
 
       - name: Install dependencies
-        run: npm --prefix ./web-app ci
+        run: npm ci
 
       - name: Restore cache
         uses: actions/cache@v4
@@ -37,4 +43,4 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
       - name: Build with Next.js
-        run: npm --prefix ./web-app run build
+        run: npm run build
