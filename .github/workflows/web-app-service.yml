@@ -29,7 +29,7 @@ jobs:
           cache-dependency-path: '**/package-lock.json'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm --prefix ./web-app ci
 
       - name: Restore cache
         uses: actions/cache@v4
@@ -43,4 +43,4 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
       - name: Build with Next.js
-        run: npm run build
+        run: npm --prefix ./web-app run build
