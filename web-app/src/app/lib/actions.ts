@@ -1,11 +1,9 @@
 'use server';
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import { Agent, fetch as ft } from "undici";
-import { CalculateFormationsRequest, GoalkeeperPlayer, LinePlayer } from "./definitions";
+import { CalculateFormationsRequest, FORMATION_CALCULATOR_URL, GoalkeeperPlayer, LinePlayer, POSITIONS_CALCULATOR_URL, SQUAD_MANAGER_URL } from "./definitions";
 
-export async function createLinePlayer(formData: FormData) {
+export async function createLinePlayer(prevState: unknown, formData: FormData) {
     const newLinePlayer: LinePlayer = {
         name: formData.get("name")!.toString(),
         aggression: parseInt(formData.get("aggression")!.toString()),
@@ -46,18 +44,42 @@ export async function createLinePlayer(formData: FormData) {
         tackling: parseInt(formData.get("tackling")!.toString())
     };
 
-    await fetch("http://localhost:8081/v1/api/linePlayer", {
-        method: "POST",
-        body: JSON.stringify(newLinePlayer),
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
+    console.info("INFO - " + (new Date()).toISOString() + " - Trying to POST the new line player");
 
-    revalidatePath('/squad-manager');
+    console.log("LOG - " + (new Date()).toISOString() + " - New line player: " + JSON.stringify(newLinePlayer));
+
+    try {
+        const res = await fetch(SQUAD_MANAGER_URL + "/v1/api/linePlayer", {
+            method: "POST",
+            body: JSON.stringify(newLinePlayer),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+
+        if (!res.ok) {
+            console.warn("WARN - " + (new Date()).toISOString() + " - POST new line player failed on backend");
+            console.warn("WARN - " + (new Date()).toISOString() + " - Status: " + res.status);
+            throw new Error((new Date()).toISOString() + " - Failed to POST", { cause: 'server' });
+        }
+
+        console.info("INFO - " + (new Date()).toISOString() + " - POST new line player with success");
+
+        revalidatePath('/squad-manager');
+
+    } catch (e: unknown) {
+        const err = e as Error;
+        if (err.cause && err.cause == 'server') {
+            console.warn("WARN - " + (new Date()).toISOString() + " - " + err.message);
+            console.warn("WARN - " + (new Date()).toISOString() + " - " + err.stack);
+        } else {
+            console.error("ERROR - " + (new Date()).toISOString() + " - " + err.message);
+            console.error("ERROR - " + (new Date()).toISOString() + " - " + err.stack);
+        }
+    }
 }
 
-export async function editLinePlayer(formData: FormData) {
+export async function editLinePlayer(prevState: unknown, formData: FormData) {
     const newLinePlayer: LinePlayer = {
         name: formData.get("name")!.toString(),
         aggression: parseInt(formData.get("aggression")!.toString()),
@@ -98,18 +120,42 @@ export async function editLinePlayer(formData: FormData) {
         tackling: parseInt(formData.get("tackling")!.toString())
     };
 
-    await fetch(`http://localhost:8081/v1/api/linePlayer/${formData.get("id")!.toString()}`, {
-        method: "PUT",
-        body: JSON.stringify(newLinePlayer),
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
+    console.info("INFO - " + (new Date()).toISOString() + " - Trying to PUT existing line player");
 
-    revalidatePath('/squad-manager');
+    console.log("LOG - " + (new Date()).toISOString() + " - Line player info to update: " + JSON.stringify(newLinePlayer));
+
+    try {
+        const res = await fetch(`${SQUAD_MANAGER_URL}/v1/api/linePlayer/${formData.get("id")!.toString()}`, {
+            method: "PUT",
+            body: JSON.stringify(newLinePlayer),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+
+        if (!res.ok) {
+            console.warn("WARN - " + (new Date()).toISOString() + " - PUT existing line player failed on backend");
+            console.warn("WARN - " + (new Date()).toISOString() + " - Status: " + res.status);
+            throw new Error((new Date()).toISOString() + " - Failed to PUT", { cause: 'server' });
+        }
+
+        console.info("INFO - " + (new Date()).toISOString() + " - PUT existing line player with success");
+
+        revalidatePath('/squad-manager');
+
+    } catch (e: unknown) {
+        const err = e as Error;
+        if (err.cause && err.cause == 'server') {
+            console.warn("WARN - " + (new Date()).toISOString() + " - " + err.message);
+            console.warn("WARN - " + (new Date()).toISOString() + " - " + err.stack);
+        } else {
+            console.error("ERROR - " + (new Date()).toISOString() + " - " + err.message);
+            console.error("ERROR - " + (new Date()).toISOString() + " - " + err.stack);
+        }
+    }
 }
 
-export async function createGoalkeeperPlayer(formData: FormData) {
+export async function createGoalkeeperPlayer(prevState: unknown, formData: FormData) {
     const newGoalkeeperPlayer: GoalkeeperPlayer = {
         name: formData.get("name")!.toString(),
         aggression: parseInt(formData.get("aggression")!.toString()),
@@ -152,18 +198,43 @@ export async function createGoalkeeperPlayer(formData: FormData) {
         throwing: parseInt(formData.get("throwing")!.toString())
     };
 
-    await fetch("http://localhost:8081/v1/api/goalkeeperPlayer", {
-        method: "POST",
-        body: JSON.stringify(newGoalkeeperPlayer),
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
+    console.info("INFO - " + (new Date()).toISOString() + " - Trying to POST the new goalkeeper player");
 
-    revalidatePath('/squad-manager');
+    console.log("LOG - " + (new Date()).toISOString() + " - New goalkeeper player: " + JSON.stringify(newGoalkeeperPlayer));
+
+    try {
+
+        const res = await fetch(SQUAD_MANAGER_URL + "/v1/api/goalkeeperPlayer", {
+            method: "POST",
+            body: JSON.stringify(newGoalkeeperPlayer),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+
+        if (!res.ok) {
+            console.warn("WARN - " + (new Date()).toISOString() + " - POST new goalkeeper player failed on backend");
+            console.warn("WARN - " + (new Date()).toISOString() + " - Status: " + res.status);
+            throw new Error((new Date()).toISOString() + " - Failed to POST", { cause: 'server' });
+        }
+
+        console.info("INFO - " + (new Date()).toISOString() + " - POST new goalkeeper player with success");
+
+        revalidatePath('/squad-manager');
+
+    } catch (e: unknown) {
+        const err = e as Error;
+        if (err.cause && err.cause == 'server') {
+            console.warn("WARN - " + (new Date()).toISOString() + " - " + err.message);
+            console.warn("WARN - " + (new Date()).toISOString() + " - " + err.stack);
+        } else {
+            console.error("ERROR - " + (new Date()).toISOString() + " - " + err.message);
+            console.error("ERROR - " + (new Date()).toISOString() + " - " + err.stack);
+        }
+    }
 }
 
-export async function editGoalkeeperPlayer(formData: FormData) {
+export async function editGoalkeeperPlayer(prevState: unknown, formData: FormData) {
     const newGoalkeeperPlayer: GoalkeeperPlayer = {
         name: formData.get("name")!.toString(),
         aggression: parseInt(formData.get("aggression")!.toString()),
@@ -206,87 +277,247 @@ export async function editGoalkeeperPlayer(formData: FormData) {
         throwing: parseInt(formData.get("throwing")!.toString())
     };
 
-    await fetch(`http://localhost:8081/v1/api/goalkeeperPlayer/${formData.get('id')!.toString()}`, {
-        method: "PUT",
-        body: JSON.stringify(newGoalkeeperPlayer),
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
+    console.info("INFO - " + (new Date()).toISOString() + " - Trying to PUT existing goalkeeper player");
 
-    revalidatePath('/squad-manager');
+    console.log("LOG - " + (new Date()).toISOString() + " - Goalkeeper player info to update: " + JSON.stringify(newGoalkeeperPlayer));
+
+    try {
+
+        const res = await fetch(`${SQUAD_MANAGER_URL}/v1/api/goalkeeperPlayer/${formData.get('id')!.toString()}`, {
+            method: "PUT",
+            body: JSON.stringify(newGoalkeeperPlayer),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+
+        if (!res.ok) {
+            console.warn("WARN - " + (new Date()).toISOString() + " - PUT existing goalkeeper player failed on backend");
+            console.warn("WARN - " + (new Date()).toISOString() + " - Status: " + res.status);
+            throw new Error((new Date()).toISOString() + " - Failed to PUT", { cause: 'server' });
+        }
+
+        console.info("INFO - " + (new Date()).toISOString() + " - PUT existing goalkeeper player with success");
+
+        revalidatePath('/squad-manager');
+
+    } catch (e: unknown) {
+        const err = e as Error;
+        if (err.cause && err.cause == 'server') {
+            console.warn("WARN - " + (new Date()).toISOString() + " - " + err.message);
+            console.warn("WARN - " + (new Date()).toISOString() + " - " + err.stack);
+        } else {
+            console.error("ERROR - " + (new Date()).toISOString() + " - " + err.message);
+            console.error("ERROR - " + (new Date()).toISOString() + " - " + err.stack);
+        }
+    }
 }
 
-export async function removeLinePlayer(formData: FormData) {
-    await fetch(`http://localhost:8081/v1/api/linePlayer/${formData.get('id')!.toString()}`, {
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
+export async function removeLinePlayer(prevState: unknown, formData: FormData) {
+    console.info("INFO - " + (new Date()).toISOString() + " - Trying to DELETE line player");
 
-    revalidatePath('/squad-manager');
+    const playerId = formData.get('id')!.toString();
+
+    console.log("LOG - " + (new Date()).toISOString() + " - Line player id: " + playerId);
+
+    try {
+
+        const res = await fetch(`${SQUAD_MANAGER_URL}/v1/api/linePlayer/${playerId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+
+        if (!res.ok) {
+            console.warn("WARN - " + (new Date()).toISOString() + " - DELETE line player failed on backend");
+            console.warn("WARN - " + (new Date()).toISOString() + " - Status: " + res.status);
+            throw new Error((new Date()).toISOString() + " - Failed to DELETE", { cause: 'server' });
+        }
+
+        console.info("INFO - " + (new Date()).toISOString() + " - DELETE line player with success");
+
+        revalidatePath('/squad-manager');
+
+    } catch (e: unknown) {
+        const err = e as Error;
+        if (err.cause && err.cause == 'server') {
+            console.warn("WARN - " + (new Date()).toISOString() + " - " + err.message);
+            console.warn("WARN - " + (new Date()).toISOString() + " - " + err.stack);
+        } else {
+            console.error("ERROR - " + (new Date()).toISOString() + " - " + err.message);
+            console.error("ERROR - " + (new Date()).toISOString() + " - " + err.stack);
+        }
+    }
 }
 
-export async function removeGoalkeeperPlayer(formData: FormData) {
-    await fetch(`http://localhost:8081/v1/api/goalkeeperPlayer/${formData.get('id')!.toString()}`, {
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
+export async function removeGoalkeeperPlayer(prevState: unknown, formData: FormData) {
+    console.info("INFO - " + (new Date()).toISOString() + " - Trying to DELETE goalkeeper player");
 
-    revalidatePath('/squad-manager');
+    const playerId = formData.get('id')!.toString();
+
+    console.log("LOG - " + (new Date()).toISOString() + " - Goalkeeper player id: " + playerId);
+
+    try {
+
+        const res = await fetch(`${SQUAD_MANAGER_URL}/v1/api/goalkeeperPlayer/${playerId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+
+        if (!res.ok) {
+            console.warn("WARN - " + (new Date()).toISOString() + " - DELETE goalkeeper player failed on backend");
+            console.warn("WARN - " + (new Date()).toISOString() + " - Status: " + res.status);
+            throw new Error((new Date()).toISOString() + " - Failed to DELETE", { cause: 'server' });
+        }
+
+        console.info("INFO - " + (new Date()).toISOString() + " - DELETE goalkeeper player with success");
+
+        revalidatePath('/squad-manager');
+
+    } catch (e: unknown) {
+        const err = e as Error;
+        if (err.cause && err.cause == 'server') {
+            console.warn("WARN - " + (new Date()).toISOString() + " - " + err.message);
+            console.warn("WARN - " + (new Date()).toISOString() + " - " + err.stack);
+        } else {
+            console.error("ERROR - " + (new Date()).toISOString() + " - " + err.message);
+            console.error("ERROR - " + (new Date()).toISOString() + " - " + err.stack);
+        }
+    }
 }
 
-export async function calculateLinePositions(formData: FormData) {
-    console.log(formData.get("select-player")?.toString());
-    await fetch("http://localhost:8082/v1/api/calculateLinePositions/" + formData.get("select-player")?.toString(), {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
+export async function calculateLinePositions(prevState: unknown, formData: FormData): Promise<string> {
+    console.info("INFO - " + (new Date()).toISOString() + " - Trying to POST line positions");
 
-    revalidatePath('/positions-calculator/positions-result/' + formData.get("player-type") + "/" + formData.get("select-player")?.toString());
-    redirect('/positions-calculator/positions-result/' + formData.get("player-type") + "/" + formData.get("select-player")?.toString());
+    const playerId = formData.get("select-player")?.toString();
+
+    console.log("LOG - " + (new Date()).toISOString() + " - Line player id: " + playerId);
+
+    try {
+        const res = await fetch(POSITIONS_CALCULATOR_URL + "/v1/api/calculateLinePositions/" + playerId, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+
+        if (!res.ok) {
+            console.warn("WARN - " + (new Date()).toISOString() + " - POST line positions failed on backend");
+            console.warn("WARN - " + (new Date()).toISOString() + " - Status: " + res.status);
+            throw new Error((new Date()).toISOString() + " - Failed to POST", { cause: 'server' });
+        }
+
+        console.info("INFO - " + (new Date()).toISOString() + " - POST line positions with success");
+
+        revalidatePath('/positions-calculator/positions-result/' + formData.get("player-type") + "/" + playerId);
+        return Promise.resolve('/positions-calculator/positions-result/' + formData.get("player-type") + "/" + playerId);
+    } catch (e: unknown) {
+        const err = e as Error;
+        if (err.cause && err.cause == 'server') {
+            console.warn("WARN - " + (new Date()).toISOString() + " - " + err.message);
+            console.warn("WARN - " + (new Date()).toISOString() + " - " + err.stack);
+        } else {
+            console.error("ERROR - " + (new Date()).toISOString() + " - " + err.message);
+            console.error("ERROR - " + (new Date()).toISOString() + " - " + err.stack);
+        }
+    }
+    return Promise.resolve("");
 }
 
-export async function calculateGoalkeeperPositions(formData: FormData) {
-    await fetch("http://localhost:8082/v1/api/calculateGoalkeeperPositions/" + formData.get("select-player")?.toString(), {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
+export async function calculateGoalkeeperPositions(prevState: unknown, formData: FormData): Promise<string> {
+    console.info("INFO - " + (new Date()).toISOString() + " - Trying to POST goalkeeper positions");
 
-    revalidatePath('/positions-calculator/positions-result/' + formData.get("player-type") + "/" + formData.get("select-player")?.toString());
-    redirect('/positions-calculator/positions-result/' + formData.get("player-type") + "/" + formData.get("select-player")?.toString());
+    const playerId = formData.get("select-player")?.toString();
+
+    console.log("LOG - " + (new Date()).toISOString() + " - Goalkeeper player id: " + playerId);
+
+    try {
+
+        const res = await fetch(POSITIONS_CALCULATOR_URL + "/v1/api/calculateGoalkeeperPositions/" + playerId, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+
+        if (!res.ok) {
+            console.warn("WARN - " + (new Date()).toISOString() + " - POST goalkeeper positions failed on backend");
+            console.warn("WARN - " + (new Date()).toISOString() + " - Status: " + res.status);
+            throw new Error((new Date()).toISOString() + " - Failed to POST", { cause: 'server' });
+        }
+
+        console.info("INFO - " + (new Date()).toISOString() + " - POST goalkeeper positions with success");
+
+        revalidatePath('/positions-calculator/positions-result/' + formData.get("player-type") + "/" + playerId);
+        return Promise.resolve('/positions-calculator/positions-result/' + formData.get("player-type") + "/" + playerId);
+    } catch (e: unknown) {
+        const err = e as Error;
+        if (err.cause && err.cause == 'server') {
+            console.warn("WARN - " + (new Date()).toISOString() + " - " + err.message);
+            console.warn("WARN - " + (new Date()).toISOString() + " - " + err.stack);
+        } else {
+            console.error("ERROR - " + (new Date()).toISOString() + " - " + err.message);
+            console.error("ERROR - " + (new Date()).toISOString() + " - " + err.stack);
+        }
+    }
+    return Promise.resolve("");
 }
 
-export async function calculateFormations(formData: FormData) {
+export async function calculateFormations(prevState: unknown, formData: FormData) {
+    console.info("INFO - " + (new Date()).toISOString() + " - Trying to POST calculate formations");
+
     const calculateFormationsRequest: CalculateFormationsRequest = {
         linePlayersIds: [],
         goalkeeperPlayersIds: []
     };
-    formData.keys().filter((k) => k.includes("line")).forEach((v) => calculateFormationsRequest.linePlayersIds.push(formData.get(v)!.toString()));
-    formData.keys().filter((k) => k.includes("goalkeeper")).forEach((v) => calculateFormationsRequest.goalkeeperPlayersIds.push(formData.get(v)!.toString()));
 
-    const res = await ft("http://localhost:8083/v1/api/calculateFormation", {
-        method: "POST",
-        body: JSON.stringify(calculateFormationsRequest),
-        headers: {
-            "Content-Type": "application/json"
-        },
-        dispatcher: new Agent({ headersTimeout: (60000 * 30) })
-    })
+    formData.keys().filter((k) => k.includes("line")).forEach(
+        (v, index) => {
+            const playerId = formData.get(v)!.toString();
+            console.log("LOG - " + (new Date()).toISOString() + " - Line player id [" + index + "]: " + playerId);
+            calculateFormationsRequest.linePlayersIds.push(playerId);
+        });
+    formData.keys().filter((k) => k.includes("goalkeeper")).forEach(
+        (v, index) => {
+            const playerId = formData.get(v)!.toString();
+            console.log("LOG - " + (new Date()).toISOString() + " - Goalkeeper player id [" + index + "]: " + playerId);
+            calculateFormationsRequest.goalkeeperPlayersIds.push(playerId);
+        });
 
-    if(res.status == 201){
+    try {
+        const res = await fetch(FORMATION_CALCULATOR_URL + "/v1/api/calculateFormation", {
+            method: "POST",
+            body: JSON.stringify(calculateFormationsRequest),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+
+        if (!res.ok) {
+            console.warn("WARN - " + (new Date()).toISOString() + " - POST calculate formations");
+            console.warn("WARN - " + (new Date()).toISOString() + " - Status: " + res.status);
+            throw new Error((new Date()).toISOString() + " - Failed to POST", { cause: 'server' });
+        }
+
         const id = await res.json();
 
-        revalidatePath('/formations-calculator/formations-result/' + id);
-        redirect('/formations-calculator/formations-result/' + id);
-    }
+        console.info("INFO - " + (new Date()).toISOString() + " - POST calculate formations with success");
 
-    redirect('/timeout');
+        revalidatePath('/formations-calculator/formations-result/' + id);
+        return Promise.resolve('/formations-calculator/formations-result/' + id);
+    } catch (e: unknown) {
+        const err = e as Error;
+        if (err.cause && err.cause == 'server') {
+            console.warn("WARN - " + (new Date()).toISOString() + " - " + err.message);
+            console.warn("WARN - " + (new Date()).toISOString() + " - " + err.stack);
+        } else {
+            console.error("ERROR - " + (new Date()).toISOString() + " - " + err.message);
+            console.error("ERROR - " + (new Date()).toISOString() + " - " + err.stack);
+        }
+    }
+    return Promise.resolve("");
+
 }

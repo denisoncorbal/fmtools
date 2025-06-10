@@ -8,6 +8,7 @@ import br.com.dgc.fmtools.squad_manager.web.dto.response.GetGoalkeeperPlayerById
 import br.com.dgc.fmtools.squad_manager.web.dto.response.GetLinePlayerByIdResponse;
 import br.com.dgc.fmtools.squad_manager.web.dto.response.PlayerCreatedResponse;
 import br.com.dgc.fmtools.squad_manager.web.dto.response.PlayerUpdatedResponse;
+import io.opentelemetry.exporter.zipkin.ZipkinSpanExporter;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.util.UUID;
@@ -16,10 +17,14 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @TestMethodOrder(OrderAnnotation.class)
+@TestPropertySource(properties = {"server.ssl.enabled=false", "management.tracing.enabled=false"})
 public class PlayerControllerTests extends AbstractIntegrationTest {
 
+  @MockitoBean private ZipkinSpanExporter zipkinSpanExporter;
   private static UUID validLinePlayerId = null;
   private static UUID validGoalkeeperPlayerId = null;
   private String basePath = "/v1/api/";

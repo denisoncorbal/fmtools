@@ -2,8 +2,8 @@
 
 import { createGoalkeeperPlayer, editGoalkeeperPlayer } from "@/app/lib/actions";
 import { GoalkeeperPlayer } from "@/app/lib/definitions";
-import { Dispatch, SetStateAction } from "react";
-import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import { Dispatch, SetStateAction, useActionState } from "react";
+import { Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
 
 interface ModalAddOrEditGoalkeeperPlayerProps {
     show: boolean,
@@ -12,6 +12,14 @@ interface ModalAddOrEditGoalkeeperPlayerProps {
 }
 
 export default function ModalAddOrEditGoalkeeperPlayer(props: ModalAddOrEditGoalkeeperPlayerProps) {
+
+    const [createResult, createFormAction, createIsPending] = useActionState(createGoalkeeperPlayer, null);
+    const [editResult, editFormAction, editIsPending] = useActionState(editGoalkeeperPlayer, null);
+
+    // TODO (use Results)
+    console.log(createResult);
+    console.log(editResult);
+
     return (
         <Modal
             show={props.show}
@@ -21,7 +29,7 @@ export default function ModalAddOrEditGoalkeeperPlayer(props: ModalAddOrEditGoal
                     {props.player ? "Edit" : "Add"} Goalkeeper Player
                 </Modal.Title>
             </Modal.Header>
-            <Form action={props.player ? editGoalkeeperPlayer : createGoalkeeperPlayer}>
+            <Form action={props.player ? editFormAction : createFormAction}>
                 <Modal.Body>
                     <Row>
                         {props.player &&
@@ -300,8 +308,16 @@ export default function ModalAddOrEditGoalkeeperPlayer(props: ModalAddOrEditGoal
 
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button type="submit">{props.player ? "Save" : "Add"}</Button>
-                    <Button onClick={() => props.setShow(false)}>Close</Button>
+                    <Button type="submit" disabled={(createIsPending || editIsPending)}>
+                        {(createIsPending || editIsPending) ? <Spinner
+                            as="span"
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-hidden={true}
+                        /> : null}
+                        {props.player ? "Save" : "Add"}</Button>
+                    <Button onClick={() => props.setShow(false)} disabled={(createIsPending || editIsPending)}>Close</Button>
                 </Modal.Footer>
             </Form>
         </Modal>

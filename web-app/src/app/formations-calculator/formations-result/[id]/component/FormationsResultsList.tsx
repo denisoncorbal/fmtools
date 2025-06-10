@@ -7,7 +7,6 @@ interface FormationsResultsListProps {
     formationsResults: TacticalStyle[],
 }
 export default function FormationsResultsList(props: FormationsResultsListProps) {
-    console.log(props.formationsResults);
     return (
         <Container>
             <Row>

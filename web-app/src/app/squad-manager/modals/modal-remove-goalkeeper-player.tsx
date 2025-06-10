@@ -2,8 +2,8 @@
 
 import { removeGoalkeeperPlayer } from "@/app/lib/actions";
 import { GoalkeeperPlayer } from "@/app/lib/definitions";
-import { Dispatch, SetStateAction } from "react";
-import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import { Dispatch, SetStateAction, useActionState } from "react";
+import { Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
 
 interface ModalAddLinePlayerProps {
     show: boolean,
@@ -12,6 +12,11 @@ interface ModalAddLinePlayerProps {
 }
 
 export default function ModalRemoveLinePlayer(props: ModalAddLinePlayerProps) {
+
+    const [removeResult, removeFormAction, removeIsPending] = useActionState(removeGoalkeeperPlayer, null);
+
+    // TODO (use result)
+    console.log(removeResult);
 
     return (
         props.player &&
@@ -23,7 +28,7 @@ export default function ModalRemoveLinePlayer(props: ModalAddLinePlayerProps) {
                     Remove Goalkeeper Player
                 </Modal.Title>
             </Modal.Header>
-            <Form action={removeGoalkeeperPlayer}>
+            <Form action={removeFormAction}>
                 <Modal.Body>
                     <Row>
                         <Col>
@@ -37,8 +42,16 @@ export default function ModalRemoveLinePlayer(props: ModalAddLinePlayerProps) {
                     </Row>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button type="submit" onClick={() => props.setShow(false)}>Remove</Button>
-                    <Button onClick={() => props.setShow(false)}>Close</Button>
+                    <Button type="submit" onClick={() => props.setShow(false)} disabled={removeIsPending}>
+                        {removeIsPending ? <Spinner
+                            as="span"
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-hidden={true}
+                        /> : null}
+                        Remove</Button>
+                    <Button onClick={() => props.setShow(false)} disabled={removeIsPending}>Close</Button>
                 </Modal.Footer>
             </Form>
         </Modal>

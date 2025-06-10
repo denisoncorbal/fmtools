@@ -1,3 +1,7 @@
+export const SQUAD_MANAGER_URL = "https://squad-manager-service:8081"
+export const POSITIONS_CALCULATOR_URL = "https://positions-calculator-service:8082"
+export const FORMATION_CALCULATOR_URL = "https://formation-calculator-service:8083"
+
 export type LinePlayer = {
     id?: string,
     name: string,

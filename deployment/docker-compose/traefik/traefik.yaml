@@ -1,0 +1,26 @@
+log:
+  level: "DEBUG"
+providers:
+  docker:
+    exposedByDefault: false
+    endpoint: "tcp://socket-proxy:2375"
+  file:
+    directory: "/etc/config"
+
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          scheme: "https"
+          to: "websecure"
+          permanent: true
+  websecure:
+    address: ":443"
+    http:
+      tls: {}
+
+serversTransport:
+  rootCAs:
+    - "/etc/ca/ca-chain.cert.pem"

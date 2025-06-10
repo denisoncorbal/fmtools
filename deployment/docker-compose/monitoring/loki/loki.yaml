@@ -1,0 +1,64 @@
+# This is a complete configuration to deploy Loki backed by the filesystem.
+# The index will be shipped to the storage via tsdb-shipper.
+
+auth_enabled: false
+
+server:
+  http_listen_port: 3100
+  http_tls_config:
+    cert_file: "/certs/loki.docker.localhost.cert.pem"
+    key_file: "/keys/loki.docker.localhost.key.pem"
+
+common:
+  instance_addr: 127.0.0.1
+  path_prefix: /tmp/loki
+  storage:
+    filesystem:
+      chunks_directory: /tmp/loki/chunks
+      rules_directory: /tmp/loki/rules
+  replication_factor: 1
+  ring:
+    kvstore:
+      store: inmemory
+
+query_range:
+  results_cache:
+    cache:
+      embedded_cache:
+        enabled: true
+        max_size_mb: 100
+
+limits_config:
+  metric_aggregation_enabled: true
+  allow_structured_metadata: true
+  volume_enabled: true
+  retention_period: 24h
+
+schema_config:
+  configs:
+  - from: 2020-10-24
+    store: tsdb
+    object_store: filesystem
+    schema: v13
+    index:
+      prefix: index_
+      period: 24h
+
+pattern_ingester:
+  enabled: true
+  metric_aggregation:
+    loki_address: localhost:3100
+    http_client_config:
+      tls_config:
+        cert_file: "/certs/loki.docker.localhost.cert.pem"
+        key_file: "/keys/loki.docker.localhost.key.pem"
+    use_tls: true
+
+ruler:
+  enable_alertmanager_discovery: true
+  enable_api: true
+
+compactor:
+  working_directory: /tmp/loki/retention
+  delete_request_store: filesystem
+  retention_enabled: true

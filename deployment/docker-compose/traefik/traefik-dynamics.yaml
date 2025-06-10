@@ -1,0 +1,14 @@
+tls:
+  certificates:
+    - certFile: "/etc/certs/traefik.docker.localhost.cert.pem"
+      keyFile: "/etc/keys/traefik.docker.localhost.key.pem"
+      stores:
+        - "default"
+    - certFile: "/etc/certs/webapp.docker.localhost.cert.pem"
+      keyFile: "/etc/keys/webapp.docker.localhost.key.pem"
+      stores:
+        - "default"
+    - certFile: "/etc/certs/grafana.docker.localhost.cert.pem"
+      keyFile: "/etc/keys/grafana.docker.localhost.key.pem"
+      stores:
+        - "default"

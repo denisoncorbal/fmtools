@@ -1,0 +1,74 @@
+name: 'fmtools'
+services:
+  formation-calculator-service:
+    build: ../../formation-calculator-service
+    container_name: formation-calculator-service
+    environment:
+      - DB_URL=jdbc:postgresql://formation-calculator-db:5432/postgres?ssl=true&sslmode=verify-full&sslrootcert=/certs/ca-chain.cert.pem&sslkey=/certs/client-formation-calculator-service.docker.localhost.p12&sslpassword=formationcalculatorservicep12
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - MANAGEMENT_TRACING_ENABLED=true
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=https://tempo:9411
+    ports:
+      - "8083:8083"
+    restart: unless-stopped
+    depends_on:
+      formation-calculator-db:
+        condition: service_healthy
+    healthcheck:
+      test: "curl -f -s --insecure https://localhost:8083/actuator/health | grep UP || exit 1"
+      interval: 30s
+      timeout: 10s
+      retries: 10
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    labels:
+      - "logging: fmtools"
+    networks:
+      - internal-formation-net
+      - internal-formation-db-net
+      - internal-squad-net
+      - internal-positions-net
+      - internal-tempo-net
+      - internal-prometheus-net
+    volumes:
+      - ../../ca/end/client/p12/formation-calculator-service.docker.localhost.p12:/certs/client-formation-calculator-service.docker.localhost.p12:ro
+      - ../../ca/intermediate/certs/ca-chain.cert.pem:/certs/ca-chain.cert.pem:ro
+      - ../../ca/certs/ca.cert.pem:/certs/ca.cert.pem:ro
+      - ../../ca/private/ca.key.pem:/keys/ca.key.pem:ro
+      - ../../ca/end/server/certs/formation-calculator-service.docker.localhost.cert.pem:/etc/certs/server.cert.pem:ro
+      - ../../ca/end/server/private/formation-calculator-service.docker.localhost.key.pem:/etc/keys/server.key.pem:ro
+
+  formation-calculator-db:
+    image: postgres:17.4-alpine
+    container_name: formation-calculator-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 500m
+    networks:
+      - internal-formation-db-net
+    volumes:
+      - ../../ca/end/server/certs/formation-calculator-db.docker.localhost.cert.pem:/etc/lib/postgresql/server.cert.pem
+      - ../../ca/end/server/private/formation-calculator-db.docker.localhost.key.pem:/etc/lib/postgresql/server.key.pem
+      - ../../ca/intermediate/certs/ca-chain.cert.pem:/etc/lib/postgresql/root.cert.pem
+    command: bash -c "chown postgres /etc/lib/postgresql/server.key.pem && chmod 0600 /etc/lib/postgresql/server.key.pem && docker-entrypoint.sh -c ssl=on -c ssl_cert_file=/etc/lib/postgresql/server.cert.pem -c ssl_key_file=/etc/lib/postgresql/server.key.pem -c ssl_ca_file=/etc/lib/postgresql/root.cert.pem"    
+
+networks:
+  internal-formation-net:
+    internal: true
+  internal-formation-db-net:
+    internal: true

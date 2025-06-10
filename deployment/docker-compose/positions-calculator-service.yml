@@ -1,0 +1,73 @@
+name: 'fmtools'
+services:
+  positions-calculator-service:
+    build: ../../positions-calculator-service
+    container_name: positions-calculator-service
+    environment:
+      - DB_URL=jdbc:postgresql://positions-calculator-db:5432/postgres?ssl=true&sslmode=verify-full&sslrootcert=/certs/ca-chain.cert.pem&sslkey=/certs/client-positions-calculator-service.docker.localhost.p12&sslpassword=positionscalculatorservicep12
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - MANAGEMENT_TRACING_ENABLED=true
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=https://tempo:9411
+    ports:
+      - "8082:8082"
+    restart: unless-stopped
+    depends_on:
+      positions-calculator-db:
+        condition: service_healthy
+    healthcheck:
+      test: "curl -f -s --insecure https://localhost:8082/actuator/health | grep UP || exit 1"
+      interval: 30s
+      timeout: 10s
+      retries: 10
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    labels:
+      - "logging: fmtools"
+    networks:
+      - internal-positions-net
+      - internal-positions-db-net
+      - internal-squad-net
+      - internal-tempo-net
+      - internal-prometheus-net
+    volumes:
+      - ../../ca/end/client/p12/positions-calculator-service.docker.localhost.p12:/certs/client-positions-calculator-service.docker.localhost.p12:ro
+      - ../../ca/intermediate/certs/ca-chain.cert.pem:/certs/ca-chain.cert.pem:ro
+      - ../../ca/certs/ca.cert.pem:/certs/ca.cert.pem:ro
+      - ../../ca/private/ca.key.pem:/keys/ca.key.pem:ro
+      - ../../ca/end/server/certs/positions-calculator-service.docker.localhost.cert.pem:/etc/certs/server.cert.pem:ro
+      - ../../ca/end/server/private/positions-calculator-service.docker.localhost.key.pem:/etc/keys/server.key.pem:ro
+
+  positions-calculator-db:
+    image: postgres:17.4-alpine
+    container_name: positions-calculator-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 500m
+    networks:
+      - internal-positions-db-net
+    volumes:
+      - ../../ca/end/server/certs/positions-calculator-db.docker.localhost.cert.pem:/etc/lib/postgresql/server.cert.pem
+      - ../../ca/end/server/private/positions-calculator-db.docker.localhost.key.pem:/etc/lib/postgresql/server.key.pem
+      - ../../ca/intermediate/certs/ca-chain.cert.pem:/etc/lib/postgresql/root.cert.pem
+    command: bash -c "chown postgres /etc/lib/postgresql/server.key.pem && chmod 0600 /etc/lib/postgresql/server.key.pem && docker-entrypoint.sh -c ssl=on -c ssl_cert_file=/etc/lib/postgresql/server.cert.pem -c ssl_key_file=/etc/lib/postgresql/server.key.pem -c ssl_ca_file=/etc/lib/postgresql/root.cert.pem"
+
+networks:
+  internal-positions-net:
+    internal: true
+  internal-positions-db-net:
+    internal: true

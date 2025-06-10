@@ -3,6 +3,8 @@ import { Col, Container, Row } from "react-bootstrap";
 import GoalkeeperPlayersList from "./components/goalkeeper-players-list";
 import LinePlayersList from "./components/line-players-list";
 
+export const dynamic = "force-dynamic";
+
 export default async function Page() {
 
     return (

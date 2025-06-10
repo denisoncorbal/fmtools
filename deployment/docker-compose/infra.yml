@@ -1,58 +1,53 @@
 name: fmtools
 services:
-  squad-manager-db:
-    image: postgres:17-alpine
-    container_name: squad-manager-db
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
+  traefik:
+    image: traefik:v3.3.6
+    container_name: traefik
     ports:
-      - "15432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      - "80:80"
+      - "443:443"
     deploy:
       resources:
         limits:
-          memory: 500m
+          cpus: '0.50'
+          memory: 512M
+    depends_on:
+      web-app:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - traefik-net
+      - web-app-net
+      - internal-socket-proxy
+      - internal-grafana-net
+    volumes:
+      - ./traefik/traefik.yaml:/etc/traefik/traefik.yaml:ro
+      - ./traefik/traefik-dynamics.yaml:/etc/config/dynamics.yaml:ro
+      - ../../ca/end/server/certs:/etc/certs:ro
+      - ../../ca/end/server/private:/etc/keys:ro
+      - ../../ca/intermediate/certs/ca-chain.cert.pem:/etc/ca/ca-chain.cert.pem
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik_https.rule=Host(`traefik.docker.localhost`)"
+      - "traefik.http.routers.traefik_https.entrypoints=websecure"
+      - "traefik.http.routers.traefik_https.service=api@internal"
+      - "traefik.http.routers.traefik_https.middlewares=traefik-auth"
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=admin:$$2a$$12$$kibrfaSIGAH9XTH/nMWKkOhx59fCoA8rdSjf0hNVdZPGj7GzIygD6"
+  
+  socket-proxy:
+    image: tecnativa/docker-socket-proxy:0.3
+    container_name: socket-proxy
+    ports:
+      - "2375"
+    environment:
+      - CONTAINERS=1
+      - NETWORKS=1
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - internal-socket-proxy
 
-  positions-calculator-db:
-    image: postgres:17-alpine
-    container_name: positions-calculator-db
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-    ports:
-      - "15433:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    deploy:
-      resources:
-        limits:
-          memory: 500m
-
-  formation-calculator-db:
-    image: postgres:17-alpine
-    container_name: formation-calculator-db
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-    ports:
-      - "15434:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    deploy:
-      resources:
-        limits:
-          memory: 500m
+networks:
+  traefik-net:
+  internal-socket-proxy:
+    internal: true

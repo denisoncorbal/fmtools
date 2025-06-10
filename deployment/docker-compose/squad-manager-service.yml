@@ -1,0 +1,71 @@
+name: 'fmtools'
+services:
+  squad-manager-service:
+    build: ../../squad-manager-service
+    container_name: squad-manager-service
+    environment:
+      - DB_URL=jdbc:postgresql://squad-manager-db:5432/postgres?ssl=true&sslmode=verify-full&sslrootcert=/certs/ca-chain.cert.pem&sslkey=/certs/client-squad-manager-service.docker.localhost.p12&sslpassword=squadmanagerservicep12
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - MANAGEMENT_TRACING_ENABLED=true
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=https://tempo:9411
+    ports:
+      - "8081"
+    restart: unless-stopped
+    depends_on:
+      squad-manager-db:
+        condition: service_healthy
+    healthcheck:
+      test: "curl -f -s --insecure https://localhost:8081/actuator/health | grep UP || exit 1"
+      interval: 30s
+      timeout: 10s
+      retries: 10
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - internal-squad-net
+      - internal-squad-db-net
+      - internal-tempo-net
+      - internal-prometheus-net
+    labels:
+      - "logging: fmtools"
+    volumes:
+      - ../../ca/end/client/p12/squad-manager-service.docker.localhost.p12:/certs/client-squad-manager-service.docker.localhost.p12:ro
+      - ../../ca/intermediate/certs/ca-chain.cert.pem:/certs/ca-chain.cert.pem:ro
+      - ../../ca/certs/ca.cert.pem:/certs/ca.cert.pem:ro
+      - ../../ca/private/ca.key.pem:/keys/ca.key.pem:ro
+      - ../../ca/end/server/certs/squad-manager-service.docker.localhost.cert.pem:/etc/certs/server.cert.pem:ro
+      - ../../ca/end/server/private/squad-manager-service.docker.localhost.key.pem:/etc/keys/server.key.pem:ro
+  
+  squad-manager-db:
+    image: postgres:17.4-alpine
+    container_name: squad-manager-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 500m
+    networks:
+      - internal-squad-db-net
+    volumes:
+      - ../../ca/end/server/certs/squad-manager-db.docker.localhost.cert.pem:/etc/lib/postgresql/server.cert.pem
+      - ../../ca/end/server/private/squad-manager-db.docker.localhost.key.pem:/etc/lib/postgresql/server.key.pem
+      - ../../ca/intermediate/certs/ca-chain.cert.pem:/etc/lib/postgresql/root.cert.pem
+    command: bash -c "chown postgres /etc/lib/postgresql/server.key.pem && chmod 0600 /etc/lib/postgresql/server.key.pem && docker-entrypoint.sh -c ssl=on -c ssl_cert_file=/etc/lib/postgresql/server.cert.pem -c ssl_key_file=/etc/lib/postgresql/server.key.pem -c ssl_ca_file=/etc/lib/postgresql/root.cert.pem"
+networks:
+  internal-squad-net:
+    internal: true
+  internal-squad-db-net:
+    internal: true

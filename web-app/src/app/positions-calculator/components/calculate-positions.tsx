@@ -1,7 +1,8 @@
 'use client'
 import { calculateGoalkeeperPositions, calculateLinePositions } from "@/app/lib/actions"
 import { GoalkeeperPlayer, LinePlayer } from "@/app/lib/definitions"
-import { ChangeEvent, useState } from "react"
+import { useRouter } from "next/navigation"
+import { ChangeEvent, useActionState, useState } from "react"
 import { Button, Col, Container, Form, Row } from "react-bootstrap"
 
 interface CalculatePositionsProps {
@@ -10,6 +11,11 @@ interface CalculatePositionsProps {
 }
 export default function CalculatePositions(props: CalculatePositionsProps) {
 
+    const router = useRouter();
+
+    const [calculateGoalkeeperResults, calculateGoalkeeperAction, calculateGoalkeeperIsPending] = useActionState(calculateGoalkeeperPositions, null);
+    const [calculateLineResults, calculateLineAction, calculateLineIsPending] = useActionState(calculateLinePositions, null);
+    
     const [selectedType, setSelectedType] = useState("line");
 
     function handlePlayerTypeSelection(e: ChangeEvent<HTMLInputElement>) {
@@ -20,7 +26,7 @@ export default function CalculatePositions(props: CalculatePositionsProps) {
         <Container>
             <Row>
                 <Col>
-                    <Form action={selectedType === "line" ? calculateLinePositions : calculateGoalkeeperPositions}>
+                    <Form action={selectedType === "line" ? calculateLineAction : calculateGoalkeeperAction}>
                         <Form.Check
                             type="radio"
                             name="player-type"
@@ -51,7 +57,13 @@ export default function CalculatePositions(props: CalculatePositionsProps) {
                                     props.goalkeeperPlayers.map((player) => <option key={player.id} value={player.id}>{player.name}</option>)
                             }
                         </Form.Select>
-                        <Button type="submit">Calculate</Button>
+                        <Button type="submit" disabled={calculateGoalkeeperIsPending || calculateLineIsPending}>Calculate</Button>
+                        {
+                            (calculateGoalkeeperResults != null && calculateGoalkeeperResults.length > 0) ? <>{router.push(calculateGoalkeeperResults)}</> : null
+                        }
+                        {
+                            (calculateLineResults != null && calculateLineResults.length > 0) ? <>{router.push(calculateLineResults)}</> : null
+                        }
                     </Form>
                 </Col>
             </Row>

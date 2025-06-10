@@ -1,0 +1,122 @@
+name: test
+services:
+  traefik:
+    # The official v3 Traefik docker image
+    image: traefik:v3.3.6
+    container_name: traefik
+    ports:
+      # The HTTP port
+      - "80:80"
+      # The Web UI (secured)
+      - "443:443"
+      - "3305:3305"
+      - "3306:3306"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./infra/traefik/traefik.yaml:/etc/traefik/traefik.yaml:ro
+      - ./infra/traefik/traefik-dynamics.yaml:/etc/config/dynamics.yaml:ro
+      #- ./infra/traefik/certs:/etc/certs:ro
+      - ../../ca/end/server/certs:/etc/certs:ro
+      - ../../ca/end/server/private:/etc/keys:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik_https.rule=Host(`traefik.docker.localhost`)"
+      - "traefik.http.routers.traefik_https.entrypoints=websecure"
+      - "traefik.http.routers.traefik_https.service=api@internal"
+      - "traefik.http.routers.traefik_https.middlewares=traefik-auth"
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=admin:$$2a$$12$$kibrfaSIGAH9XTH/nMWKkOhx59fCoA8rdSjf0hNVdZPGj7GzIygD6"
+      - "traefik.docker.network=test_traefik_net"      
+      - "traefik.tcp.routers.tmysql.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.tmysql.entrypoints=tmysql"
+      - "traefik.tcp.routers.tmysql.tls=true"
+      - "traefik.tcp.routers.tmysql.tls.passthrough=true"
+      - "traefik.tcp.routers.tmysql.service=tmysql"
+      - "traefik.tcp.services.tmysql.loadbalancer.server.port=3306"
+    networks:
+      - traefik_net
+  
+  squad-manager-db:
+    image: "mysql:8.4.5"
+    container_name: squad-manager-db
+    command: [ "mysqld",
+      "--require_secure_transport=ON",
+      "--general_log=ON",
+      "--general-log-file=/var/lib/mysql/general-log.log",
+      "--ssl-ca=/etc/certs/ca.pem",
+      "--ssl-cert=/etc/certs/server-cert.pem",
+      "--ssl-key=/etc/certs/server-key.pem"
+    ]
+    volumes:
+      - ../../ca/intermediate/certs/ca-chain.cert.pem:/etc/certs/ca.pem:ro
+      - ../../ca/end/server/certs/squad-manager-db.docker.localhost.cert.pem:/etc/certs/server-cert.pem:ro
+      - ../../ca/end/server/private/squad-manager-db.docker.localhost.key.pem:/etc/certs/server-key.pem:ro
+    ports:
+      - "3306"
+    environment:
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: postgres
+      MYSQL_USER: postgres
+      MYSQL_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -proot | grep alive || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 500m
+    labels:
+      - "traefik.enable=true"
+      - "traefik.tcp.routers.mysql.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.mysql.entrypoints=mysql"
+      - "traefik.tcp.routers.mysql.tls=true"
+      - "traefik.tcp.routers.mysql.tls.passthrough=true"
+      - "traefik.tcp.routers.mysql.service=mysql"
+      - "traefik.tcp.services.mysql.loadbalancer.server.port=3306"
+      - "traefik.docker.network=test_traefik_net"
+    networks:
+      - traefik_net
+
+  squad-manager-service:
+    build: ../../squad-manager-service
+    container_name: squad-manager-service
+    environment:
+      # - DB_URL=jdbc:mysql://traefik:5429/postgres?sslMode=VERIFY_CA&serverName=squad-manager-db.docker.localhost
+      - DB_URL=jdbc:mysql://traefik:3305/postgres?sslMode=REQUIRED
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+    ports:
+      - "8081:8081"
+    depends_on:
+      squad-manager-db:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.squad-manager-service.rule=Host(`squad-manager-service.docker.localhost`)"
+      - "traefik.http.routers.squad-manager-service.entrypoints=websecure"
+      - "traefik.http.services.squad-manager-service.loadbalancer.server.port=8081"
+      - "logging: fmtools"
+      - "traefik.docker.network=test_traefik_net"
+    volumes:
+      - ./infra/traefik/certs/squad-manager-service.docker.localhost.p12:/certs/squad-manager-service.docker.localhost.p12:ro
+      - ./infra/traefik/certs/.docker.localhost.p12:/certs/.docker.localhost.p12:ro
+      - ../../ca/end/server/p12/traefik.docker.localhost.p12:/certs/traefik.docker.localhost.p12:ro
+      - ../../ca/end/server/certs/squad-manager-service.docker.localhost.cert.pem:/certs/squad-manager-service.docker.localhost.cert.pem:ro
+      - ../../ca/end/server/private/squad-manager-service.docker.localhost.key.pem:/certs/squad-manager-service.docker.localhost.key.pem:ro
+      - ../../ca/end/server/certs/traefik.docker.localhost.cert.pem:/certs/traefik.docker.localhost.cert.pem:ro
+      - ../../ca/end/server/private/traefik.docker.localhost.key.pem:/certs/traefik.docker.localhost.key.pem:ro
+      - ../../ca/end/client/certs/squad-manager-service.docker.localhost.cert.pem:/certs/client-squad-manager-service.docker.localhost.cert.pem:ro
+      - ../../ca/end/client/p12/squad-manager-service.docker.localhost.p12:/certs/client-squad-manager-service.docker.localhost.p12:ro
+      - ../../ca/intermediate/certs/ca-chain.cert.pem:/certs/ca-chain.cert.pem:ro
+      - ../../ca/intermediate/private/intermediate.key.pem:/certs/intermediate.key.pem:ro
+    networks:
+      - traefik_net
+
+networks:
+  traefik_net:

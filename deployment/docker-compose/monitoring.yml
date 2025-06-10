@@ -1,0 +1,139 @@
+name: "fmtools"
+services:
+  prometheus:
+    image: prom/prometheus:v3.2.1
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./monitoring/prometheus/web-config.yml:/etc/prometheus/web-config.yml
+      - ../../ca/intermediate/certs/ca-chain.cert.pem:/certs/ca-chain.cert.pem:ro
+      - ../../ca/end/server/certs/prometheus.docker.localhost.cert.pem:/certs/prometheus.docker.localhost.cert.pem:ro
+      - ../../ca/end/server/private/prometheus.docker.localhost.key.pem:/keys/prometheus.docker.localhost.key.pem:ro
+    command: "--config.file=/etc/prometheus/prometheus.yml --web.config.file=/etc/prometheus/web-config.yml"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 256M
+    networks:
+      - internal-prometheus-net
+
+  alloy:
+    container_name: alloy
+    image: grafana/alloy:v1.8.1
+    ports:
+      - 12345:12345
+    volumes:
+      - ./monitoring/alloy/config.alloy:/etc/alloy/config.alloy
+      - ../../ca/intermediate/certs/ca-chain.cert.pem:/certs/ca-chain.cert.pem:ro
+    command: run --server.http.listen-addr=0.0.0.0:12345 --storage.path=/var/lib/alloy/data /etc/alloy/config.alloy
+    deploy:
+      resources:
+        limits:
+          cpus: "0.3"
+          memory: 256M
+        reservations:
+          cpus: "0.15"
+          memory: 128M
+    networks:
+      - internal-socket-proxy
+      - internal-aloy-net
+      - internal-loki-net
+    
+  loki:
+    image: grafana/loki:3.4.3
+    container_name: loki
+    command: "-config.file=/etc/loki/loki.yaml"
+    volumes:
+      - ./monitoring/loki/loki.yaml:/etc/loki/loki.yaml
+      - ../../ca/end/server/certs/loki.docker.localhost.cert.pem:/certs/loki.docker.localhost.cert.pem:ro
+      - ../../ca/end/server/private/loki.docker.localhost.key.pem:/keys/loki.docker.localhost.key.pem:ro
+    ports:
+      - "3100:3100"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 256M
+    networks:
+      - internal-loki-net
+    
+  tempo:
+    image: grafana/tempo:2.7.2
+    container_name: tempo
+    command: "-config.file /etc/tempo-config.yml"
+    ports:
+      - "3200:3200" # Tempo
+      - "9411:9411" # Zipkin
+    volumes:
+      - ./monitoring/tempo/tempo.yml:/etc/tempo-config.yml
+      - ../../ca/intermediate/certs/ca-chain.cert.pem:/tls/ca.cert.pem:ro
+      - ../../ca/end/server/certs/tempo.docker.localhost.cert.pem:/tls/tempo.cert.pem:ro
+      - ../../ca/end/server/private/tempo.docker.localhost.key.pem:/tls/tempo.key.pem:ro
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 256M
+    networks:
+      - internal-tempo-net
+    
+  grafana:
+    image: grafana/grafana-oss:11.6.0
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+      - GF_USERS_ALLOW_SIGN_UP=false
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 256M
+    networks:
+      - internal-grafana-net
+      - internal-prometheus-net
+      - internal-tempo-net
+      - internal-loki-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.docker.localhost`)"
+      - "traefik.http.routers.grafana.entrypoints=web,websecure"
+      - "traefik.http.routers.grafana.service=grafana"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+      - "traefik.docker.network=fmtools_internal-grafana-net"
+
+volumes:
+  grafana_data: {}
+
+networks:
+  docker-access-internal-net:
+    internal: true
+  internal-aloy-net:
+    internal: true
+  internal-grafana-net:
+    internal: true
+  internal-loki-net:
+    internal: true
+  internal-prometheus-net:
+    internal: true
+  internal-tempo-net:
+    internal: true

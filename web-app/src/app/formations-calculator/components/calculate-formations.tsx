@@ -1,6 +1,8 @@
 'use client'
 import { calculateFormations } from "@/app/lib/actions"
 import { GoalkeeperPlayer, LinePlayer } from "@/app/lib/definitions"
+import { useRouter } from "next/navigation"
+import { useActionState } from "react"
 import { Button, Col, Container, Form, FormCheck, Row } from "react-bootstrap"
 
 interface CalculateFormationsProps {
@@ -9,11 +11,15 @@ interface CalculateFormationsProps {
 }
 export default function CalculateFormations(props: CalculateFormationsProps) {
 
+    const router = useRouter();
+
+    const [calculateFormationResults, calculateFormationAction, calculateFormationIsPending] = useActionState(calculateFormations, null);
+
     return (
         <Container>
             <Row>
                 <Col>
-                    <Form action={calculateFormations} className="text-center">
+                    <Form action={calculateFormationAction} className="text-center">
                         <Row className="my-2">
                             <Col className="bg-light mx-1">
                                 <h2>Line Players</h2>
@@ -48,7 +54,10 @@ export default function CalculateFormations(props: CalculateFormationsProps) {
                                 </div>
                             </Col>
                         </Row>
-                        <Button type="submit">Calculate</Button>
+                        <Button type="submit" disabled={calculateFormationIsPending}>Calculate</Button>
+                        {
+                            (calculateFormationResults != null && calculateFormationResults.length > 0) ? <>{router.push(calculateFormationResults)}</> : null
+                        }
                     </Form>
                 </Col>
             </Row>

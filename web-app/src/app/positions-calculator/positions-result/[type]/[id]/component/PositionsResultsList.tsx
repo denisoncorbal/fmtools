@@ -9,8 +9,6 @@ interface PositionsResultsListProps {
     playerData: LinePlayer | GoalkeeperPlayer
 }
 export default function PositionsResultsList(props: PositionsResultsListProps) {
-    console.log(props.positionsResults);
-    console.log(typeof (props.positionsResults));
     return (
         <Container>
             <Row>
@@ -30,7 +28,7 @@ export default function PositionsResultsList(props: PositionsResultsListProps) {
                 <Col className={styles.card_results} >
                     {
                         isSuitablePositionArray(props.positionsResults) && props.positionsResults.sort(sortPositionResults).map((position, index) =>
-                            <Card key={index} className="m-1 p-1">
+                            <Card key={index} className={"m-1 p-1 " + (index%2!=0 ? styles.odd_card_results : "")}>
                                 <Card.Title className="p-1">{position.name} - {parseFloat(position.percentage.toFixed(2))}%</Card.Title>
                             </Card>
                         )
