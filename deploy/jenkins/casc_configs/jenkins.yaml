@@ -1,0 +1,132 @@
+jenkins:
+  systemMessage: "Jenkins with JCasC, Pipeline e Credentials autoconfigured!"
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: ${JENKINS_ADMIN_USER}
+          password: ${JENKINS_ADMIN_PASSWORD}
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+    
+
+tool:
+  nodejs:
+    installations:
+      - name: "NodeJS 22"
+        home: ""
+        properties:
+          - installSource:
+              installers:
+                - nodeJSInstaller:
+                    id: "22.18.0"
+
+jobs:
+  - script: > 
+      pipelineJob("Build and Deploy") {
+        definition {
+          cps {
+            script("""\
+              pipeline {
+                agent any
+                tools {
+                  nodejs 'NodeJS 22'
+                }
+                options {
+                  timeout(time: 1, unit: 'HOURS')
+                }
+                environment {
+                  WILDFLY_ADMIN_USER = credentials('wildfly-admin-user')
+                  WILDFLY_ADMIN_PASSWORD = credentials('wildfly-admin-password')
+                  WILDFLY_HOSTNAME = credentials('wildfly-hostname')
+                  WILDFLY_PORT = credentials('wildfly-port')
+                }
+                stages {
+                  stage('checkout') {
+                    steps {
+                      git branch: 'main', url: 'https://github.com/denisoncorbal/fmtools'
+                    }
+                  }
+                  stage('build angular') {
+                    steps {
+                      sh 'cd ./fmtools-frontend && npm install && npm run build'
+                    }
+                  }
+                  stage('copy frontend to spring'){
+                    steps {
+                      sh 'cp -r ././fmtools-frontend/dist/fmtools-frontend/browser ././fmtools-backend/src/main/resources/static'
+                    }
+                  }
+                  stage('build spring') {
+                    steps {
+                      sh 'cd ./fmtools-backend && chmod +x ./mvnw && ./mvnw clean wildfly:deploy -D"wildfly.user=${WILDFLY_ADMIN_USER}" -D"wildfly.password=${WILDFLY_ADMIN_PASSWORD}" -D"wildfly.hostname=${WILDFLY_HOSTNAME}" -D"wildfly.port=${WILDFLY_PORT}"'
+                    }
+                  }
+                  stage('capture') {
+                    steps {
+                      // archiveArtifacts '**/build/libs/*.jar'
+                      archiveArtifacts '**/target/*.jar'
+                      junit '**/target/surefire-reports/*.xml'
+                      // Configure Jacoco for code coverage
+                      jacoco(execPattern: '**/target/jacoco/*.exec')
+                    }
+                  }
+                }
+                post {
+                  always {
+                    // Clean up workspace
+                    cleanWs()
+                  }
+                  success {
+                    // Notify on success
+                    echo 'Build successful!'
+                  }
+                  unstable {
+                    // Notify on unstable build
+                    echo 'Build unstable.'
+                  }
+                  failure {
+                    // Notify on failure
+                    echo 'Build failed!'
+                  }
+                }
+              }
+            """.stripIndent())
+          sandbox()
+          }
+        }
+        triggers {
+          cron('H/5 * * * *')
+        }
+      }
+
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - string:
+              scope: GLOBAL
+              id: "wildfly-admin-user"
+              description: "Wildfly Admin User"
+              secret: "${readFile:/run/secrets/WILDFLY_ADMIN_USER}"
+          - string:
+              scope: GLOBAL
+              id: "wildfly-admin-password"
+              description: "Wildfly Admin Password"
+              secret: "${readFile:/run/secrets/WILDFLY_ADMIN_PASSWORD}"
+          - string:
+              scope: GLOBAL
+              id: "wildfly-hostname"
+              description: "Wildfly Hostname"
+              secret: "${readFile:/run/secrets/WILDFLY_HOSTNAME}"
+          - string:
+              scope: GLOBAL
+              id: "wildfly-port"
+              description: "Wildfly Port"
+              secret: "${readFile:/run/secrets/WILDFLY_PORT}"
+
+unclassified:
+  location:
+    adminAddress: "admin@admin.com"
+    url: "http://localhost:8080"

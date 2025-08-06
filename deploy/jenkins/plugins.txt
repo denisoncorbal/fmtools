@@ -1,0 +1,14 @@
+configuration-as-code
+workflow-aggregator
+workflow-job
+git
+credentials
+credentials-binding
+blueocean
+matrix-auth
+job-dsl
+pipeline-github-lib
+github
+ssh-slaves
+mailer
+nodejs

@@ -1,0 +1,56 @@
+services:
+  jenkins:
+    container_name: jenkins
+    build:
+      context: ./jenkins
+      dockerfile: jenkins.dockerfile
+    ports:
+      - "8081:8080"
+      - "50000:50000"
+    environment:
+      - JENKINS_ADMIN_USER=/run/secrets/JENKINS_ADMIN_USER
+      - JENKINS_ADMIN_PASSWORD=/run/secrets/JENKINS_ADMIN_PASSWORD
+    secrets:
+      - JENKINS_ADMIN_USER
+      - JENKINS_ADMIN_PASSWORD
+      - WILDFLY_ADMIN_USER
+      - WILDFLY_ADMIN_PASSWORD
+      - WILDFLY_HOSTNAME
+      - WILDFLY_PORT
+    networks:
+      - deploy
+
+  wildfly:
+    container_name: wildfly
+    build:
+      context: ./wildfly
+      dockerfile: wildfly.dockerfile
+      secrets:
+        - WILDFLY_ADMIN_USER
+        - WILDFLY_ADMIN_PASSWORD
+    environment:
+      JBOSS_HOME: "/opt/jboss/wildfly"
+      ADMIN_USER: /run/secrets/wildfly-user
+      ADMIN_PASSWORD: /run/secrets/wildfly-password
+    ports:
+      - "8080:8080"
+      - "9990:9990"
+    networks:
+      - deploy
+      
+secrets:
+  JENKINS_ADMIN_USER:
+    file: ./jenkins/jenkins_user.secret
+  JENKINS_ADMIN_PASSWORD:
+    file: ./jenkins/jenkins_password.secret
+  WILDFLY_ADMIN_USER:
+    file: ./wildfly/wildfly_user.secret
+  WILDFLY_ADMIN_PASSWORD:
+    file: ./wildfly/wildfly_password.secret
+  WILDFLY_HOSTNAME:
+    file: ./wildfly/wildfly_hostname.secret
+  WILDFLY_PORT:
+    file: ./wildfly/wildfly_port.secret
+
+networks:
+  deploy:
