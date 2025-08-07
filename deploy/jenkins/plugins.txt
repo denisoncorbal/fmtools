@@ -12,3 +12,4 @@ github
 ssh-slaves
 mailer
 nodejs
+ws-cleanup

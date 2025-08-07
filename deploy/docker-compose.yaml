@@ -17,8 +17,12 @@ services:
       - WILDFLY_ADMIN_PASSWORD
       - WILDFLY_HOSTNAME
       - WILDFLY_PORT
+      - GITHUB_PROJECT_URL
     networks:
       - deploy
+    depends_on:
+      wildfly:
+        condition: service_healthy
 
   wildfly:
     container_name: wildfly
@@ -28,6 +32,12 @@ services:
       secrets:
         - WILDFLY_ADMIN_USER
         - WILDFLY_ADMIN_PASSWORD
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
     environment:
       JBOSS_HOME: "/opt/jboss/wildfly"
       ADMIN_USER: /run/secrets/wildfly-user
@@ -51,6 +61,8 @@ secrets:
     file: ./wildfly/wildfly_hostname.secret
   WILDFLY_PORT:
     file: ./wildfly/wildfly_port.secret
+  GITHUB_PROJECT_URL:
+    file: ./jenkins/github_project_url.secret
 
 networks:
   deploy:

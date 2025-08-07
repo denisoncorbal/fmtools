@@ -41,35 +41,32 @@ jobs:
                   WILDFLY_ADMIN_PASSWORD = credentials('wildfly-admin-password')
                   WILDFLY_HOSTNAME = credentials('wildfly-hostname')
                   WILDFLY_PORT = credentials('wildfly-port')
+                  GITHUB_PROJECT_URL = credentials('github-project-url')
                 }
                 stages {
                   stage('checkout') {
                     steps {
-                      git branch: 'main', url: 'https://github.com/denisoncorbal/fmtools'
+                      git branch: 'main', url: '${GITHUB_PROJECT_URL}'
                     }
                   }
                   stage('build angular') {
                     steps {
-                      sh 'cd ./fmtools-frontend && npm install && npm run build'
+                      sh 'cd ./fmtools-frontend && npm install && npm install -g @angular/cli && ng build -c production --output-mode static --base-href /fmtools/'
                     }
                   }
                   stage('copy frontend to spring'){
                     steps {
-                      sh 'cp -r ././fmtools-frontend/dist/fmtools-frontend/browser ././fmtools-backend/src/main/resources/static'
+                      sh 'cp -r ./fmtools-frontend/dist/fmtools-frontend/browser ./fmtools-backend/src/main/resources/static'
                     }
                   }
                   stage('build spring') {
                     steps {
-                      sh 'cd ./fmtools-backend && chmod +x ./mvnw && ./mvnw clean wildfly:deploy -D"wildfly.user=${WILDFLY_ADMIN_USER}" -D"wildfly.password=${WILDFLY_ADMIN_PASSWORD}" -D"wildfly.hostname=${WILDFLY_HOSTNAME}" -D"wildfly.port=${WILDFLY_PORT}"'
+                      sh 'cd ./fmtools-backend && chmod +x ./mvnw && ./mvnw clean wildfly:deploy -D"wildfly.username=${WILDFLY_ADMIN_USER}" -D"wildfly.password=${WILDFLY_ADMIN_PASSWORD}" -D"wildfly.hostname=${WILDFLY_HOSTNAME}" -D"wildfly.port=${WILDFLY_PORT}"'
                     }
                   }
                   stage('capture') {
-                    steps {
-                      // archiveArtifacts '**/build/libs/*.jar'
-                      archiveArtifacts '**/target/*.jar'
-                      junit '**/target/surefire-reports/*.xml'
-                      // Configure Jacoco for code coverage
-                      jacoco(execPattern: '**/target/jacoco/*.exec')
+                    steps {                      
+                      archiveArtifacts '**/target/*.war'
                     }
                   }
                 }
@@ -96,8 +93,8 @@ jobs:
           sandbox()
           }
         }
-        triggers {
-          cron('H/5 * * * *')
+        triggers{
+          scm('H/5 * * * *')
         }
       }
 
@@ -125,6 +122,11 @@ credentials:
               id: "wildfly-port"
               description: "Wildfly Port"
               secret: "${readFile:/run/secrets/WILDFLY_PORT}"
+          - string:
+              scope: GLOBAL
+              id: "github-project-url"
+              description: "Github Project Url"
+              secret: "${readFile:/run/secrets/GITHUB_PROJECT_URL}"
 
 unclassified:
   location:
