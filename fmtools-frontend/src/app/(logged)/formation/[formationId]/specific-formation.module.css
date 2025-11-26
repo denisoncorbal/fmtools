@@ -1,0 +1,35 @@
+.background {
+    min-width: 100vw;
+    min-height: 85vh;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.positions_container {
+    margin: 8px;
+}
+
+.position {
+    display: inline-block;
+    margin: 8px;
+    padding: 8px;
+}
+
+.player_data_container {
+    text-align: center;
+}
+
+.player_name {
+    display: inline-block;
+    padding-right: 8px;
+}
+
+.player_suitability {
+    display: inline-block;
+    padding-left: 8px;
+}
