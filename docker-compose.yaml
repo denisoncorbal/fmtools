@@ -1,0 +1,23 @@
+services:
+  db:
+    image: postgres:18.1
+    container_name: ${POSTGRES_CONTAINER_NAME}
+    environment:
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE_NAME}
+    env_file: .env
+
+  backend:
+    build:
+      context: .\fmtools-backend
+    container_name: ${BACKEND_CONTAINER_NAME}
+    env_file: .env
+    
+
+  frontend:
+    build:
+      context: .\fmtools-frontend
+    container_name: ${FRONTEND_CONTAINER_NAME}
+    ports:
+      - "3000:3000"

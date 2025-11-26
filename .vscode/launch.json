@@ -1,0 +1,28 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "br.com.dgc.fmtools.domain.Main",
+            "projectName": "fmtools"
+        },
+        {
+            "type": "java",
+            "name": "FmtoolsApplication",
+            "request": "launch",
+            "mainClass": "br.com.dgc.fmtools.FmtoolsApplication",
+            "projectName": "fmtools"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-Main<fmtools>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "br.com.dgc.domain.Main",
+            "projectName": "fmtools",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
