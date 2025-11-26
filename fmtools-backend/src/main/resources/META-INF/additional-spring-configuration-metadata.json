@@ -1,0 +1,39 @@
+{
+    "properties": [
+        {
+            "name": "custom.jwt.notBeforeMinutesInThePast",
+            "type": "java.lang.Integer",
+            "description": "Property to use on jose4j token generation and validation"
+        },
+        {
+            "name": "custom.jwt.expirationTimeMinutesInTheFuture",
+            "type": "java.lang.Integer",
+            "description": "Property to use on jose4j token generation and validation"
+        },
+        {
+            "name": "custom.jwt.audience",
+            "type": "java.lang.String",
+            "description": "Property to use on jose4j token generation and validation"
+        },
+        {
+            "name": "custom.jwt.issuer",
+            "type": "java.lang.String",
+            "description": "Property to use on jose4j token generation and validation"
+        },
+        {
+            "name": "custom.jwt.diffBetweenAccessAndRefreshInMinutes",
+            "type": "java.lang.Integer",
+            "description": "Property to use on jose4j token generation and validation"
+        },
+        {
+            "name": "custom.jwt.numberOfBytesForId",
+            "type": "java.lang.Integer",
+            "description": "Property to use on jose4j token generation and validation"
+        },
+        {
+            "name": "custom.jwt.keyId",
+            "type": "java.lang.String",
+            "description": "Property to use on jose4j token generation and validation"
+        }
+    ]
+}
