@@ -23,6 +23,7 @@ jobs:
         id: docker_build
         uses: xhofe/del-docker-tag@main
         with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
           token: ${{ secrets.DOCKERHUB_TOKEN }}
           tags: denisoncorbal/fmtools:backend-latest
       -
