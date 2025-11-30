@@ -1,4 +1,4 @@
-name: Auto Deploy to aaPanel
+name: Backend deploy
 
 on:
   push:
