@@ -9,8 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-
-  docker:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       -
@@ -34,16 +33,9 @@ jobs:
         with:
           context: ./fmtools-frontend
           push: true
-          tags: denisoncorbal/fmtools:frontend-latest
-
-  deploy:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      actions: read
-    steps:
-      - uses: actions/checkout@v4
-      - name: Deploy to aaPanel
+          tags: denisoncorbal/fmtools:frontend-latest  
+      - 
+        name: Deploy to aaPanel
         uses: tunnaduong/aapanel-deploy-action@main
         with:
           panel_url: ${{ secrets.AAPANEL_URL }}
