@@ -1,0 +1,50 @@
+name: Auto Deploy to aaPanel
+
+on:
+  push:
+    branches: [main]
+    paths:
+        - 'fmtools-backend/**'
+
+jobs:
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v5
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./fmtools-backend
+          push: true
+          tags: denisoncorbal/fmtools:backend-latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to aaPanel
+        uses: tunnaduong/aapanel-deploy-action@main
+        with:
+          panel_url: ${{ secrets.AAPANEL_URL }}
+          webhook_key: ${{ secrets.AAPANEL_BACKEND_WEBHOOK_KEY }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
