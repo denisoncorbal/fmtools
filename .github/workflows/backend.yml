@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
         - 'fmtools-backend/**'
+  workflow_dispatch:
 
 jobs:
 
