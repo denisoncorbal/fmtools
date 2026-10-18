@@ -22,9 +22,6 @@ pipeline {
                     echo "Verificando Docker..."
                     docker --version
                     docker compose version
-
-                    echo "Validando arquivo Compose..."
-                    docker compose config -q
                 '''
             }
         }
@@ -42,6 +39,9 @@ pipeline {
 
                     umask 077
                     cp "$ENV_FILE" .env
+
+                    echo "Validando arquivo Compose..."
+                    docker compose config -q
 
                     echo "Atualizando containers..."
                     docker compose up -d --build --remove-orphans
