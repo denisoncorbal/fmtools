@@ -19,5 +19,6 @@ services:
     build:
       context: ./fmtools-frontend
     container_name: ${FRONTEND_CONTAINER_NAME}
+    env_file: .env
     ports:
       - "3000:3000"
