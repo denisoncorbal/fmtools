@@ -10,14 +10,14 @@ services:
 
   backend:
     build:
-      context: .\fmtools-backend
+      context: ./fmtools-backend
     container_name: ${BACKEND_CONTAINER_NAME}
     env_file: .env
     
 
   frontend:
     build:
-      context: .\fmtools-frontend
+      context: ./fmtools-frontend
     container_name: ${FRONTEND_CONTAINER_NAME}
     ports:
       - "3000:3000"
