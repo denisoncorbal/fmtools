@@ -38,6 +38,8 @@ pipeline {
                     set -eu
 
                     umask 077
+
+                    rm -f .env
                     cp "$ENV_FILE" .env
 
                     echo "Validando arquivo Compose..."
