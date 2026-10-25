@@ -232,3 +232,6 @@ thumb
 sketch
 
 # End of https://www.toptal.com/developers/gitignore/api/maven,java,nextjs,react,node,dotenv
+secrets/
+*.env
+*.env.*

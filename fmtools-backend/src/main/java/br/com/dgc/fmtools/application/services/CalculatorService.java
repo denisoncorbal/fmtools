@@ -8,8 +8,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import br.com.dgc.fmtools.application.ports.outbound.PlayerRepositoryPort;
 import br.com.dgc.fmtools.application.ports.outbound.TacticalPositionRepositoryPort;
 import br.com.dgc.fmtools.application.services.mappers.PlayerMapper;
@@ -85,12 +83,7 @@ public class CalculatorService {
         Calculator calculator = new Calculator();
 
         List<Player> players = playerEntities.stream().map(pe -> {
-            try {
-                return this.playerMapper.toPlayer(pe);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-                return null;
-            }
+            return this.playerMapper.toPlayer(pe);
         }).toList();
         List<TacticalPosition> tacticalPositions = tacticalPositionEntities.stream()
                 .map(tpe -> {

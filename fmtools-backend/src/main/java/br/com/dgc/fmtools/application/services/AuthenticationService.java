@@ -19,11 +19,6 @@ import org.jose4j.lang.JoseException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import br.com.dgc.fmtools.application.ports.outbound.UserRepositoryPort;
 import br.com.dgc.fmtools.application.services.mappers.UserMapper;
 import br.com.dgc.fmtools.infrastructure.adapters.inbound.rest.dtos.request.LoginRequestDto;
@@ -36,6 +31,8 @@ import br.com.dgc.fmtools.infrastructure.adapters.outbound.persistence.entities.
 import br.com.dgc.fmtools.infrastructure.config.jwt.JwtConfig;
 import br.com.dgc.fmtools.infrastructure.config.jwt.JwtType;
 import br.com.dgc.fmtools.infrastructure.config.persistence.AuthenticationConfig;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 @Service
 public class AuthenticationService {
@@ -69,7 +66,7 @@ public class AuthenticationService {
         return this.userMapper.toSignInResponseDto(userEntity);
     }
 
-    public LoginResponseDto login(LoginRequestDto loginRequestDto) throws JsonProcessingException, JoseException {
+    public LoginResponseDto login(LoginRequestDto loginRequestDto) throws JoseException {
         UserEntity userEntity = this.userRepositoryPort.getFromDatabaseByUsername(loginRequestDto.username());
         this.passwordEncoder.matches(
                 loginRequestDto.password() + userEntity.getSalt() + this.authenticationConfig.getPEPPER(),
@@ -78,7 +75,7 @@ public class AuthenticationService {
                 this.generateToken(userEntity.getId().toString(), JwtType.REFRESH));
     }
 
-    private String generateToken(String userId, JwtType jwtType) throws JoseException, JsonProcessingException {
+    private String generateToken(String userId, JwtType jwtType) throws JoseException {
         JwtClaims claims = new JwtClaims();
         claims.setIssuer(this.jwtConfig.getIssuer());
         claims.setAudience(this.jwtConfig.getAudience());
@@ -122,8 +119,8 @@ public class AuthenticationService {
         return jwtEncripted;
     }
 
-    public String validateToken(String jwtEncripted) throws JoseException, JsonMappingException,
-            JsonProcessingException, InvalidJwtException, MalformedClaimException {
+    public String validateToken(String jwtEncripted) throws JoseException,
+            InvalidJwtException, MalformedClaimException {
         JsonWebEncryption jweDecryption = new JsonWebEncryption();
         jweDecryption.setCompactSerialization(jwtEncripted);
         jweDecryption.setKey(rsaJsonWebKey.getPrivateKey());
@@ -154,8 +151,8 @@ public class AuthenticationService {
         return subject;
     }
 
-    public Object refresh(RefreshRequestDto refreshRequestDto) throws JsonMappingException, JsonProcessingException,
-            MalformedClaimException, JoseException, InvalidJwtException {
+    public Object refresh(RefreshRequestDto refreshRequestDto)
+            throws MalformedClaimException, JoseException, InvalidJwtException {
         String subject = this.validateToken(refreshRequestDto.refreshToken());
         return new RefreshResponseDto(this.generateToken(subject, JwtType.ACCESS));
     }

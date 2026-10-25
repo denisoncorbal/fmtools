@@ -22,7 +22,8 @@ public class Formation {
             throws InvalidPositionsSizeException, NotUniqueFieldPositionsException {
         if (positions.size() > 11)
             throw new InvalidPositionsSizeException();
-        if (positions.size() != positions.stream().map(TacticalPosition::getFieldPosition).distinct().count())
+        if (positions.size() != positions.stream().map(
+                tp -> tp.getFieldPosition()).distinct().count())
             throw new NotUniqueFieldPositionsException();
         this.name = name;
         this.tacticalPositions = positions;
@@ -34,7 +35,5 @@ public class Formation {
                 + ", getTacticalPositions()=" + getTacticalPositions() + ", getClass()=" + getClass() + ", hashCode()="
                 + hashCode() + ", toString()=" + super.toString() + "]";
     }
-
-    
 
 }

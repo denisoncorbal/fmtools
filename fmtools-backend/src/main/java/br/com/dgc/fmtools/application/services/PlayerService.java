@@ -8,20 +8,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 import br.com.dgc.fmtools.application.ports.outbound.PlayerRepositoryPort;
 import br.com.dgc.fmtools.application.ports.outbound.SquadRepositoryPort;
@@ -42,21 +37,21 @@ public class PlayerService {
     private final PlayerRepositoryPort playerRepositoryPort;
     private final SquadRepositoryPort squadRepositoryPort;
 
-    private static final String regexFindSpacesBetweenWords = "\\b\\s+";
+    private static final String REGEX_FIND_SPACES_BETWEEN_WORDS = "\\b\\s+";
 
-    private static final String regexFindSpaces = "\\s";
+    private static final String REGEX_FIND_SPACES = "\\s";
 
-    private static final String regexFindVerticalLineOrHifenOrSpace = "(\\|)|(-)|(\\s)";
+    private static final String REGEX_FIND_VERTICAL_LINE_OR_HIFEN_OR_SPACE = "(\\|)|(-)|(\\s)";
 
-    private static final String regexFindWordsSnakeCase = "[A-Za-z_]+";
+    private static final String REGEX_FIND_WORDS_SNAKE_CASE = "[A-Za-z_]+";
 
-    private static final String regexFindNumbers = "[0-9]+";
+    private static final String REGEX_FIND_NUMBERS = "[0-9]+";
 
-    private static final String tableDataSelector = "td";
+    private static final String TABLE_DATA_SELECTOR = "td";
 
-    private static final String underscore = "_";
+    private static final String UNDERSCORE = "_";
 
-    private static final String newLine = "\n";
+    private static final String NEWLINE = "\n";
 
     public PlayerService(PlayerMapper playerMapper, PlayerRepositoryPort playerRepositoryPort,
             SquadRepositoryPort squadRepositoryPort) {
@@ -65,8 +60,7 @@ public class PlayerService {
         this.squadRepositoryPort = squadRepositoryPort;
     }
 
-    public PlayerResponseDto createPlayer(PlayerRequestDto playerRequestDto)
-            throws JsonMappingException, JsonProcessingException {
+    public PlayerResponseDto createPlayer(PlayerRequestDto playerRequestDto) {
         PlayerEntity pe = this.playerMapper.toPlayerEntity(playerRequestDto);
         UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UUID ownerId = UUID.fromString(user.getUsername());
@@ -85,17 +79,17 @@ public class PlayerService {
         List<Integer> values = new ArrayList<>();
 
         Stream<String> lines = file.getResource().getContentAsString(StandardCharsets.US_ASCII)
-                .replaceAll(PlayerService.regexFindSpacesBetweenWords, PlayerService.underscore)
-                .replaceAll(PlayerService.regexFindVerticalLineOrHifenOrSpace, PlayerService.newLine).lines();
+                .replaceAll(PlayerService.REGEX_FIND_SPACES_BETWEEN_WORDS, PlayerService.UNDERSCORE)
+                .replaceAll(PlayerService.REGEX_FIND_VERTICAL_LINE_OR_HIFEN_OR_SPACE, PlayerService.NEWLINE).lines();
 
         lines.forEach((line) -> {
             String trimmedLine = line.trim();
             if (trimmedLine.length() > 0) {
                 String finalLine = trimmedLine.substring(0, trimmedLine.length() - 1);
-                if (finalLine.matches(PlayerService.regexFindWordsSnakeCase)) {
+                if (finalLine.matches(PlayerService.REGEX_FIND_WORDS_SNAKE_CASE)) {
                     keys.add(finalLine.toUpperCase());
                 }
-                if (finalLine.matches(PlayerService.regexFindNumbers)) {
+                if (finalLine.matches(PlayerService.REGEX_FIND_NUMBERS)) {
                     values.add(Integer.parseInt(finalLine));
                 }
             }
@@ -123,18 +117,24 @@ public class PlayerService {
 
         Document doc = Jsoup.parse(file.getResource().getContentAsString(StandardCharsets.US_ASCII));
 
-        Elements tdElements = doc.select(PlayerService.tableDataSelector);
+        Elements tdElements = doc.select(PlayerService.TABLE_DATA_SELECTOR);
 
         List<String> tdTexts = tdElements.stream()
-                .map(Element::text)
-                .collect(Collectors.toList());
+                .map((e) -> {
+                    if (e != null) {
+                        return e.text();
+                    }
+                    return "";
+                })
+                .toList();
 
-        tdTexts.stream().forEach(
+        tdTexts.forEach(
                 tt -> {
-                    if (tt.matches(PlayerService.regexFindNumbers)) {
+                    if (tt.matches(PlayerService.REGEX_FIND_NUMBERS)) {
                         values.add(Integer.parseInt(tt));
                     } else {
-                        keys.add(tt.trim().replaceAll(PlayerService.regexFindSpaces, PlayerService.underscore).toUpperCase());
+                        keys.add(tt.trim().replaceAll(PlayerService.REGEX_FIND_SPACES, PlayerService.UNDERSCORE)
+                                .toUpperCase());
                     }
                 });
 
@@ -159,16 +159,11 @@ public class PlayerService {
         UUID ownerId = UUID.fromString(user.getUsername());
         List<PlayerEntity> peList = this.playerRepositoryPort.getPlayersBySquadIdAndOwnerId(squadId, ownerId);
         return peList.stream().map(t -> {
-            try {
-                return this.playerMapper.toGetAllPlayersResponseDto(t);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-                return null;
-            }
+            return this.playerMapper.toGetAllPlayersResponseDto(t);
         }).toList();
     }
 
-    public GetAllPlayersResponseDto getPlayerById(UUID id) throws JsonMappingException, JsonProcessingException {
+    public GetAllPlayersResponseDto getPlayerById(UUID id) {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UUID ownerId = UUID.fromString(user.getUsername());
         PlayerEntity pe = this.playerRepositoryPort.getPlayerFromDatabase(id, ownerId);

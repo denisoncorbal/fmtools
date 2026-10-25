@@ -5,15 +5,12 @@ import java.io.IOException;
 import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.jose4j.lang.JoseException;
-import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import br.com.dgc.fmtools.application.services.AuthenticationService;
 import jakarta.servlet.FilterChain;
@@ -33,8 +30,8 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain)
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+            FilterChain filterChain)
             throws ServletException, IOException {
 
         String header = request.getHeader("Authorization");
@@ -53,7 +50,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String textUserId = "";
         try {
             textUserId = this.authenticationService.validateToken(token);
-        } catch (JsonProcessingException | MalformedClaimException | JoseException | InvalidJwtException e) {
+        } catch (MalformedClaimException | JoseException | InvalidJwtException e) {
             e.printStackTrace();
         }
         UserDetails user = this.userDetailsService.loadUserByUsername(textUserId);

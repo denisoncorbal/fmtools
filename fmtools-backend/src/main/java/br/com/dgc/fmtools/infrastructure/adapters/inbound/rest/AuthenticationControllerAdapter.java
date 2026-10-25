@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-
 import br.com.dgc.fmtools.application.ports.inbound.AuthenticationControllerPort;
 import br.com.dgc.fmtools.application.services.AuthenticationService;
 import br.com.dgc.fmtools.infrastructure.adapters.inbound.rest.dtos.request.LoginRequestDto;
@@ -37,14 +34,14 @@ public class AuthenticationControllerAdapter implements AuthenticationController
     @Override
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto)
-            throws JsonProcessingException, JoseException {
+            throws JoseException {
         return ResponseEntity.ok(this.authenticationService.login(loginRequestDto));
     }
 
     @Override
     @PostMapping("/refresh")
-    public ResponseEntity<?> refreshLogin(@RequestBody RefreshRequestDto refreshRequestDto) throws JsonMappingException,
-            JsonProcessingException, MalformedClaimException, JoseException, InvalidJwtException {
+    public ResponseEntity<?> refreshLogin(@RequestBody RefreshRequestDto refreshRequestDto)
+            throws MalformedClaimException, JoseException, InvalidJwtException {
         return ResponseEntity.ok(this.authenticationService.refresh(refreshRequestDto));
     }
 

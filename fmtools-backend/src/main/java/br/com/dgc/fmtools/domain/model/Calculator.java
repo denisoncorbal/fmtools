@@ -21,13 +21,16 @@ public class Calculator {
 
                 double suitability = 0.0;
 
-                suitability += keyAttributes.stream().map((ka) -> player.attributes.getOrDefault(ka.toString(), 0))
-                                .reduce(Integer::sum)
-                                .get();
+                suitability += keyAttributes.stream()
+                                .mapToInt(
+                                                ka -> player.attributes.getOrDefault(
+                                                                ka.toString(), 0))
+                                .sum();
+
                 suitability *= 2;
                 suitability += preferableAttributes.stream()
-                                .map((pa) -> player.attributes.getOrDefault(pa.toString(), 0))
-                                .reduce(Integer::sum).get();
+                                .mapToInt(pa -> player.attributes.getOrDefault(pa.toString(), 0))
+                                .sum();
                 suitability /= (keyAttributes.size() * 2 + preferableAttributes.size());
                 suitability = suitability * 100 / 20;
 
@@ -69,10 +72,11 @@ public class Calculator {
 
                 for (DefaultWeightedEdge e : matching) {
                         Player p = players.stream().filter(pl -> pl.getId().toString().equals(graph.getEdgeSource(e)))
-                                        .findFirst().get();
+                                        .findFirst().orElseThrow(IllegalArgumentException::new);
                         tacticalPositions.stream()
                                         .filter(tp -> tp.getId().toString().equals(graph.getEdgeTarget(e)))
-                                        .findFirst().get().assignPlayer(p, graph.getEdgeWeight(e));
+                                        .findFirst().orElseThrow(IllegalArgumentException::new)
+                                        .assignPlayer(p, graph.getEdgeWeight(e));
                 }
 
                 return totalWeight / 11;

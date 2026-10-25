@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-
 import br.com.dgc.fmtools.application.ports.inbound.PlayerControllerPort;
 import br.com.dgc.fmtools.application.services.PlayerService;
 import br.com.dgc.fmtools.infrastructure.adapters.inbound.rest.dtos.request.PlayerRequestDto;
@@ -34,8 +31,7 @@ public class PlayerControllerAdapter implements PlayerControllerPort {
 
     @Override
     @PostMapping("")
-    public ResponseEntity<?> createPlayer(@RequestBody @Valid PlayerRequestDto playerRequestDto)
-            throws JsonMappingException, JsonProcessingException {
+    public ResponseEntity<?> createPlayer(@RequestBody @Valid PlayerRequestDto playerRequestDto) {
         PlayerResponseDto playerResponseDto = this.playerService.createPlayer(playerRequestDto);
         if (playerResponseDto == null) {
             ResponseEntity.badRequest().build();
@@ -71,7 +67,7 @@ public class PlayerControllerAdapter implements PlayerControllerPort {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getPlayerById(@PathVariable UUID id) throws JsonMappingException, JsonProcessingException {
+    public ResponseEntity<?> getPlayerById(@PathVariable UUID id) {
         return ResponseEntity.ok(this.playerService.getPlayerById(id));
     }
 

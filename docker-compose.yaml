@@ -1,24 +1,115 @@
 services:
   db:
     image: postgres:18.1
-    container_name: ${POSTGRES_CONTAINER_NAME}
+    restart: unless-stopped
+    container_name: db
+
     environment:
-      POSTGRES_USER: ${POSTGRES_USERNAME}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DATABASE_NAME}
-    env_file: .env
+      POSTGRES_USER: ${POSTGRES_USERNAME:?Defina POSTGRES_USERNAME}
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+      POSTGRES_DB: ${POSTGRES_DATABASE_NAME:?Defina POSTGRES_DATABASE_NAME}
+
+    secrets:
+      - postgres_password
+
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+    networks:
+      - db_network
+
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"'
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+    security_opt:
+      - no-new-privileges:true
+
+    cap_drop:
+      - ALL
+
+    cap_add:
+      - CHOWN
+      - FOWNER
+      - SETUID
+      - SETGID
+      - DAC_OVERRIDE
 
   backend:
     build:
       context: ./fmtools-backend
-    container_name: ${BACKEND_CONTAINER_NAME}
-    env_file: .env
-    
+    container_name: backend
+
+    restart: unless-stopped
+
+    env_file:
+      - ./backend.env
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    networks:
+      - app_network
+      - db_network
+
+    security_opt:
+      - no-new-privileges:true
+
+    cap_drop:
+      - ALL
+
+    # Ative somente depois de adaptar e testar a aplicação:
+    user: "10001:10001"
+    read_only: true
+    tmpfs:
+      - /tmp
 
   frontend:
+    container_name: frontend
     build:
       context: ./fmtools-frontend
-    container_name: ${FRONTEND_CONTAINER_NAME}
-    env_file: .env
+
+    restart: unless-stopped
+
+    env_file:
+      - ./frontend.env
+
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
+
+    networks:
+      - app_network
+
+    security_opt:
+      - no-new-privileges:true
+
+    cap_drop:
+      - ALL
+
+    # Ative somente se a aplicação funcionar sem escrita
+    # no filesystem e sem privilégios de root:
+    user: "10001:10001"
+    read_only: true
+    tmpfs:
+      - /tmp
+
+volumes:
+  postgres_data:
+
+networks:
+  app_network:
+    driver: bridge
+
+  db_network:
+    driver: bridge
+    internal: true
+
+secrets:
+  postgres_password:
+    file: ./secrets/postgres_password.txt
