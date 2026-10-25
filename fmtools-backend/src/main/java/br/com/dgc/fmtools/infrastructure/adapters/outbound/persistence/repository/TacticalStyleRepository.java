@@ -9,7 +9,7 @@ import br.com.dgc.fmtools.infrastructure.adapters.outbound.persistence.entities.
 
 public interface TacticalStyleRepository extends JpaRepository<TacticalStyleEntity, UUID> {
 
-    List<TacticalStyleEntity> findAllByTacticIdAndOwnerId(UUID tacticId, UUID ownerId);
+    List<TacticalStyleEntity> findAllByTacticIdAndOwnerId(UUID tacticId, String ownerId);
 
-    List<TacticalStyleEntity> findAllByOwnerId(UUID ownerId);
+    List<TacticalStyleEntity> findAllByOwnerId(String ownerId);
 }

@@ -9,7 +9,7 @@ public interface FormationRepositoryPort {
     public FormationEntity saveToDatabase(FormationEntity formationEntity);
 
     public List<FormationEntity> getAllFormationsFromDatabaseByTacticalStyleIdAndOwnerId(UUID tacticalStyleId,
-            UUID ownerId);
+            String ownerId);
 
-    public List<FormationEntity> getAllFormationsFromDatabaseByOwnerId(UUID ownerId);
+    public List<FormationEntity> getAllFormationsFromDatabaseByOwnerId(String ownerId);
 }

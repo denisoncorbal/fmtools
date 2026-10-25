@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import br.com.dgc.fmtools.application.ports.outbound.PlayerRepositoryPort;
@@ -119,34 +120,43 @@ public class CalculatorService {
 
     private List<PlayerEntity> getPlayersFromList(List<UUID> ids) {
         List<PlayerEntity> players = new ArrayList<>();
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UUID ownerId = UUID.fromString(user.getUsername());
-        ids.forEach((id) -> {
-            PlayerEntity pe = this.playerRepositoryPort.getFromDatabase(id);
-            if (pe.getOwnerId().equals(ownerId)) {
-                players.add(pe);
-            }
-        });
-        return players;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
+            String ownerId = jwtAuth.getToken().getSubject();
+            ids.forEach((id) -> {
+                PlayerEntity pe = this.playerRepositoryPort.getFromDatabase(id);
+                if (pe.getOwnerId().equals(ownerId)) {
+                    players.add(pe);
+                }
+            });
+            return players;
+        }
+        return null;
     }
 
     private List<PlayerEntity> getPlayersFromSquad(UUID squadId) {
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UUID ownerId = UUID.fromString(user.getUsername());
-        return this.playerRepositoryPort.getPlayersBySquadIdAndOwnerId(squadId, ownerId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
+            String ownerId = jwtAuth.getToken().getSubject();
+            return this.playerRepositoryPort.getPlayersBySquadIdAndOwnerId(squadId, ownerId);
+        }
+        return null;
     }
 
     private List<TacticalPositionEntity> getTacticalPositionsFromList(List<UUID> ids) {
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UUID ownerId = UUID.fromString(user.getUsername());
-        List<TacticalPositionEntity> tacticalPositions = new ArrayList<>();
-        ids.forEach(id -> {
-            TacticalPositionEntity tpe = this.tacticalPositionRepositoryPort.getFromDatabase(id);
-            if (tpe.getOwnerId().equals(ownerId)) {
-                tacticalPositions.add(tpe);
-            }
-        });
-        return tacticalPositions;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
+            String ownerId = jwtAuth.getToken().getSubject();
+            List<TacticalPositionEntity> tacticalPositions = new ArrayList<>();
+            ids.forEach(id -> {
+                TacticalPositionEntity tpe = this.tacticalPositionRepositoryPort.getFromDatabase(id);
+                if (tpe.getOwnerId().equals(ownerId)) {
+                    tacticalPositions.add(tpe);
+                }
+            });
+            return tacticalPositions;
+        }
+        return null;
     }
 
     private List<TacticalPositionEntity> getTacticalPositionsFromFormation(UUID formationId) {

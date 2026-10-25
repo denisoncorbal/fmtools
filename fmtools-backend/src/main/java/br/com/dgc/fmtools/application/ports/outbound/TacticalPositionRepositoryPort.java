@@ -10,5 +10,5 @@ public interface TacticalPositionRepositoryPort {
 
     public TacticalPositionEntity getFromDatabase(UUID id);
 
-    public List<TacticalPositionEntity> getAllTacticalPositionsFromDatabase(UUID formationId, UUID ownerId);
+    public List<TacticalPositionEntity> getAllTacticalPositionsFromDatabase(UUID formationId, String ownerId);
 }

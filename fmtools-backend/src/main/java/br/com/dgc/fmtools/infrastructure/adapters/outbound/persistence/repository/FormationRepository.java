@@ -9,8 +9,8 @@ import br.com.dgc.fmtools.infrastructure.adapters.outbound.persistence.entities.
 
 public interface FormationRepository extends JpaRepository<FormationEntity, UUID> {
 
-    List<FormationEntity> findAllByTacticalStyleIdAndOwnerId(UUID tacticalStyleId, UUID ownerId);
+    List<FormationEntity> findAllByTacticalStyleIdAndOwnerId(UUID tacticalStyleId, String ownerId);
 
-    List<FormationEntity> findAllByOwnerId(UUID ownerId);
+    List<FormationEntity> findAllByOwnerId(String ownerId);
 
 }

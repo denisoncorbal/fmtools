@@ -28,7 +28,7 @@ public class TacticalPositionRepositoryAdapter implements TacticalPositionReposi
     }
 
     @Override
-    public List<TacticalPositionEntity> getAllTacticalPositionsFromDatabase(UUID formationId, UUID ownerId) {
+    public List<TacticalPositionEntity> getAllTacticalPositionsFromDatabase(UUID formationId, String ownerId) {
         return this.tacticalPositionRepository.findAllByFormationIdAndOwnerId(formationId, ownerId);
     }
 }

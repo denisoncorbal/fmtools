@@ -28,12 +28,12 @@ public class PlayerRepositoryAdapter implements PlayerRepositoryPort {
     }
 
     @Override
-    public List<PlayerEntity> getPlayersBySquadIdAndOwnerId(UUID squadId, UUID ownerId) {
+    public List<PlayerEntity> getPlayersBySquadIdAndOwnerId(UUID squadId, String ownerId) {
         return this.playerRepository.findAllBySquadIdAndOwnerId(squadId, ownerId);
     }
 
     @Override
-    public PlayerEntity getPlayerFromDatabase(UUID id, UUID ownerId) {
+    public PlayerEntity getPlayerFromDatabase(UUID id, String ownerId) {
         return this.playerRepository.findByIdAndOwnerId(id, ownerId);
     }
 

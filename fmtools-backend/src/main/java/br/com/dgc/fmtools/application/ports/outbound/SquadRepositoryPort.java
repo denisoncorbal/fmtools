@@ -10,7 +10,7 @@ public interface SquadRepositoryPort {
 
     public SquadEntity getFromDatabase(UUID squadId);
 
-    public List<SquadEntity> getAllSquadsFromDatabaseByTeamIdAndOwnerId(UUID teamId, UUID ownerId);
+    public List<SquadEntity> getAllSquadsFromDatabaseByTeamIdAndOwnerId(UUID teamId, String ownerId);
 
-    public List<SquadEntity> getAllSquadsFromDatabaseByOwnerId(UUID ownerId);
+    public List<SquadEntity> getAllSquadsFromDatabaseByOwnerId(String ownerId);
 }

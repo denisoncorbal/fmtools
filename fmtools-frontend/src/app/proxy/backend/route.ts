@@ -1,5 +1,5 @@
 "use server";
-import { cookies } from "next/headers";
+import { getToken } from "next-auth/jwt";
 import { NextRequest } from "next/server";
 
 const refreshApiPath =
@@ -11,7 +11,7 @@ const refreshTokenName = process.env.REFRESH_TOKEN_NAME!;
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   const url = searchParams.get("url");
-  const resp = await backendFetch(url!);
+  const resp = await backendFetch(url!, req);
   const data = await resp.json();
   return Response.json(data, { status: resp.status });
 }
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
   let resp = null;
   if (contentType.includes("application/json")) {
     const body = await req.json();
-    resp = await backendFetch(body.url!, {
+    resp = await backendFetch(body.url!, req, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body.data),
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     const body = await req.formData();
     const url = body.get("url")!.toString();
     body.delete("url");
-    resp = await backendFetch(url, {
+    resp = await backendFetch(url, req, {
       method: "POST",
       body: body,
     });
@@ -41,16 +41,23 @@ export async function POST(req: NextRequest) {
   return Response.json(data, { status: resp!.status });
 }
 
-async function getTokens() {
-  const cookieStore = await cookies();
+async function getTokens(req: NextRequest) {
+  const token = await getToken({
+    req: req,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
   return {
-    access: cookieStore.get(accessTokenName)?.value,
-    refresh: cookieStore.get(refreshTokenName)?.value,
+    access: token?.accessToken,
+    refresh: token?.refreshToken,
   };
 }
 
-async function backendFetch(url: string, options: RequestInit = {}) {
-  let { access, refresh } = await getTokens();
+async function backendFetch(
+  url: string,
+  req: NextRequest,
+  options: RequestInit = {},
+) {
+  let { access, refresh } = await getTokens(req);
   async function doRequest() {
     return await fetch(url, {
       ...options,
@@ -63,44 +70,6 @@ async function backendFetch(url: string, options: RequestInit = {}) {
   }
 
   let res = await doRequest();
-
-  if (res.status === 401 || res.status === 403) {
-    // tentar refresh
-    const refreshResp = await fetch(refreshApiPath, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ accessToken: access, refreshToken: refresh }),
-    });
-
-    if (!refreshResp.ok) return res;
-
-    const { accessToken: newAccess, refreshToken: newRefresh } =
-      await refreshResp.json();
-
-    // atualizar cookies
-    const cookieStore = await cookies();
-    cookieStore.set(accessTokenName, newAccess, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      path: "/",
-      maxAge: 60 * 15,
-    });
-    cookieStore.set(refreshTokenName, newRefresh, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 30,
-    });
-
-    // atualizar variáveis locais
-    access = newAccess;
-    refresh = newRefresh;
-
-    // refazer requisição original
-    res = await doRequest();
-  }
 
   return res;
 }

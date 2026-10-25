@@ -13,8 +13,9 @@ import java.util.stream.Stream;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -62,16 +63,19 @@ public class PlayerService {
 
     public PlayerResponseDto createPlayer(PlayerRequestDto playerRequestDto) {
         PlayerEntity pe = this.playerMapper.toPlayerEntity(playerRequestDto);
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UUID ownerId = UUID.fromString(user.getUsername());
-        pe.setOwnerId(ownerId);
-        SquadEntity se = this.squadRepositoryPort.getFromDatabase(playerRequestDto.squadId());
-        if (!se.getOwnerId().equals(ownerId)) {
-            return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
+            String ownerId = jwtAuth.getToken().getSubject();
+            pe.setOwnerId(ownerId);
+            SquadEntity se = this.squadRepositoryPort.getFromDatabase(playerRequestDto.squadId());
+            if (!se.getOwnerId().equals(ownerId)) {
+                return null;
+            }
+            pe.setSquad(se);
+            pe = this.playerRepositoryPort.saveToDatabase(pe);
+            return this.playerMapper.toPlayerResponseDto(pe);
         }
-        pe.setSquad(se);
-        pe = this.playerRepositoryPort.saveToDatabase(pe);
-        return this.playerMapper.toPlayerResponseDto(pe);
+        return null;
     }
 
     public PlayerResponseDto createPlayerFromText(String name, MultipartFile file, UUID squadId) throws IOException {
@@ -155,18 +159,24 @@ public class PlayerService {
     }
 
     public List<GetAllPlayersResponseDto> getAllPlayers(UUID squadId) {
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UUID ownerId = UUID.fromString(user.getUsername());
-        List<PlayerEntity> peList = this.playerRepositoryPort.getPlayersBySquadIdAndOwnerId(squadId, ownerId);
-        return peList.stream().map(t -> {
-            return this.playerMapper.toGetAllPlayersResponseDto(t);
-        }).toList();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
+            String ownerId = jwtAuth.getToken().getSubject();
+            List<PlayerEntity> peList = this.playerRepositoryPort.getPlayersBySquadIdAndOwnerId(squadId, ownerId);
+            return peList.stream().map(t -> {
+                return this.playerMapper.toGetAllPlayersResponseDto(t);
+            }).toList();
+        }
+        return null;
     }
 
     public GetAllPlayersResponseDto getPlayerById(UUID id) {
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UUID ownerId = UUID.fromString(user.getUsername());
-        PlayerEntity pe = this.playerRepositoryPort.getPlayerFromDatabase(id, ownerId);
-        return this.playerMapper.toGetAllPlayersResponseDto(pe);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
+            String ownerId = jwtAuth.getToken().getSubject();
+            PlayerEntity pe = this.playerRepositoryPort.getPlayerFromDatabase(id, ownerId);
+            return this.playerMapper.toGetAllPlayersResponseDto(pe);
+        }
+        return null;
     }
 }

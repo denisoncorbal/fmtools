@@ -3,8 +3,9 @@ package br.com.dgc.fmtools.application.services;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import br.com.dgc.fmtools.application.ports.outbound.TacticRepositoryPort;
@@ -32,29 +33,38 @@ public class TacticService {
 
     public TacticResponseDto createTactic(TacticRequestDto tacticRequestDto) {
         TacticEntity te = this.tacticMapper.toTacticEntity(tacticRequestDto);
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UUID ownerId = UUID.fromString(user.getUsername());
-        te.setOwnerId(ownerId);
-        TeamEntity teamEntity = this.teamRepositoryPort.getFromDatabase(tacticRequestDto.teamId());
-        if (!teamEntity.getOwnerId().equals(ownerId))
-            return null;
-        te.setTeam(teamEntity);
-        te = this.tacticRepositoryPort.saveToDatabase(te);
-        return this.tacticMapper.toTacticResponseDto(te);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
+            String ownerId = jwtAuth.getToken().getSubject();
+            te.setOwnerId(ownerId);
+            TeamEntity teamEntity = this.teamRepositoryPort.getFromDatabase(tacticRequestDto.teamId());
+            if (!teamEntity.getOwnerId().equals(ownerId))
+                return null;
+            te.setTeam(teamEntity);
+            te = this.tacticRepositoryPort.saveToDatabase(te);
+            return this.tacticMapper.toTacticResponseDto(te);
+        }
+        return null;
     }
 
     public List<GetAllTacticsResponseDto> getAllTacticsByTeamId(UUID teamId) {
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UUID ownerId = UUID.fromString(user.getUsername());
-        List<TacticEntity> teList = this.tacticRepositoryPort.getAllTacticsFromDatabaseByTeamIdAndOwnerId(teamId,
-                ownerId);
-        return teList.stream().map(this.tacticMapper::toGetAllTacticsResponseDto).toList();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
+            String ownerId = jwtAuth.getToken().getSubject();
+            List<TacticEntity> teList = this.tacticRepositoryPort.getAllTacticsFromDatabaseByTeamIdAndOwnerId(teamId,
+                    ownerId);
+            return teList.stream().map(this.tacticMapper::toGetAllTacticsResponseDto).toList();
+        }
+        return null;
     }
 
     public List<GetAllTacticsResponseDto> getAllTactics() {
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UUID ownerId = UUID.fromString(user.getUsername());
-        List<TacticEntity> teList = this.tacticRepositoryPort.getAllTacticsFromDatabaseByOwnerId(ownerId);
-        return teList.stream().map(this.tacticMapper::toGetAllTacticsResponseDto).toList();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
+            String ownerId = jwtAuth.getToken().getSubject();
+            List<TacticEntity> teList = this.tacticRepositoryPort.getAllTacticsFromDatabaseByOwnerId(ownerId);
+            return teList.stream().map(this.tacticMapper::toGetAllTacticsResponseDto).toList();
+        }
+        return null;
     }
 }

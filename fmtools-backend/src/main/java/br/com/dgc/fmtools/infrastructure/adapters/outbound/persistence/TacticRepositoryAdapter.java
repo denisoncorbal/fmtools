@@ -28,12 +28,12 @@ public class TacticRepositoryAdapter implements TacticRepositoryPort {
     }
 
     @Override
-    public List<TacticEntity> getAllTacticsFromDatabaseByTeamIdAndOwnerId(UUID teamId, UUID ownerId) {
+    public List<TacticEntity> getAllTacticsFromDatabaseByTeamIdAndOwnerId(UUID teamId, String ownerId) {
         return this.tacticRepository.findAllByTeamIdAndOwnerId(teamId, ownerId);
     }
 
     @Override
-    public List<TacticEntity> getAllTacticsFromDatabaseByOwnerId(UUID ownerId) {
+    public List<TacticEntity> getAllTacticsFromDatabaseByOwnerId(String ownerId) {
         return this.tacticRepository.findAllByOwnerId(ownerId);
     }
 }

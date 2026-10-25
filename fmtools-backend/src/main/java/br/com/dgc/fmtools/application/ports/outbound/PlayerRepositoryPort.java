@@ -10,7 +10,7 @@ public interface PlayerRepositoryPort {
 
     public PlayerEntity getFromDatabase(UUID id);
 
-    public List<PlayerEntity> getPlayersBySquadIdAndOwnerId(UUID squadId, UUID ownerId);
+    public List<PlayerEntity> getPlayersBySquadIdAndOwnerId(UUID squadId, String ownerId);
 
-    public PlayerEntity getPlayerFromDatabase(UUID id, UUID ownerId);
+    public PlayerEntity getPlayerFromDatabase(UUID id, String ownerId);
 }

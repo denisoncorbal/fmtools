@@ -3,8 +3,9 @@ package br.com.dgc.fmtools.application.services;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import br.com.dgc.fmtools.application.ports.outbound.SquadRepositoryPort;
@@ -31,29 +32,38 @@ public class SquadService {
 
     public SquadResponseDto createSquad(SquadRequestDto squadRequestDto) {
         SquadEntity se = this.squadMapper.toSquadEntity(squadRequestDto);
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UUID ownerId = UUID.fromString(user.getUsername());
-        se.setOwnerId(ownerId);
-        TeamEntity te = this.teamRepositoryPort.getFromDatabase(squadRequestDto.teamId());
-        if (!te.getOwnerId().equals(ownerId))
-            return null;
-        se.setTeam(te);
-        se = this.squadRepositoryPort.saveToDatabase(se);
-        return this.squadMapper.toSquadResponseDto(se);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
+            String ownerId = jwtAuth.getToken().getSubject();
+            se.setOwnerId(ownerId);
+            TeamEntity te = this.teamRepositoryPort.getFromDatabase(squadRequestDto.teamId());
+            if (!te.getOwnerId().equals(ownerId))
+                return null;
+            se.setTeam(te);
+            se = this.squadRepositoryPort.saveToDatabase(se);
+            return this.squadMapper.toSquadResponseDto(se);
+        }
+        return null;
     }
 
     public List<GetAllSquadsResponseDto> getAllSquadsByTeamId(UUID teamId) {
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UUID ownerId = UUID.fromString(user.getUsername());
-        List<SquadEntity> seList = this.squadRepositoryPort.getAllSquadsFromDatabaseByTeamIdAndOwnerId(teamId,
-                ownerId);
-        return seList.stream().map(this.squadMapper::toGetAllSquadsResponseDto).toList();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
+            String ownerId = jwtAuth.getToken().getSubject();
+            List<SquadEntity> seList = this.squadRepositoryPort.getAllSquadsFromDatabaseByTeamIdAndOwnerId(teamId,
+                    ownerId);
+            return seList.stream().map(this.squadMapper::toGetAllSquadsResponseDto).toList();
+        }
+        return null;
     }
 
     public Object getAllSquads() {
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UUID ownerId = UUID.fromString(user.getUsername());
-        List<SquadEntity> seList = this.squadRepositoryPort.getAllSquadsFromDatabaseByOwnerId(ownerId);
-        return seList.stream().map(this.squadMapper::toGetAllSquadsResponseDto).toList();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
+            String ownerId = jwtAuth.getToken().getSubject();
+            List<SquadEntity> seList = this.squadRepositoryPort.getAllSquadsFromDatabaseByOwnerId(ownerId);
+            return seList.stream().map(this.squadMapper::toGetAllSquadsResponseDto).toList();
+        }
+        return null;
     }
 }

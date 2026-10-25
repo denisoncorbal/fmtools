@@ -28,12 +28,12 @@ public class SquadRepositoryAdapter implements SquadRepositoryPort {
     }
 
     @Override
-    public List<SquadEntity> getAllSquadsFromDatabaseByTeamIdAndOwnerId(UUID teamId, UUID ownerId) {
+    public List<SquadEntity> getAllSquadsFromDatabaseByTeamIdAndOwnerId(UUID teamId, String ownerId) {
         return this.squadRepository.findAllByTeamIdAndOwnerId(teamId, ownerId);
     }
 
     @Override
-    public List<SquadEntity> getAllSquadsFromDatabaseByOwnerId(UUID ownerId) {
+    public List<SquadEntity> getAllSquadsFromDatabaseByOwnerId(String ownerId) {
         return this.squadRepository.findAllByOwnerId(ownerId);
     }
 }

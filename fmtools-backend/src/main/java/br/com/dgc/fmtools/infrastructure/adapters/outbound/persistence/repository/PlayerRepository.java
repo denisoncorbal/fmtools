@@ -9,8 +9,8 @@ import br.com.dgc.fmtools.infrastructure.adapters.outbound.persistence.entities.
 
 public interface PlayerRepository extends JpaRepository<PlayerEntity, UUID> {
 
-    List<PlayerEntity> findAllBySquadIdAndOwnerId(UUID squadId, UUID ownerId);
+    List<PlayerEntity> findAllBySquadIdAndOwnerId(UUID squadId, String ownerId);
 
-    PlayerEntity findByIdAndOwnerId(UUID id, UUID ownerId);
+    PlayerEntity findByIdAndOwnerId(UUID id, String ownerId);
 
 }

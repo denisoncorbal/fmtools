@@ -24,12 +24,12 @@ public class FormationRepositoryAdapter implements FormationRepositoryPort {
 
     @Override
     public List<FormationEntity> getAllFormationsFromDatabaseByTacticalStyleIdAndOwnerId(UUID tacticalStyleId,
-            UUID ownerId) {
+            String ownerId) {
         return this.formationRepository.findAllByTacticalStyleIdAndOwnerId(tacticalStyleId, ownerId);
     }
 
     @Override
-    public List<FormationEntity> getAllFormationsFromDatabaseByOwnerId(UUID ownerId) {
+    public List<FormationEntity> getAllFormationsFromDatabaseByOwnerId(String ownerId) {
         return this.formationRepository.findAllByOwnerId(ownerId);
     }
 }

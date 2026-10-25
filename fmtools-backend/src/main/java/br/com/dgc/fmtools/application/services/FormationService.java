@@ -4,8 +4,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,36 +43,46 @@ public class FormationService {
             return null;
         }
         FormationEntity fe = this.formationMapper.toFormationEntity(formationRequestDto);
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UUID ownerId = UUID.fromString(user.getUsername());
-        fe.setOwnerId(ownerId);
-        TacticalStyleEntity ts = this.tacticalStyleRepositoryPort
-                .getFromDatabase(formationRequestDto.tacticalStyleId());
-        if (!ts.getOwnerId().equals(ownerId)) {
-            return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
+            String ownerId = jwtAuth.getToken().getSubject();
+            fe.setOwnerId(ownerId);
+            TacticalStyleEntity ts = this.tacticalStyleRepositoryPort
+                    .getFromDatabase(formationRequestDto.tacticalStyleId());
+            if (!ts.getOwnerId().equals(ownerId)) {
+                return null;
+            }
+            fe.setTacticalStyle(ts);
+            fe.setTacticalPositions(formationRequestDto.tacticalPositions().stream().map(tp -> {
+                TacticalPositionEntity tpe = this.tacticalPositionMapper.toTacticalPositionEntity(tp);
+                tpe.setOwnerId(ownerId);
+                return tpe;
+            }).collect(Collectors.toSet()));
+            fe = this.formationRepositoryPort.saveToDatabase(fe);
+            return this.formationMapper.toFormationEntity(fe);
         }
-        fe.setTacticalStyle(ts);
-        fe.setTacticalPositions(formationRequestDto.tacticalPositions().stream().map(tp -> {
-            TacticalPositionEntity tpe = this.tacticalPositionMapper.toTacticalPositionEntity(tp);
-            tpe.setOwnerId(ownerId);
-            return tpe;
-        }).collect(Collectors.toSet()));
-        fe = this.formationRepositoryPort.saveToDatabase(fe);
-        return this.formationMapper.toFormationEntity(fe);
+        return null;
     }
 
     public List<GetAllFormationsResponseDto> getAllFormationsByTacticalStyle(UUID tacticalStyleId) {
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UUID ownerId = UUID.fromString(user.getUsername());
-        List<FormationEntity> feList = this.formationRepositoryPort.getAllFormationsFromDatabaseByTacticalStyleIdAndOwnerId(tacticalStyleId,
-                ownerId);
-        return feList.stream().map(this.formationMapper::toGetAllFormationsResponseDto).toList();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
+            String ownerId = jwtAuth.getToken().getSubject();
+            List<FormationEntity> feList = this.formationRepositoryPort
+                    .getAllFormationsFromDatabaseByTacticalStyleIdAndOwnerId(tacticalStyleId,
+                            ownerId);
+            return feList.stream().map(this.formationMapper::toGetAllFormationsResponseDto).toList();
+        }
+        return null;
     }
 
     public List<GetAllFormationsResponseDto> getAllFormations() {
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UUID ownerId = UUID.fromString(user.getUsername());
-        List<FormationEntity> feList = this.formationRepositoryPort.getAllFormationsFromDatabaseByOwnerId(ownerId);
-        return feList.stream().map(this.formationMapper::toGetAllFormationsResponseDto).toList();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
+            String ownerId = jwtAuth.getToken().getSubject();
+            List<FormationEntity> feList = this.formationRepositoryPort.getAllFormationsFromDatabaseByOwnerId(ownerId);
+            return feList.stream().map(this.formationMapper::toGetAllFormationsResponseDto).toList();
+        }
+        return null;
     }
 }

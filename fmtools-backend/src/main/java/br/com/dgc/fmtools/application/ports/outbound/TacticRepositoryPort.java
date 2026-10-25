@@ -10,7 +10,7 @@ public interface TacticRepositoryPort {
 
     public TacticEntity getFromDatabase(UUID tacticId);
 
-    public List<TacticEntity> getAllTacticsFromDatabaseByTeamIdAndOwnerId(UUID teamId, UUID ownerId);
+    public List<TacticEntity> getAllTacticsFromDatabaseByTeamIdAndOwnerId(UUID teamId, String ownerId);
 
-    public List<TacticEntity> getAllTacticsFromDatabaseByOwnerId(UUID ownerId);
+    public List<TacticEntity> getAllTacticsFromDatabaseByOwnerId(String ownerId);
 }

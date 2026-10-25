@@ -19,13 +19,13 @@ public class PlayerEntity {
     private UUID id;
 
     @Column(nullable = false)
-    private UUID ownerId;
+    private String ownerId;
 
-    public UUID getOwnerId() {
+    public String getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(UUID ownerId) {
+    public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
 

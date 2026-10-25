@@ -1,14 +1,16 @@
+import { requireAuth } from "@/lib/requireAuth";
 import Menu from "./menu";
 
-export default function LoggedLayout({
-    children,
+export default async function LoggedLayout({
+  children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-    return (
-        <>
-            <Menu />
-            {children}
-        </>
-    );
+  await requireAuth();
+  return (
+    <>
+      <Menu />
+      {children}
+    </>
+  );
 }

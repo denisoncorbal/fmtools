@@ -28,7 +28,7 @@ public class TeamRepositoryAdapter implements TeamRepositoryPort {
     }
 
     @Override
-    public List<TeamEntity> getAllTeamsFromDatabase(UUID ownerId) {
+    public List<TeamEntity> getAllTeamsFromDatabase(String ownerId) {
         return this.teamRepository.findAllByOwnerId(ownerId);
     }
 }

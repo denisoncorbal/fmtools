@@ -10,7 +10,7 @@ public interface TacticalStyleRepositoryPort {
 
     public TacticalStyleEntity getFromDatabase(UUID tacticalStyleId);
 
-    public List<TacticalStyleEntity> getAllTacticalStylesByTacticIdAndOwnerIdFromDatabase(UUID tacticId, UUID ownerId);
+    public List<TacticalStyleEntity> getAllTacticalStylesByTacticIdAndOwnerIdFromDatabase(UUID tacticId, String ownerId);
 
-    public List<TacticalStyleEntity> getAllTacticalStylesByOwnerIdFromDatabase(UUID ownerId);
+    public List<TacticalStyleEntity> getAllTacticalStylesByOwnerIdFromDatabase(String ownerId);
 }

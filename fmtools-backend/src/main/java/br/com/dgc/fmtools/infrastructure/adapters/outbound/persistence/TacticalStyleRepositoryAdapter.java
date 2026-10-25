@@ -28,12 +28,12 @@ public class TacticalStyleRepositoryAdapter implements TacticalStyleRepositoryPo
     }
 
     @Override
-    public List<TacticalStyleEntity> getAllTacticalStylesByTacticIdAndOwnerIdFromDatabase(UUID tacticId, UUID ownerId) {
+    public List<TacticalStyleEntity> getAllTacticalStylesByTacticIdAndOwnerIdFromDatabase(UUID tacticId, String ownerId) {
         return this.tacticalStyleRepository.findAllByTacticIdAndOwnerId(tacticId, ownerId);
     }
 
     @Override
-    public List<TacticalStyleEntity> getAllTacticalStylesByOwnerIdFromDatabase(UUID ownerId) {
+    public List<TacticalStyleEntity> getAllTacticalStylesByOwnerIdFromDatabase(String ownerId) {
         return this.tacticalStyleRepository.findAllByOwnerId(ownerId);
     }
 }

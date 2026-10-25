@@ -21,13 +21,13 @@ public class SquadEntity {
     private UUID id;
 
     @Column(nullable = false)
-    private UUID ownerId;
+    private String ownerId;
 
-    public UUID getOwnerId() {
+    public String getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(UUID ownerId) {
+    public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
 
@@ -38,7 +38,7 @@ public class SquadEntity {
         this.name = name;
     }
 
-    public SquadEntity(String name, Set<PlayerEntity> players, UUID ownerId) {
+    public SquadEntity(String name, Set<PlayerEntity> players, String ownerId) {
         this.name = name;
         this.players = players;
         this.ownerId = ownerId;

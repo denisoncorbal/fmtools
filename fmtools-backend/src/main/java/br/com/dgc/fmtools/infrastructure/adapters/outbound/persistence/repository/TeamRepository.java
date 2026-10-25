@@ -9,6 +9,6 @@ import br.com.dgc.fmtools.infrastructure.adapters.outbound.persistence.entities.
 
 public interface TeamRepository extends JpaRepository<TeamEntity, UUID> {
 
-    List<TeamEntity> findAllByOwnerId(UUID ownerId);
+    List<TeamEntity> findAllByOwnerId(String ownerId);
 
 }

@@ -10,5 +10,5 @@ public interface TeamRepositoryPort {
 
     public TeamEntity getFromDatabase(UUID teamId);
 
-    public List<TeamEntity> getAllTeamsFromDatabase(UUID ownerId);
+    public List<TeamEntity> getAllTeamsFromDatabase(String ownerId);
 }
