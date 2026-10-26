@@ -54,15 +54,14 @@ pipeline {
                     rm -f .env
                     rm -f frontend.env
                     rm -f backend.env
-                    rm -rf ./secrets
+                    rm -rf secrets
 
-                    mkdir secrets
+                    mkdir -p secrets
 
                     cp "$ENV_FILE" .env
                     cp "$FRONTEND_ENV_FILE" frontend.env
                     cp "$BACKEND_ENV_FILE" backend.env
-                    set +x
-                    printf '%s' "$POSTGRES_PASSWORD" > ./secrets/postgres_password.txt
+                    printf '%s' "$POSTGRES_PASSWORD" > secrets/postgres_password.txt
 
                     echo "Validando arquivo Compose..."
                     docker compose config -q
