@@ -40,6 +40,10 @@ pipeline {
                 file(
                     credentialsId: 'fmtools-backend-env',
                     variable: 'BACKEND_ENV_FILE'
+                ),
+                string(
+                    credentialsId: 'fmtools-postgres-password',
+                    variable: 'POSTGRES_PASSWORD'
                 )
               ]) {
                 sh '''
@@ -50,10 +54,14 @@ pipeline {
                     rm -f .env
                     rm -f frontend.env
                     rm -f backend.env
+                    rm -rf ./secrets
+
+                    mkdir secrets
 
                     cp "$ENV_FILE" .env
                     cp "$FRONTEND_ENV_FILE" frontend.env
                     cp "$BACKEND_ENV_FILE" backend.env
+                    cp "$POSTGRES_PASSWORD" ./secrets/postgres_password.txt
 
                     echo "Validando arquivo Compose..."
                     docker compose config -q
