@@ -1,0 +1,10 @@
+ALTER TABLE TB_User
+    ALTER COLUMN id DROP DEFAULT,
+    ALTER COLUMN id TYPE VARCHAR(64);
+
+ALTER TABLE TB_User
+    DROP COLUMN username,
+    DROP COLUMN password,
+    DROP COLUMN salt;
+
+INSERT INTO TB_User(id) VALUES('fmtools_guest');

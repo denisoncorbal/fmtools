@@ -40,6 +40,8 @@ A demonstrative version, full functional, is hosted online [here](https://fmtool
 
 To login on the hosted version just use fmtools_guest for user and password.
 
+Print screen your results since database is cleaned up daily.
+
 ## 🚀 Running FMTools locally
 
 Clone the repository
