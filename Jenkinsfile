@@ -67,7 +67,7 @@ pipeline {
                     docker compose config -q
 
                     echo "Atualizando containers..."
-                    docker compose up -d --build --remove-orphans
+                    docker compose up -d --build --remove-orphans --force-recreate
 
                     echo "Containers em execução:"
                     docker compose ps
