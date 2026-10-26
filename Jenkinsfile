@@ -30,8 +30,16 @@ pipeline {
             steps {
               withCredentials([
                 file(
-                  credentialsId: 'fmtools-env-file',
+                  credentialsId: 'fmtools-env',
                   variable: 'ENV_FILE'
+                ),
+                file(
+                    credentialsId: 'fmtools-frontend-env',
+                    variable: 'FRONTEND_ENV_FILE'
+                ),
+                file(
+                    credentialsId: 'fmtools-backend-env',
+                    variable: 'BACKEND_ENV_FILE'
                 )
               ]) {
                 sh '''
@@ -40,7 +48,12 @@ pipeline {
                     umask 077
 
                     rm -f .env
+                    rm -f frontend.env
+                    rm -f backend.env
+
                     cp "$ENV_FILE" .env
+                    cp "$FRONTEND_ENV_FILE" frontend.env
+                    cp "$BACKEND_ENV_FILE" backend.env
 
                     echo "Validando arquivo Compose..."
                     docker compose config -q
