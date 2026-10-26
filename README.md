@@ -27,20 +27,26 @@ The project is still under development and next updates will focus on:
 
 - [ ] Update information like teams, squads, etc
 - [ ] Delete information like teams, squads, etc
-- [ ] Display logged user info
 - [ ] Increment informations to be managed
 
 ## 💻 Prerequisites
 
 - Docker and Docker Compose installed
+- Keycloak host to manage access
 
 ## Accessing FMTools online
 
 A demonstrative version, full functional, is hosted online [here](https://fmtools.denison.corbal.nom.br)
 
+To login on the hosted version just use fmtools_guest for user and password.
+
 ## 🚀 Running FMTools locally
 
-Clone the repository, access the main folder and run
+Clone the repository
+
+Create .env, frontend.env, backend.env and secrets/postgres_password.txt
+
+And then access the main folder and run
 ```
 docker compose up -d --build
 ```
