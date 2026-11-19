@@ -9,7 +9,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { cookies, headers } from "next/headers";
+import { headers } from "next/headers";
 import Link from "next/link";
 import ModalCreateTeam from "./modal-create-team";
 import styles from "./team.module.css";
@@ -20,43 +20,45 @@ const teamApiPath =
 export default async function TeamPage() {
   const h = await headers();
   const host = h.get("host");
-  const ck = await cookies();
 
-  const res = await fetch(`http://${host}/proxy/backend?url=${teamApiPath}`, {
-    cache: "no-cache",
-    credentials: "include",
-    headers: {
-      cookie: ck.toString(),
-    },
-  });
+  let jsonRes;
 
-  console.log(res);
+  try {
+    const res = await fetch(`http://${host}/proxy/backend?url=${teamApiPath}`, {
+      cache: "no-cache",
+      credentials: "include",
+    });
+    jsonRes = await res.json();
+  } catch (e) {
+    jsonRes = null;
+  }
 
-  const jsonRes = await res.json();
-
-  return (
-    <Box component="section" className={styles.background}>
-      <Typography variant="h2">
-        Teams <ModalCreateTeam />
-      </Typography>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {jsonRes.map((item: { id: string; name: string }) => (
-              <TableRow key={item.id}>
-                <TableCell>
-                  <Link href={`/team/${item.id}`}>{item.name}</Link>
-                </TableCell>
+  if (jsonRes) {
+    return (
+      <Box component="section" className={styles.background}>
+        <Typography variant="h2">
+          Teams <ModalCreateTeam />
+        </Typography>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
-  );
+            </TableHead>
+            <TableBody>
+              {jsonRes.map((item: { id: string; name: string }) => (
+                <TableRow key={item.id}>
+                  <TableCell>
+                    <Link href={`/team/${item.id}`}>{item.name}</Link>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+    );
+  }
+  return <></>;
 }

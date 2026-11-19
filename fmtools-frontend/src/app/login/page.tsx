@@ -10,26 +10,11 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { useAuth } from "../provider/auth-provider";
 import styles from "./page.module.css";
 
 export default function Login() {
-  const [loading, setLoading] = useState(false);
-
-  async function handleLogin() {
-    setLoading(true);
-
-    try {
-      await signIn("keycloak", {
-        callbackUrl: "/team",
-      });
-    } catch (error) {
-      console.error("Erro ao iniciar autenticação", error);
-      setLoading(false);
-    }
-  }
-
+  const { login, loading } = useAuth();
   return (
     <Box component="section" className={styles.background}>
       <Container maxWidth="xs">
@@ -76,7 +61,7 @@ export default function Login() {
             fullWidth
             variant="contained"
             size="large"
-            onClick={handleLogin}
+            onClick={login}
             disabled={loading}
             startIcon={
               loading ? (

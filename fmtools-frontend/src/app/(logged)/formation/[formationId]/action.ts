@@ -1,6 +1,6 @@
 "use server";
 
-import { cookies, headers } from "next/headers";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 const bestFormationApiPath =
@@ -10,7 +10,6 @@ const bestFormationApiPath =
 export default async function calculatePositions(data: FormData) {
   const h = await headers();
   const host = h.get("host");
-  const ck = await cookies();
   const tacticalPositions = data
     .get("tacticalPositions")
     ?.toString()
@@ -24,7 +23,6 @@ export default async function calculatePositions(data: FormData) {
     }),
     headers: {
       "Content-Type": "application/json",
-      cookie: ck.toString(),
     },
   });
 

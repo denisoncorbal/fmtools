@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import AccountBadge from "./accountBadge";
 import { LogoutButton } from "./logoutButton";
 import styles from "./menu.module.css";
 
@@ -76,6 +77,7 @@ export default function Menu() {
         >
           FMTools
         </Typography>
+        <AccountBadge />
         <LogoutButton />
       </Toolbar>
     </AppBar>

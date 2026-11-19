@@ -1,6 +1,6 @@
 "use server";
 
-import { cookies, headers } from "next/headers";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 const textPlayerApiPath =
@@ -13,7 +13,6 @@ const htmlPlayerApiPath =
 export async function createPlayer(data: FormData) {
   const h = await headers();
   const host = h.get("host");
-  const ck = await cookies();
   const textFile = data.get("textFile") as File;
   if (
     textFile &&
@@ -29,9 +28,6 @@ export async function createPlayer(data: FormData) {
     const res = await fetch(`http://${host}/proxy/backend`, {
       method: "POST",
       body: uploadForm,
-      headers: {
-        cookie: ck.toString(),
-      },
     });
     if (res.status == 200) {
       redirect(`/squad/${data.get("squadId")}`);
@@ -52,9 +48,6 @@ export async function createPlayer(data: FormData) {
       const res = await fetch(`http://${host}/proxy/backend`, {
         method: "POST",
         body: uploadForm,
-        headers: {
-          cookie: ck.toString(),
-        },
       });
 
       if (res.status == 200) {

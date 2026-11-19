@@ -1,31 +1,9 @@
 "use server";
 
-import { cookies, headers } from "next/headers";
-import { NextResponse } from "next/server";
-
-const accessTokenName = process.env.ACCESS_TOKEN_NAME!;
-const refreshTokenName = process.env.REFRESH_TOKEN_NAME!;
+import { useAuth } from "@/app/provider/auth-provider";
 
 export async function GET() {
-  const h = await headers();
-  const host = h.get("host");
-  const cookieStore = await cookies();
+  const { logout } = useAuth();
 
-  cookieStore.set(accessTokenName, "", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    path: "/",
-    maxAge: 0,
-  });
-
-  cookieStore.set(refreshTokenName, "", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    path: "/",
-    maxAge: 0,
-  });
-
-  return NextResponse.redirect(`http://${host}/login`);
+  logout();
 }
