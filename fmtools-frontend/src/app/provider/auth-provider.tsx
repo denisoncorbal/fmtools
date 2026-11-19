@@ -18,10 +18,6 @@ interface AuthContextData {
   login: () => void;
 }
 
-const logoutApiPath =
-  process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL! +
-  process.env.NEXT_PUBLIC_BACKEND_API_AUTH_LOGOUT_PATH!;
-
 const AuthContext = createContext<AuthContextData | null>(null);
 
 export function AuthProvider({
@@ -43,11 +39,10 @@ export function AuthProvider({
   const logout = () => {
     setUser(null);
 
-    window.location.href = logoutApiPath;
+    window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL}${process.env.NEXT_PUBLIC_BACKEND_API_AUTH_LOGOUT_PATH}`;
   };
 
   const login = () => {
-    console.log("Login chamado");
     setUser(null);
 
     window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL}${process.env.NEXT_PUBLIC_BACKEND_API_AUTH_LOGIN_PATH}`;
