@@ -11,7 +11,7 @@ export default function AccountBadge() {
 
   return (
     <Typography variant="body1" component="div" sx={{ flexGrow: 1 }}>
-      Welcome, {user?.name}
+      Welcome, {user?.fullName}
     </Typography>
   );
 }
