@@ -31,16 +31,6 @@ export function AuthProvider({
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const refreshUser = useCallback(async () => {
-    try {
-      const currentUser = await getMe();
-      setUser(currentUser);
-    } catch (error) {
-      console.error("Error on loading user:", error);
-      setUser(null);
-    }
-  }, []);
-
   const logout = useCallback(() => {
     setUser(null);
 
@@ -73,6 +63,16 @@ export function AuthProvider({
       return null;
     }
   }, []);
+
+  const refreshUser = useCallback(async () => {
+    try {
+      const currentUser = await getMe();
+      setUser(currentUser);
+    } catch (error) {
+      console.error("Error on loading user:", error);
+      setUser(null);
+    }
+  }, [getMe]);
 
   useEffect(() => {
     let active = true;

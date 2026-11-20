@@ -11,16 +11,11 @@ interface ProtectedRouteProps {
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { isAuthenticated, loading } = useAuth();
   const router = useRouter();
-  const isMounted = useRef(true);
+  const hasRedirect = useRef(true);
 
   useEffect(() => {
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!loading && !isAuthenticated && isMounted.current) {
+    if (!loading && !isAuthenticated && !hasRedirect.current) {
+      hasRedirect.current = true;
       router.replace("/login");
     }
   }, [loading, isAuthenticated, router]);
