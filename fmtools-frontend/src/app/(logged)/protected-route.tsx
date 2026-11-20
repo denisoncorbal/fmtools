@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useAuth } from "../provider/auth-provider";
 
 interface ProtectedRouteProps {
@@ -11,9 +11,16 @@ interface ProtectedRouteProps {
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { isAuthenticated, loading } = useAuth();
   const router = useRouter();
+  const isMounted = useRef(true);
 
   useEffect(() => {
-    if (!loading && !isAuthenticated) {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!loading && !isAuthenticated && isMounted.current) {
       router.replace("/login");
     }
   }, [loading, isAuthenticated, router]);
@@ -22,8 +29,8 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     return <div>Loading...</div>;
   }
 
-  if (!isAuthenticated) {
-    return null;
+  if (!loading && !isAuthenticated) {
+    return <div>Redirecting...</div>;
   }
 
   return <>{children}</>;
