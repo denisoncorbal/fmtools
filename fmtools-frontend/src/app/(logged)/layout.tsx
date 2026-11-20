@@ -8,8 +8,10 @@ export default async function LoggedLayout({
 }>) {
   return (
     <>
-      <Menu />
-      <ProtectedRoute>{children}</ProtectedRoute>
+      <ProtectedRoute>
+        <Menu />
+        {children}
+      </ProtectedRoute>
     </>
   );
 }

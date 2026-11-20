@@ -4,22 +4,27 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useAuth } from "../provider/auth-provider";
 
-export function ProtectedRoute({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
-  const { loading, isAuthenticated } = useAuth();
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
 
+export function ProtectedRoute({ children }: ProtectedRouteProps) {
+  const { isAuthenticated, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
       router.replace("/login");
     }
-  }, [loading, isAuthenticated]);
+  }, [loading, isAuthenticated, router]);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <div>Loading...</div>;
   }
 
-  return children;
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  return <>{children}</>;
 }

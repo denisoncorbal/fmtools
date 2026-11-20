@@ -1,6 +1,5 @@
 "use client";
 
-import { getMe, User } from "@/service/auth.service";
 import {
   createContext,
   useCallback,
@@ -8,6 +7,12 @@ import {
   useEffect,
   useState,
 } from "react";
+
+interface User {
+  fullName: string;
+  email: string;
+  roles: string[];
+}
 
 interface AuthContextData {
   user: User | null;
@@ -46,6 +51,20 @@ export function AuthProvider({
     setUser(null);
 
     window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL}${process.env.NEXT_PUBLIC_BACKEND_API_AUTH_LOGIN_PATH}`;
+  };
+
+  const getMe = async () => {
+    setUser(null);
+
+    const res = await fetch(
+      `/proxy/backend?url=${process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL}${process.env.NEXT_PUBLIC_BACKEND_API_AUTH_ME_PATH}`,
+      {
+        cache: "no-cache",
+        credentials: "include",
+      },
+    );
+
+    return (await res.json()) as User;
   };
 
   useEffect(() => {
