@@ -11,7 +11,7 @@ interface ProtectedRouteProps {
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { isAuthenticated, loading } = useAuth();
   const router = useRouter();
-  const hasRedirect = useRef(true);
+  const hasRedirect = useRef(false);
 
   useEffect(() => {
     if (!loading && !isAuthenticated && !hasRedirect.current) {
