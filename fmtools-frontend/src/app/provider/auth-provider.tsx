@@ -56,15 +56,19 @@ export function AuthProvider({
   const getMe = async () => {
     setUser(null);
 
-    const res = await fetch(
-      `/proxy/backend?url=${process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL}${process.env.NEXT_PUBLIC_BACKEND_API_AUTH_ME_PATH}`,
-      {
-        cache: "no-cache",
-        credentials: "include",
-      },
-    );
+    try {
+      const res = await fetch(
+        `/proxy/backend?url=${process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL}${process.env.NEXT_PUBLIC_BACKEND_API_AUTH_ME_PATH}`,
+        {
+          cache: "no-cache",
+          credentials: "include",
+        },
+      );
 
-    return (await res.json()) as User;
+      return (await res.json()) as User;
+    } catch {
+      return null;
+    }
   };
 
   useEffect(() => {
