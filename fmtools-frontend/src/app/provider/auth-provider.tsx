@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 
 interface User {
   fullName: string;
@@ -18,7 +12,7 @@ interface AuthContextData {
   user: User | null;
   loading: boolean;
   isAuthenticated: boolean;
-  refreshUser: () => Promise<void>;
+  authenticate: () => Promise<void>;
   logout: () => void;
   login: () => void;
 }
@@ -29,21 +23,28 @@ export function AuthProvider({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const logout = useCallback(() => {
     setUser(null);
+    setLoading(false);
+    setIsAuthenticated(false);
 
     window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL}${process.env.NEXT_PUBLIC_BACKEND_API_AUTH_LOGOUT_PATH}`;
   }, []);
 
   const login = useCallback(() => {
     setUser(null);
+    setLoading(false);
+    setIsAuthenticated(false);
 
     window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL}${process.env.NEXT_PUBLIC_BACKEND_API_AUTH_LOGIN_PATH}`;
   }, []);
 
-  const getMe = useCallback(async () => {
+  const authenticate = useCallback(async () => {
+    setLoading(true);
+    setIsAuthenticated(false);
     try {
       const res = await fetch(
         `/proxy/backend?url=${process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL}${process.env.NEXT_PUBLIC_BACKEND_API_AUTH_ME_PATH}`,
@@ -54,52 +55,19 @@ export function AuthProvider({
       );
 
       if (!res.ok) {
-        return null;
+        setUser(null);
+        setIsAuthenticated(false);
       }
 
-      return (await res.json()) as User;
+      setUser((await res.json()) as User);
+      setIsAuthenticated(true);
     } catch (error) {
       console.error("Error fetching current user:", error);
-      return null;
-    }
-  }, []);
-
-  const refreshUser = useCallback(async () => {
-    try {
-      const currentUser = await getMe();
-      setUser(currentUser);
-    } catch (error) {
-      console.error("Error on loading user:", error);
       setUser(null);
+      setIsAuthenticated(false);
+    } finally {
+      setLoading(false);
     }
-  }, [getMe]);
-
-  useEffect(() => {
-    let active = true;
-
-    async function initialize() {
-      try {
-        const currentUser = await getMe();
-
-        if (active) {
-          setUser(currentUser);
-        }
-      } catch {
-        if (active) {
-          setUser(null);
-        }
-      } finally {
-        if (active) {
-          setLoading(false);
-        }
-      }
-    }
-
-    void initialize();
-
-    return () => {
-      active = false;
-    };
   }, []);
 
   return (
@@ -107,8 +75,8 @@ export function AuthProvider({
       value={{
         user,
         loading,
-        isAuthenticated: !!user,
-        refreshUser,
+        isAuthenticated,
+        authenticate,
         logout,
         login,
       }}

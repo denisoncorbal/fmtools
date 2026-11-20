@@ -9,16 +9,29 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading, authenticate } = useAuth();
   const router = useRouter();
   const hasRedirect = useRef(false);
+  const hasAuthenticate = useRef(false);
 
   useEffect(() => {
-    if (!loading && !isAuthenticated && !hasRedirect.current) {
-      hasRedirect.current = true;
-      router.replace("/login");
+    async function tryAuthenticate() {
+      if (
+        !hasRedirect.current &&
+        !hasAuthenticate.current &&
+        !loading &&
+        !isAuthenticated
+      ) {
+        hasAuthenticate.current = true;
+        await authenticate();
+        if (!isAuthenticated && !loading) {
+          hasRedirect.current = true;
+          router.replace("/login");
+        }
+      }
     }
-  }, [loading, isAuthenticated, router]);
+    void tryAuthenticate();
+  }, [loading, isAuthenticated]);
 
   if (loading) {
     return <div>Loading...</div>;
