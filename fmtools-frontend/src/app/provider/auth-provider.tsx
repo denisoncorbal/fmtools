@@ -41,35 +41,38 @@ export function AuthProvider({
     }
   }, []);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     setUser(null);
 
     window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL}${process.env.NEXT_PUBLIC_BACKEND_API_AUTH_LOGOUT_PATH}`;
-  };
+  }, []);
 
-  const login = () => {
+  const login = useCallback(() => {
     setUser(null);
 
     window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL}${process.env.NEXT_PUBLIC_BACKEND_API_AUTH_LOGIN_PATH}`;
-  };
+  }, []);
 
-  const getMe = async () => {
-    setUser(null);
-
+  const getMe = useCallback(async () => {
     try {
       const res = await fetch(
         `/proxy/backend?url=${process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL}${process.env.NEXT_PUBLIC_BACKEND_API_AUTH_ME_PATH}`,
         {
-          cache: "no-cache",
+          cache: "no-store",
           credentials: "include",
         },
       );
 
+      if (!res.ok) {
+        return null;
+      }
+
       return (await res.json()) as User;
-    } catch {
+    } catch (error) {
+      console.error("Error fetching current user:", error);
       return null;
     }
-  };
+  }, []);
 
   useEffect(() => {
     let active = true;
