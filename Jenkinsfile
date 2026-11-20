@@ -11,6 +11,18 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+
+                script {
+                    def gitCommit = sh(
+                        script: 'git rev-parse --short=8 HEAD',
+                        returnStdout: true
+                    ).trim()
+
+                    env.DEPLOYMENT_ID =
+                        "${env.BUILD_NUMBER}-${gitCommit}"
+
+                    echo "Deployment ID: ${env.DEPLOYMENT_ID}"
+                }
             }
         }
 
@@ -22,6 +34,8 @@ pipeline {
                     echo "Verificando Docker..."
                     docker --version
                     docker compose version
+
+                    echo "Deployment ID: $DEPLOYMENT_ID"
                 '''
             }
         }
@@ -51,6 +65,8 @@ pipeline {
 
                     umask 077
 
+                    echo "Deployment ID: $DEPLOYMENT_ID"
+
                     rm -f .env
                     rm -f frontend.env
                     rm -f backend.env
@@ -67,8 +83,7 @@ pipeline {
                     docker compose config -q
 
                     echo "Atualizando containers..."
-                    docker compose build --no-cache
-                    docker compose up -d --remove-orphans --force-recreate
+                    docker compose -d --build --remove-orphans --force-recreate
 
                     echo "Containers em execução:"
                     docker compose ps
