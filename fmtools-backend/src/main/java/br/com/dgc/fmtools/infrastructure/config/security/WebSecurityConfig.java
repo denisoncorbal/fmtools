@@ -24,10 +24,8 @@ public class WebSecurityConfig {
                 .sessionManagement(
                         sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
-                        authorize -> authorize.requestMatchers("/api/v1/auth/signIn").permitAll()
+                        authorize -> authorize
                                 .requestMatchers("/api/v1/auth/login").permitAll()
-                                .requestMatchers("/api/v1/auth/refresh").permitAll()
-                                .requestMatchers("/api/v1/auth/isLogged").permitAll()
                                 .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .build();
@@ -36,7 +34,8 @@ public class WebSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000"));
+        config.setAllowedOrigins(
+                List.of("https://fmtools.denison.corbal.nom.br", "https://fmtools.gateway.denison.corbal.nom.br"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
