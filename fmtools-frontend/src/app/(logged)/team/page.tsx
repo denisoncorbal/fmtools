@@ -9,7 +9,6 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { cookies, headers } from "next/headers";
 import Link from "next/link";
 import ModalCreateTeam from "./modal-create-team";
 import styles from "./team.module.css";
@@ -18,16 +17,9 @@ const teamApiPath =
   process.env.BACKEND_COMPLETE_BASE_URL! + process.env.BACKEND_API_TEAM_PATH!;
 
 export default async function TeamPage() {
-  const h = await headers();
-  const host = h.get("host");
-  const ck = await cookies();
-
-  const res = await fetch(`http://${host}/proxy/backend?url=${teamApiPath}`, {
+  const res = await fetch(`${teamApiPath}`, {
     cache: "no-cache",
     credentials: "include",
-    headers: {
-      cookie: ck.toString(),
-    },
   });
 
   console.log(res);

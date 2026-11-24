@@ -1,26 +1,11 @@
 "use client";
 
 import { Button } from "@mui/material";
-import { signOut } from "next-auth/react";
 
 export function LogoutButton() {
-  async function handleLogout() {
-    const response = await fetch("/logout", {
-      method: "POST",
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to logout");
-    }
-
-    const { url } = await response.json();
-
-    await signOut({
-      redirect: false,
-      callbackUrl: "/",
-    });
-
-    window.location.assign(url);
+  function handleLogout() {
+    window.location.href =
+      "https://fmtools.gateway.denison.corbal.nom.br/api/v1/auth/logout";
   }
 
   return (

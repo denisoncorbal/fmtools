@@ -10,24 +10,17 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { signIn } from "next-auth/react";
 import { useState } from "react";
 import styles from "./page.module.css";
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
 
-  async function handleLogin() {
+  function handleLogin() {
     setLoading(true);
 
-    try {
-      await signIn("keycloak", {
-        callbackUrl: "/team",
-      });
-    } catch (error) {
-      console.error("Erro ao iniciar autenticação", error);
-      setLoading(false);
-    }
+    window.location.href =
+      "https://fmtools.gateway.denison.corbal.nom.br/api/v1/auth/login";
   }
 
   return (

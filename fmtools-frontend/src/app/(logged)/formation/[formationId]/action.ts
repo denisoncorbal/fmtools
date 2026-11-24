@@ -1,6 +1,5 @@
 "use server";
 
-import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 const bestFormationApiPath =
@@ -8,24 +7,21 @@ const bestFormationApiPath =
   process.env.BACKEND_API_BEST_FORMATION_PATH!;
 
 export default async function calculatePositions(data: FormData) {
-  const h = await headers();
-  const host = h.get("host");
-  const ck = await cookies();
   const tacticalPositions = data
     .get("tacticalPositions")
     ?.toString()
     .split(",");
   const squadId = data.get("squad")?.toString();
-  const res = await fetch(`http://${host}/proxy/backend`, {
+  const res = await fetch(`${bestFormationApiPath}`, {
     method: "POST",
     body: JSON.stringify({
-      url: bestFormationApiPath,
-      data: { tacticalPositions: tacticalPositions, squadId: squadId },
+      tacticalPositions: tacticalPositions,
+      squadId: squadId,
     }),
     headers: {
       "Content-Type": "application/json",
-      cookie: ck.toString(),
     },
+    credentials: "include",
   });
 
   if (res.status == 200) {

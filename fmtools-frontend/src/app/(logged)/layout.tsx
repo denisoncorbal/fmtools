@@ -1,4 +1,6 @@
-import { requireAuth } from "@/lib/requireAuth";
+import { UserProvider } from "@/components/providers/user-provider";
+import { getLoggedUser } from "@/services/user-service";
+import { redirect } from "next/navigation";
 import Menu from "./menu";
 
 export default async function LoggedLayout({
@@ -6,11 +8,16 @@ export default async function LoggedLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  await requireAuth();
+  const user = await getLoggedUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
   return (
-    <>
+    <UserProvider user={user}>
       <Menu />
       {children}
-    </>
+    </UserProvider>
   );
 }
