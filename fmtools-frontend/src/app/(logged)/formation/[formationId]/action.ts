@@ -3,8 +3,8 @@
 import { redirect } from "next/navigation";
 
 const bestFormationApiPath =
-  process.env.BACKEND_COMPLETE_BASE_URL! +
-  process.env.BACKEND_API_BEST_FORMATION_PATH!;
+  process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL! +
+  process.env.NEXT_PUBLIC_BACKEND_API_BEST_FORMATION_PATH!;
 
 export default async function calculatePositions(data: FormData) {
   const tacticalPositions = data

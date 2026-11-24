@@ -14,8 +14,8 @@ import ModalCreateFormation from "./modal-create-formation";
 import styles from "./specific-tactical-style.module.css";
 
 const formationApiPath =
-  process.env.BACKEND_COMPLETE_BASE_URL! +
-  process.env.BACKEND_API_FORMATION_PATH!;
+  process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL! +
+  process.env.NEXT_PUBLIC_BACKEND_API_FORMATION_PATH!;
 
 export default async function SpecificTacticalStyle({
   params,

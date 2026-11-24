@@ -15,9 +15,9 @@ import ModalCreateTactic from "./modal-create-tactic";
 import styles from "./specific-team.module.css";
 
 const squadApiPath =
-  process.env.BACKEND_COMPLETE_BASE_URL! + process.env.BACKEND_API_SQUAD_PATH!;
+  process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL! + process.env.NEXT_PUBLIC_BACKEND_API_SQUAD_PATH!;
 const tacticApiPath =
-  process.env.BACKEND_COMPLETE_BASE_URL! + process.env.BACKEND_API_TACTIC_PATH!;
+  process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL! + process.env.NEXT_PUBLIC_BACKEND_API_TACTIC_PATH!;
 
 export default async function SpecificTeam({
   params,

@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import {
   Box,
   Paper,
@@ -14,9 +15,11 @@ import ModalCreateTactic from "./modal-create-tactic";
 import styles from "./tactic.module.css";
 
 const teamApiPath =
-  process.env.BACKEND_COMPLETE_BASE_URL! + process.env.BACKEND_API_TEAM_PATH!;
+  process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL! +
+  process.env.NEXT_PUBLIC_BACKEND_API_TEAM_PATH!;
 const tacticApiPath =
-  process.env.BACKEND_COMPLETE_BASE_URL! + process.env.BACKEND_API_TACTIC_PATH!;
+  process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL! +
+  process.env.NEXT_PUBLIC_BACKEND_API_TACTIC_PATH!;
 
 export default async function TacticPage() {
   const teamRes = await fetch(`${teamApiPath}`, {

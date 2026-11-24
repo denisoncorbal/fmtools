@@ -3,8 +3,8 @@
 import { redirect } from "next/navigation";
 
 const formationApiPath =
-  process.env.BACKEND_COMPLETE_BASE_URL! +
-  process.env.BACKEND_API_FORMATION_PATH!;
+  process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL! +
+  process.env.NEXT_PUBLIC_BACKEND_API_FORMATION_PATH!;
 
 export async function createFormation(data: FormData) {
   const tacticalPositions = [

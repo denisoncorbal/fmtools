@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import {
   Box,
   Paper,
@@ -14,9 +15,11 @@ import ModalCreateSquad from "./modal-create-squad";
 import styles from "./squad.module.css";
 
 const teamApiPath =
-  process.env.BACKEND_COMPLETE_BASE_URL! + process.env.BACKEND_API_TEAM_PATH!;
+  process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL! +
+  process.env.NEXT_PUBLIC_BACKEND_API_TEAM_PATH!;
 const squadApiPath =
-  process.env.BACKEND_COMPLETE_BASE_URL! + process.env.BACKEND_API_SQUAD_PATH!;
+  process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL! +
+  process.env.NEXT_PUBLIC_BACKEND_API_SQUAD_PATH!;
 
 export default async function SquadPage() {
   const teamRes = await fetch(`${teamApiPath}`, {

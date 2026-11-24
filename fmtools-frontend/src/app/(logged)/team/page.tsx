@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import {
   Box,
   Paper,
@@ -14,7 +15,8 @@ import ModalCreateTeam from "./modal-create-team";
 import styles from "./team.module.css";
 
 const teamApiPath =
-  process.env.BACKEND_COMPLETE_BASE_URL! + process.env.BACKEND_API_TEAM_PATH!;
+  process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL! +
+  process.env.NEXT_PUBLIC_BACKEND_API_TEAM_PATH!;
 
 export default async function TeamPage() {
   const res = await fetch(`${teamApiPath}`, {

@@ -14,8 +14,8 @@ import ModalCreateTacticalStyle from "./modal-create-tactical-style";
 import styles from "./specific-tactic.module.css";
 
 const tacticalStyleApiPath =
-  process.env.BACKEND_COMPLETE_BASE_URL! +
-  process.env.BACKEND_API_TACTICAL_STYLE_PATH!;
+  process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL! +
+  process.env.NEXT_PUBLIC_BACKEND_API_TACTICAL_STYLE_PATH!;
 
 export default async function SpecificTactic({
   params,

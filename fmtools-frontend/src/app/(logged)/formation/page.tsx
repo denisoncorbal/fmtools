@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import {
   Box,
   Paper,
@@ -14,11 +15,11 @@ import styles from "./formation.module.css";
 import ModalCreateFormation from "./modal-create-formation";
 
 const tacticalStyleApiPath =
-  process.env.BACKEND_COMPLETE_BASE_URL! +
-  process.env.BACKEND_API_TACTICAL_STYLE_PATH!;
+  process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL! +
+  process.env.NEXT_PUBLIC_BACKEND_API_TACTICAL_STYLE_PATH!;
 const formationApiPath =
-  process.env.BACKEND_COMPLETE_BASE_URL! +
-  process.env.BACKEND_API_FORMATION_PATH!;
+  process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL! +
+  process.env.NEXT_PUBLIC_BACKEND_API_FORMATION_PATH!;
 
 export default async function FormationPage() {
   const tacticalStylesRes = await fetch(`${tacticalStyleApiPath}`, {

@@ -3,12 +3,12 @@ import ModalCalculatePosition from "./modal-calculate-position";
 import styles from "./specific-formation.module.css";
 
 const playerApiPath =
-  process.env.BACKEND_COMPLETE_BASE_URL! + process.env.BACKEND_API_PLAYER_PATH!;
+  process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL! + process.env.NEXT_PUBLIC_BACKEND_API_PLAYER_PATH!;
 const tacticalPositionApiPath =
-  process.env.BACKEND_COMPLETE_BASE_URL! +
-  process.env.BACKEND_API_TACTICAL_POSITION_PATH!;
+  process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL! +
+  process.env.NEXT_PUBLIC_BACKEND_API_TACTICAL_POSITION_PATH!;
 const squadApiPath =
-  process.env.BACKEND_COMPLETE_BASE_URL! + process.env.BACKEND_API_SQUAD_PATH!;
+  process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL! + process.env.NEXT_PUBLIC_BACKEND_API_SQUAD_PATH!;
 
 async function getPlayer(
   playerId: string,

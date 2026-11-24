@@ -3,8 +3,8 @@
 import { redirect } from "next/navigation";
 
 const tactialStyleApiPath =
-  process.env.BACKEND_COMPLETE_BASE_URL! +
-  process.env.BACKEND_API_TACTICAL_STYLE_PATH!;
+  process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL! +
+  process.env.NEXT_PUBLIC_BACKEND_API_TACTICAL_STYLE_PATH!;
 
 export default async function createTacticalStyle(data: FormData) {
   const res = await fetch(`${tactialStyleApiPath}`, {

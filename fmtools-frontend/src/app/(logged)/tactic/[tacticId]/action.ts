@@ -3,10 +3,10 @@
 import { redirect } from "next/navigation";
 
 const tacticalStyleApiPath =
-  process.env.BACKEND_COMPLETE_BASE_URL! +
-  process.env.BACKEND_API_TACTICAL_STYLE_PATH!;
+  process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL! +
+  process.env.NEXT_PUBLIC_BACKEND_API_TACTICAL_STYLE_PATH!;
 const squadApiPath =
-  process.env.BACKEND_COMPLETE_BASE_URL! + process.env.BACKEND_API_SQUAD_PATH!;
+  process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL! + process.env.NEXT_PUBLIC_BACKEND_API_SQUAD_PATH!;
 
 export async function createTacticalStyle(data: FormData) {
   const res = await fetch(`${tacticalStyleApiPath}`, {

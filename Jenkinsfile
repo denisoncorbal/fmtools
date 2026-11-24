@@ -34,10 +34,6 @@ pipeline {
                   variable: 'ENV_FILE'
                 ),
                 file(
-                    credentialsId: 'fmtools-frontend-env',
-                    variable: 'FRONTEND_ENV_FILE'
-                ),
-                file(
                     credentialsId: 'fmtools-backend-env',
                     variable: 'BACKEND_ENV_FILE'
                 ),
@@ -52,14 +48,12 @@ pipeline {
                     umask 077
 
                     rm -f .env
-                    rm -f frontend.env
                     rm -f backend.env
                     rm -rf secrets
 
                     mkdir -p secrets
 
                     cp "$ENV_FILE" .env
-                    cp "$FRONTEND_ENV_FILE" frontend.env
                     cp "$BACKEND_ENV_FILE" backend.env
                     printf '%s' "$POSTGRES_PASSWORD" > secrets/postgres_password.txt
 
