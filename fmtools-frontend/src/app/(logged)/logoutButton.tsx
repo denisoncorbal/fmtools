@@ -5,7 +5,7 @@ import { Button } from "@mui/material";
 export function LogoutButton() {
   function handleLogout() {
     window.location.href =
-      "https://fmtools.gateway.denison.corbal.nom.br/api/v1/auth/logout";
+      "https://fmtools.denison.corbal.nom.br/gateway/api/v1/auth/logout";
   }
 
   return (
