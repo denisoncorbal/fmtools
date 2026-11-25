@@ -13,14 +13,17 @@ import {
 import { useState } from "react";
 import styles from "./page.module.css";
 
+const loginApiPath =
+  process.env.NEXT_PUBLIC_BACKEND_COMPLETE_BASE_URL! +
+  process.env.NEXT_PUBLIC_BACKEND_API_AUTH_LOGIN_PATH!;
+
 export default function Login() {
   const [loading, setLoading] = useState(false);
 
   function handleLogin() {
     setLoading(true);
 
-    window.location.href =
-      "https://fmtools.denison.corbal.nom.br/gateway/api/v1/auth/login";
+    window.location.href = `${loginApiPath}`;
   }
 
   return (
